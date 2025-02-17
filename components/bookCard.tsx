@@ -17,7 +17,7 @@ interface BookProps {
 
 const BookCard: React.FC<BookProps> = ({ book, onReadMore }) => {
   return (
-    <div className="shadow rounded-xl p-2 flex flex-col w-[18rem] gap-4">
+    <div className="shadow rounded-xl p-2 flex flex-col md:w-[18rem] flex-1 gap-4">
       {/* Image Section */}
       <div className="relative h-52 rounded-xl overflow-hidden">
         <Image 
