@@ -21,7 +21,7 @@ export default function RootLayout({
       >
         <main className="flex flex-col justify-between items-center h-[100vh] " >
           <Navbar></Navbar>
-          <section className="flex w-fit" >
+          <section className="flex w-fit gap-x-20" >
             {children}
           </section>
           <Footer></Footer>

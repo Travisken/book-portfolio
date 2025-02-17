@@ -43,7 +43,7 @@ const TestimonialSection: React.FC = () => {
     >
       <div id="testimonialForm" className="h-[70vh] flex items-center bg-g">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-center mb-6">Testimonials</h2>
+          <h2 className="text-3xl font-bold text-center mb-6">Testimonials</h2>
 
           {isMobile ? (
             <Swiper
