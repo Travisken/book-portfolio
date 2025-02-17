@@ -11,7 +11,7 @@ import TestimonialForm from "@/components/testimonialForm";
 import AboutSection from "@/components/aboutSection";
 import TestimonialSection from "@/components/testimonialSection";
 import Link from "next/link";
-import ExperienceSection from "@/components/experienceSection";
+// import ExperienceSection from "@/components/experienceSection";
 
 interface Book {
   id: number;
@@ -37,7 +37,7 @@ const Home = () => {
     <section>
       <HeroSection />
       <AboutSection />
-      <ExperienceSection/>
+      {/* <ExperienceSection/> */}
 
       <div className="flex flex-col gap-10 items-center md:px-20 px-4 py-8">
         <div className="flex w-full justify-between items-center mt-8">

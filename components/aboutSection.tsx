@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import ExperienceSection from "./experienceSection";
 
 export default function AboutSection() {
     const [expanded, setExpanded] = useState(false);
@@ -11,14 +12,15 @@ export default function AboutSection() {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
         >
-            <section id="about" className="md:w-[88%] flex-1 flex justify-center items-center flex-col mx-auto mt-12 gap-8 text-center">
-                <h2 className="text-4xl font-bold">
-                    About Me
+            <section className="flex gap-8 items-start justify-start px-20 ">
+                <section id="about" className=" flex-1 flex justify-start items-left flex-col mx-auto gap-8 text-left">
+                <h2 className="text-4xl text-left font-bold">
+                    Hi, I'm Dr. Akinsiku Folarin
                 </h2>
 
                 <div className="bg-[#00000015] md:p-4 p-2 md:rounded-xl text-left md:max-w-[88vw]">
                     <p>
-                        Akinsiku Folarin is the CEO of Pentspace, a thriving e-commerce platform dedicated to enhancing user connections with businesses and services. Beyond the digital marketplace, he is deeply committed to revolutionizing healthcare in Nigeria through global collaboration and knowledge transfer at CNHPD (Community of Nigerian Healthcare Professionals in diaspora).
+                        I'm the CEO of Pentspace, a thriving e-commerce platform dedicated to enhancing user connections with businesses and services. Beyond the digital marketplace, he is deeply committed to revolutionizing healthcare in Nigeria through global collaboration and knowledge transfer at CNHPD (Community of Nigerian Healthcare Professionals in diaspora).
                     </p>
 
                     {expanded && (
@@ -45,7 +47,11 @@ export default function AboutSection() {
                         {expanded ? "See Less" : "See More"}
                     </button>
                 </div>
+
             </section>
+                <ExperienceSection></ExperienceSection>
+            </section>
+            
         </motion.div>
     );
 }
