@@ -3,11 +3,11 @@
         {
           "id": 1,
           "title": "Investing in healthcare",
-          "description": "A thrilling adventure novel that takes you through different eras of history.",
+          "description": "A guide to investment opportunities in global healthcare, empowering professionals to drive innovation and impact.",
           "image": "/book_cover.jpeg",
           "buyLink": "/",
           "published": true,
-          "rating": 1
+          "rating": 4
         },
         {
           "id": 2,
