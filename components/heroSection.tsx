@@ -22,13 +22,13 @@ const HeroSection: React.FC = () => {
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "100%",
 
-                }} className=" h-[450px] bg-top md:bg-right w-full relative md:w-[35%] border-white border-8 flex">
-                    <div className="absolute -z-[1] -top-14 -left-14 md:grid hidden grid-cols-5  gap-4">
+                }} className=" h-[550px] bg-top md:bg-right w-full relative md:w-[35%] border-white border-8 flex">
+                    <div className="absolute -z-[1] -top-14 -left-16 md:grid hidden grid-cols-5  gap-4">
                         {[...Array(25)].map((_, i) => (
                             <span key={i} className="w-3 h-3 bg-gray-300 rounded-full"></span>
                         ))}
                     </div>
-                    <div className="bg-[#00000015] -z-[1] absolute -top-20 -left-16 md:flex hidden h-[25rem] aspect-square"></div>
+                    <div className="bg-[#00000015] -z-[1] absolute -top-20 -left-20 md:flex hidden h-[25rem] aspect-square"></div>
                 </div>
 
 
