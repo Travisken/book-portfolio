@@ -19,6 +19,7 @@ interface Book {
   image: string;
   buyLink: string;
   published: boolean;
+  rating: number;
 }
 
 const Home = () => {
