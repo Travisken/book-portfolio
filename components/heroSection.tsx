@@ -6,7 +6,7 @@ const HeroSection: React.FC = () => {
     return (
         <>
             <section className="flex flex-wrap text-center md:text-left md:justify-between md:p-0 p-4 md:h-[90vh] md:px-20  items-center">
-                <div className="flex flex-col md:w-[40%] gap-4 items-center md:items-start">
+                <div className="flex flex-col md:w-[55%] gap-4 items-center md:items-start">
                     <h3 className="md:text-5xl text-3xl md:w-[80%] font-extrabold">
                         Akinsiku Folarin
                     </h3>
