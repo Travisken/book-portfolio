@@ -2,18 +2,10 @@
 
 import { Star } from "lucide-react";
 
-// interface TestimonialProps {
-//   title: string;
-//   description: string;
-//   image: string;
-//   buyLink: string;
-// }
 
 interface TestimonialProps {
     name: string;
-    // role: string;
     review: string;
-    // image: string;
     rating: number;
   }
 

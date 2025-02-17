@@ -5,6 +5,7 @@ import TestimonialCard from "./testimonialCard";
 import testimonialData from "@/public/data.json";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
+import { Star } from "lucide-react";
 
 interface BookModalProps {
     open: boolean;
@@ -14,8 +15,19 @@ interface BookModalProps {
         description: string;
         image: string;
         buyLink: string;
+        rating: number;
+
     } | null;
 }
+
+
+
+
+// interface TestimonialProps {
+//     name: string;
+//     review: string;
+//     rating: number;
+//   }
 
 type Testimonial = {
     id: number;
@@ -108,9 +120,9 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             slotProps={{ backdrop: { timeout: 500 } }}
         >
             <Fade in={open}>
-                <Box sx={modalStyle} className="w-full max-w-2xl p-5 md:p-6 flex flex-col gap-6">
+                <Box sx={modalStyle} className="w-full max-w-2xl p-5 overflow-y-auto md:p-6 flex flex-col gap-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="relative w-full h-48 md:h-72 rounded-lg bg-cover bg-center" 
+                        <div className="relative w-full h-48 md:h-[22rem] rounded-lg bg-cover bg-center"
                             style={{ backgroundImage: `url(${book.image})` }}>
                         </div>
                         <div className="flex flex-col gap-4">
@@ -121,38 +133,43 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                             <Typography className="text-zinc-600">{book.description}</Typography>
 
                             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Enter your email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="w-full p-3 border rounded-lg focus:outline-[#3ca0ce]"
-                            required
-                        />
-                        {error && <p className="text-red-500 text-sm">{error}</p>}
-                        {success && <p className="text-green-500 text-sm">{success}</p>}
-                        <Button
-                            variant="contained"
-                            className="mt-4 py-3 rounded-lg bg-[#3ca0ce] hover:bg-[#135690]"
-                            type="submit"
-                            disabled={loading}
-                        >
-                            {loading ? "Sending..." : "Read now"}
-                        </Button>
-                    </form>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Enter your email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-[#3ca0ce]"
+                                    required
+                                />
+                                {error && <p className="text-red-500 text-sm">{error}</p>}
+                                {success && <p className="text-green-500 text-sm">{success}</p>}
+                                <Button
+                                    variant="contained"
+                                    className="mt-4 py-3 rounded-lg bg-[#3ca0ce] hover:bg-[#135690]"
+                                    type="submit"
+                                    disabled={loading}
+                                >
+                                    {loading ? "Sending..." : "Read now"}
+                                </Button>
+                            </form>
+
+                            <div className="flex flex-col mt-4 items-start">
+                                <p className="text-xl">Rating</p>
+                                <div className="flex">
+                                   {[...Array(5)].map((_, index) => (
+                                    <Star
+                                        key={index}
+                                        className={`w-5 h-5 ${index < (book?.rating || 0) ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`}
+                                    />
+                                ))}  
+                                </div>
+                               
+                            </div>
+
                         </div>
                     </div>
-                    
-                    <div className="flex flex-1 max-w-[23rem] flex-col gap-4">
-                        {testimonialData.testimonials
-                            .filter((testimonial: Testimonial) => testimonial.id === 3)
-                            .map((testimonial) => (
-                                <TestimonialCard key={testimonial.id} {...testimonial} />
-                            ))}
-                    </div>
-                    
-                    
+
                 </Box>
             </Fade>
         </Modal>
