@@ -11,12 +11,12 @@ export default function AboutSection() {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
         >
-            <section id="about" className="md:w-[88%] flex-1 flex justify-center items-center flex-col mx-auto gap-8 text-center">
+            <section id="about" className="md:w-[88%] flex-1 flex justify-center items-center flex-col mx-auto mt-12 gap-8 text-center">
                 <h2 className="text-4xl font-bold">
                     About Me
                 </h2>
 
-                <div className="bg-[#00000002] md:p-4 p-2 md:rounded-xl text-left md:max-w-[88vw]">
+                <div className="bg-[#00000015] md:p-4 p-2 md:rounded-xl text-left md:max-w-[88vw]">
                     <p>
                         Akinsiku Folarin is the CEO of Pentspace, a thriving e-commerce platform dedicated to enhancing user connections with businesses and services. Beyond the digital marketplace, he is deeply committed to revolutionizing healthcare in Nigeria through global collaboration and knowledge transfer at CNHPD (Community of Nigerian Healthcare Professionals in diaspora).
                     </p>
