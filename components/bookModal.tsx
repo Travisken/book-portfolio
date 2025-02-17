@@ -21,9 +21,7 @@ type Testimonial = {
     id: number;
     name: string;
     review: string;
-    // Add other properties as needed
 };
-
 
 const modalStyle = {
     position: "absolute",
@@ -35,6 +33,10 @@ const modalStyle = {
     borderRadius: "8px",
     outline: "none",
     p: 3,
+    width: "90vw",
+    maxWidth: "800px",
+    maxHeight: "90vh",
+    overflowY: "auto"
 };
 
 const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
@@ -75,7 +77,6 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             book_title: book.title,
             book_link: book.buyLink,
         };
-        console.log(templateParams)
 
         try {
             const response = await emailjs.send(
@@ -107,59 +108,51 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             slotProps={{ backdrop: { timeout: 500 } }}
         >
             <Fade in={open}>
-                <Box className="md:w-[70vw] w-[95%] md:p-4 flex md:items-center md:justify-center h-[70vh] overflow-scroll" sx={modalStyle}>
-                    <div className="flex flex-wrap md:flex-nowrap p-2 overflow-scroll gap-10">
-                        <div className="flex w-full flex-col gap-4">
-                            <div
-                                style={{
-                                    backgroundImage: `url(${book.image})`,
-                                    backgroundRepeat: "no-repeat",
-                                    backgroundSize: "cover",
-                                    backgroundPosition: "center",
-                                }}
-                                className="bg-red-400 max-md:w-[100%] max-md:h-[10rem] h-72 rounded-lg"
-                            ></div>
-
-                            <h5 className="text-xl font-semibold">Description</h5>
-                            <Typography className="text-zinc-600 mt-2 md:w-[400px]">{book.description}</Typography>
+                <Box sx={modalStyle} className="w-full max-w-2xl p-5 md:p-6 flex flex-col gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="relative w-full h-48 md:h-72 rounded-lg bg-cover bg-center" 
+                            style={{ backgroundImage: `url(${book.image})` }}>
                         </div>
-
-                        <div className="flex flex-wrap gap-10">
+                        <div className="flex flex-col gap-4">
                             <Typography variant="h4" component="h2" className="font-semibold">
                                 {book.title}
                             </Typography>
+                            <h5 className="text-lg font-semibold">Description</h5>
+                            <Typography className="text-zinc-600">{book.description}</Typography>
 
-                            {testimonialData.testimonials
-                                .filter((testimonial: Testimonial) => testimonial.id === 3)
-                                .map((testimonial) => (
-                                    <TestimonialCard key={testimonial.id} {...testimonial} />
-                                ))}
-
-
-                            <form className="w-full gap-4 flex flex-col" onSubmit={handleSubmit}>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Enter your email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border rounded-xl focus:outline-[#3ca0ce]"
-                                    required
-                                />
-                                {error && <p className="text-red-500 text-sm">{error}</p>}
-                                {success && <p className="text-green-500 text-sm">{success}</p>}
-
-                                <Button
-                                    variant="contained"
-                                    className="mt-4 !py-3 !rounded-xl !bg-[#3ca0ce] hover:!bg-[#135690]"
-                                    type="submit"
-                                    disabled={loading}
-                                >
-                                    {loading ? "Sending..." : "Read now"}
-                                </Button>
-                            </form>
+                            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full p-3 border rounded-lg focus:outline-[#3ca0ce]"
+                            required
+                        />
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
+                        {success && <p className="text-green-500 text-sm">{success}</p>}
+                        <Button
+                            variant="contained"
+                            className="mt-4 py-3 rounded-lg bg-[#3ca0ce] hover:bg-[#135690]"
+                            type="submit"
+                            disabled={loading}
+                        >
+                            {loading ? "Sending..." : "Read now"}
+                        </Button>
+                    </form>
                         </div>
                     </div>
+                    
+                    <div className="flex flex-1 max-w-[23rem] flex-col gap-4">
+                        {testimonialData.testimonials
+                            .filter((testimonial: Testimonial) => testimonial.id === 3)
+                            .map((testimonial) => (
+                                <TestimonialCard key={testimonial.id} {...testimonial} />
+                            ))}
+                    </div>
+                    
+                    
                 </Box>
             </Fade>
         </Modal>

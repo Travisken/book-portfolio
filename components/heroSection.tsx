@@ -22,7 +22,7 @@ const HeroSection: React.FC = () => {
                     backgroundSize: "90%",
                     backgroundPosition: "center"
 
-                 }} className=" h-[70vh] w-full md:w-[40%] flex">
+                 }} className=" h-[550px] w-full md:w-[40%] flex">
                 </div>
 
             </section>

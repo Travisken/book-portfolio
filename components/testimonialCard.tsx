@@ -22,7 +22,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ name, review, rating }) =
   
     <>
     
-    <div className="bg-white w-full md:w-[26rem] shadow-lg rounded-2xl p-6 max-w-md transition-all duration-300 hover:scale-105 ">
+    <div className="bg-white w-full md:max-w-[26rem] shadow-lg rounded-2xl p-6 max-w-md transition-all duration-300 hover:scale-105 ">
       <div className="flex items-center space-x-4 ">
         <div className="border-2 border-gray-300 w-14 h-14 rounded-full "></div>
         {/* <img src={image} alt={name} className="w-14 h-14 rounded-full object-cover border-2 border-gray-300" /> */}

@@ -7,6 +7,10 @@ section{
   width: 100vw;
 }
 
+::-webkit-scrollbar{
+  display: none;
+}
+
 html {
   scroll-behavior: smooth;
 }
