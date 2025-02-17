@@ -1,0 +1,77 @@
+{
+      "booksSection": [
+        {
+          "id": 1,
+          "title": "Investing in healthcare",
+          "description": "A thrilling adventure novel that takes you through different eras of history.",
+          "image": "/book_cover.jpeg",
+          "buyLink": "/",
+          "published": true
+        },
+        {
+          "id": 2,
+          "title": "Mysteries of the Mind",
+          "description": "A psychological thriller that keeps you on the edge of your seat.",
+          "image": "/images/book2.jpg",
+          "buyLink": "https://example.com/book2",
+          "published": false
+        },
+        {
+          "id": 3,
+          "title": "A Journey Through Time",
+          "description": "A thrilling adventure novel that takes you through different eras of history.",
+          "image": "/images/book1.jpg",
+          "buyLink": "https://example.com/book1",
+          "published": false
+        },
+        {
+          "id": 4,
+          "title": "A Journey Through Time",
+          "description": "A thrilling adventure novel that takes you through different eras of history.",
+          "image": "/images/book1.jpg",
+          "buyLink": "https://example.com/book1",
+          "published": false
+        }
+      ],
+    "testimonials": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "review": "An incredible book that changed my perspective on storytelling!",
+        "rating": 1
+      },
+      {
+        "id": 2,
+        "name": "Jane Smith",
+        "review": "I couldn't put the book down! The narrative is gripping and full of twists.",
+        "rating": 4
+      },
+      {
+        "id": 3,
+        "name": "Jane Smith",
+        "review": "I couldn't put the book down! The narrative is gripping and full of twists.",
+        "rating": 2
+      }
+    ],
+    "partnersSection": [
+      {
+        "id": 1,
+        "name": "Bookstore Inc.",
+        "logo": "/images/partner1.png",
+        "website": "https://bookstore.com"
+      },
+      {
+        "id": 2,
+        "name": "Readers Hub",
+        "logo": "/images/partner2.png",
+        "website": "https://readershub.com"
+      }
+    ],
+    "newsletterSection": {
+      "header": "Join Our Newsletter",
+      "text": "Stay updated with new book releases, exclusive content, and more!",
+      "ctaText": "Subscribe Now",
+      "ctaLink": "/subscribe"
+    }
+  }
+  
