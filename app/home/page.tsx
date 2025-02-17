@@ -39,8 +39,8 @@ const Home = () => {
       <AboutSection />
       <ExperienceSection/>
 
-      <div className="flex flex-col gap-10 items-center md:px-20 py-8">
-        <div className="flex w-full justify-between items-center px-4 mt-8">
+      <div className="flex flex-col gap-10 items-center md:px-20 px-4 py-8">
+        <div className="flex w-full justify-between items-center  mt-8">
           <h2 className="text-2xl font-bold">Books</h2>
           {books.length > 4 && (
             <Link 
