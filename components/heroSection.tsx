@@ -21,9 +21,8 @@ const HeroSection: React.FC = () => {
                     backgroundImage: "url('/author.jpeg')",
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "90%",
-                    backgroundPosition: "right"
 
-                }} className=" h-[550px] w-full relative md:w-[40%] flex">
+                }} className=" h-[550px] bg-center md:bg-right w-full relative md:w-[40%] flex">
                     <div className="absolute -z-[1] -top-14 md:grid hidden grid-cols-5  gap-4">
                         {[...Array(25)].map((_, i) => (
                             <span key={i} className="w-4 h-4 bg-gray-300 rounded-full"></span>
