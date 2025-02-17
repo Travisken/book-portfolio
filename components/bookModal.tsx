@@ -132,7 +132,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                             <h5 className="text-lg font-semibold">Description</h5>
                             <Typography className="text-zinc-600">{book.description}</Typography>
 
-                            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                            <form className="flex relative flex-col gap-6" onSubmit={handleSubmit}>
                                 <input
                                     type="email"
                                     name="email"
@@ -142,8 +142,8 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                                     className="w-full p-3 border rounded-lg focus:outline-[#3ca0ce]"
                                     required
                                 />
-                                {error && <p className="text-red-500 text-sm">{error}</p>}
-                                {success && <p className="text-green-500 text-sm">{success}</p>}
+                                {error && <p className="text-red-500 bottom-0 absolute text-sm">{error}</p>}
+                                {success && <p className="text-green-500 top-[3rem] absolute text-sm">{success}</p>}
                                 <Button
                                     variant="contained"
                                     className="mt-4 py-3 rounded-lg bg-[#3ca0ce] hover:bg-[#135690]"
@@ -154,7 +154,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                                 </Button>
                             </form>
 
-                            <div className="flex flex-col mt-4 items-start">
+                            <div className="flex flex-col mt-2 items-start">
                                 <p className="text-xl">Rating</p>
                                 <div className="flex">
                                    {[...Array(5)].map((_, index) => (
