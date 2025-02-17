@@ -1,8 +1,8 @@
 "use client";
 
 import { Modal, Backdrop, Fade, Box, Typography, Button } from "@mui/material";
-import TestimonialCard from "./testimonialCard";
-import testimonialData from "@/public/data.json";
+// import TestimonialCard from "./testimonialCard";
+// import testimonialData from "@/public/data.json";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Star } from "lucide-react";
@@ -29,11 +29,11 @@ interface BookModalProps {
 //     rating: number;
 //   }
 
-type Testimonial = {
-    id: number;
-    name: string;
-    review: string;
-};
+// type Testimonial = {
+//     id: number;
+//     name: string;
+//     review: string;
+// };
 
 const modalStyle = {
     position: "absolute",
