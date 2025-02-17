@@ -1,16 +1,19 @@
 import Image from "next/image";
 
-interface BookProps {
-  book: {
-    id: number;
-    title: string;
-    description: string;
-    image: string;
-    buyLink: string;
-    published: boolean;
-  };
-  onReadMore: (book: any) => void;
+interface Book {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  buyLink: string;
+  published: boolean;
 }
+
+interface BookProps {
+  book: Book;
+  onReadMore: (book: Book) => void;
+}
+
 
 const BookCard: React.FC<BookProps> = ({ book, onReadMore }) => {
   return (

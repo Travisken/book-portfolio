@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 
 import { Star } from "lucide-react";
 
@@ -19,25 +19,7 @@ interface TestimonialProps {
 
 const TestimonialCard: React.FC<TestimonialProps> = ({ name, review, rating }) => {
   return (
-    // <div className="shadow-lg rounded-xl p-4 flex flex-col w-[18rem] gap-4 bg-white">
-    //   <div className="h-52 rounded-xl overflow-hidden relative">
-    //     <Image src={image} alt={title} layout="fill" objectFit="cover" className="rounded-lg" />
-    //   </div>
-
-    //   <div className="flex flex-col gap-2">
-    //     <h3 className="font-semibold text-xl">{title}</h3>
-    //     <p className="text-zinc-600 text-sm">{description}</p>
-    //     <a
-    //       href={buyLink}
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //       className="p-2 rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex items-center justify-center"
-    //     >
-    //       Read more
-    //     </a>
-    //   </div>
-    // </div>
-
+  
     <>
     
     <div className="bg-white w-full md:w-[26rem] shadow-lg rounded-2xl p-6 max-w-md transition-all duration-300 hover:scale-105 ">
@@ -50,7 +32,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ name, review, rating }) =
         </div>
       </div>
 
-      <p className="text-gray-700 mt-4 italic">"{review}"</p>
+      <p className="text-gray-700 mt-4 italic">&quot{review}&quot</p>
 
       <div className="flex items-center mt-4">
         {[...Array(5)].map((_, index) => (

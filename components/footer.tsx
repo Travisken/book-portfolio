@@ -1,4 +1,4 @@
-// import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -6,9 +6,15 @@ const Footer = () => {
       <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
         {/* Navigation Links */}
         <nav className="flex space-x-6 text-sm">
-          <a href="/" className="hover:text-gray-400">Home</a>
-          <a href="#about" className="hover:text-gray-400">About</a>
-          <a href="#testimonial" className="hover:text-gray-400">Testimonials</a>
+          <Link href="/" className="hover:text-gray-400">
+            Home
+          </Link>
+          <Link href="#about" className="hover:text-gray-400">
+            About
+          </Link>
+          <Link href="#testimonial" className="hover:text-gray-400">
+            Testimonials
+          </Link>
         </nav>
 
         {/* Social Media Links */}

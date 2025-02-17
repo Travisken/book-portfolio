@@ -9,6 +9,18 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
 
+// Define the type for a single testimonial
+interface Testimonial {
+  id: string;
+  name: string;
+  message: string;
+  // Add other fields as needed
+}
+
+interface TestimonialData {
+  testimonials: Testimonial[];
+}
+
 const TestimonialSection: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -41,16 +53,16 @@ const TestimonialSection: React.FC = () => {
               modules={[Pagination]}
               className="w-full"
             >
-              {testimonialData.testimonials.map((testimonial: any) => (
+              {(testimonialData as unknown as TestimonialData).testimonials.map((testimonial) => (
                 <SwiperSlide key={testimonial.id}>
-                  <TestimonialCard {...testimonial} />
+                  <TestimonialCard review={""} rating={0} {...testimonial} />
                 </SwiperSlide>
               ))}
             </Swiper>
           ) : (
             <div className="flex gap-10">
-              {testimonialData.testimonials.map((testimonial: any) => (
-                <TestimonialCard key={testimonial.id} {...testimonial} />
+              {(testimonialData as unknown as TestimonialData).testimonials.map((testimonial) => (
+                <TestimonialCard review={""} rating={0} key={testimonial.id} {...testimonial} />
               ))}
             </div>
           )}

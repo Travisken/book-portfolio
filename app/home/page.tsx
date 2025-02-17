@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import BookSection from "@/components/bookSection";
+// import BookSection from "@/components/bookSection";
 import BookCard from "@/components/bookCard";
 import BookModal from "@/components/bookModal";
 import bookData from "@/public/data.json";

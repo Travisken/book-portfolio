@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from 'react';
+
+
 
 export default function TestimonialForm() {
   const [formData, setFormData] = useState({
@@ -8,16 +10,17 @@ export default function TestimonialForm() {
     bookName: ""
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Submitted Data:", formData);
     alert("Thank you for your feedback!");
   };
+
 
   return (
     <>

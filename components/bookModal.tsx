@@ -17,6 +17,14 @@ interface BookModalProps {
     } | null;
 }
 
+type Testimonial = {
+    id: number;
+    name: string;
+    review: string;
+    // Add other properties as needed
+};
+
+
 const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -122,10 +130,11 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                             </Typography>
 
                             {testimonialData.testimonials
-                                .filter((testimonial: any) => testimonial.id === 3)
-                                .map((testimonial: any) => (
+                                .filter((testimonial: Testimonial) => testimonial.id === 3)
+                                .map((testimonial) => (
                                     <TestimonialCard key={testimonial.id} {...testimonial} />
                                 ))}
+
 
                             <form className="w-full gap-4 flex flex-col" onSubmit={handleSubmit}>
                                 <input
