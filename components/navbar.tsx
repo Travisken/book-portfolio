@@ -92,7 +92,7 @@ export default function Navbar() {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
                             transition={{ duration: 0.3 }}
-                            className="absolute top-12 -right-4 bg-white shadow-md p-4 w-[100vw]"
+                            className="absolute top-12 -right-4 bg-white z-10 shadow-md p-4 w-[100vw]"
                         >
                             <ul className="flex flex-col gap-4">
                                 {navLinks.map(({ name, href }) => (
