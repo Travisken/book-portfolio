@@ -16,7 +16,7 @@
           "image": "/images/book2.jpg",
           "buyLink": "https://example.com/book2",
           "published": false,
-          "rating": 1
+          "rating": 3
         },
         {
           "id": 3,
@@ -25,7 +25,7 @@
           "image": "/images/book1.jpg",
           "buyLink": "https://example.com/book1",
           "published": false,
-          "rating": 1
+          "rating": 4
         },
         {
           "id": 4,
@@ -34,7 +34,7 @@
           "image": "/images/book1.jpg",
           "buyLink": "https://example.com/book1",
           "published": false,
-          "rating": 1
+          "rating": 3
         }
       ],
     "testimonials": [
@@ -42,7 +42,7 @@
         "id": 1,
         "name": "John Doe",
         "review": "An incredible book that changed my perspective on storytelling!",
-        "rating": 1
+        "rating": 3
       },
       {
         "id": 2,

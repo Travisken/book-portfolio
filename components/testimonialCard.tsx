@@ -24,7 +24,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ name, review, rating }) =
         </div>
       </div>
 
-      <p className="text-gray-700 mt-4 italic">&quot{review}&quot</p>
+      <p className="text-gray-700 mt-4 italic">&quot;{review}&quot;</p>
 
       <div className="flex items-center mt-4">
         {[...Array(5)].map((_, index) => (
