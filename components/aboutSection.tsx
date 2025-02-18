@@ -12,7 +12,7 @@ export default function AboutSection() {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
         >
-            <section className="flex gap-8 items-start justify-start px-20 ">
+            <section className="flex items-start justify-start md:px-[5.2rem]">
                 <section id="about" className=" flex-1 flex justify-start items-left flex-col mx-auto gap-8 text-left">
                 <h2 className="text-4xl text-left font-bold">
                     Hi, I'm Dr. Akinsiku Folarin
@@ -26,7 +26,7 @@ export default function AboutSection() {
                     {expanded && (
                         <>
                             <p className="mt-4">
-                                CNHPD is a network of dedicated healthcare professionals committed to enhancing Nigeria’s healthcare sector. United by a shared vision of national development, they focus on bridging local practices with global standards through technical collaborations and networking.
+                                CNHPD is a network of dedicated healthcare professionals committed to enhancing Nigeria&apos;s healthcare sector. United by a shared vision of national development, they focus on bridging local practices with global standards through technical collaborations and networking.
                             </p>
                             <p className="mt-4">
                                 Currently pursuing an MBA at the University of Kansas, Folarin merges healthcare innovation with strategic business insights. He leverages a unique blend of financial acumen, customer service excellence, and analytical expertise.

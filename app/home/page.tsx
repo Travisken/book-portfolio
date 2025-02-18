@@ -52,7 +52,7 @@ const Home = () => {
           )}
         </div>
 
-        <div className="flex gap-8 flex-wrap justify-center md:justify-between items-center">
+        <div className="flex gap-8 flex-wrap md:gap-0 justify-center md:!justify-between w-full items-center">
           {books.map((book) => (
             <BookCard key={book.id} book={book} onReadMore={() => handleOpen(book)} />
           ))}
