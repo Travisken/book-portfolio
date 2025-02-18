@@ -20,7 +20,7 @@ export default function AboutSection() {
 
                 <div className="bg-[#00000015] md:p-4 p-2 md:rounded-xl text-left md:max-w-[88vw]">
                     <p>
-                        I'm the CEO of Pentspace, a thriving e-commerce platform dedicated to enhancing user connections with businesses and services. Beyond the digital marketplace, he is deeply committed to revolutionizing healthcare in Nigeria through global collaboration and knowledge transfer at CNHPD (Community of Nigerian Healthcare Professionals in diaspora).
+                        I&apos;m the CEO of Pentspace, a thriving e-commerce platform dedicated to enhancing user connections with businesses and services. Beyond the digital marketplace, he is deeply committed to revolutionizing healthcare in Nigeria through global collaboration and knowledge transfer at CNHPD (Community of Nigerian Healthcare Professionals in diaspora).
                     </p>
 
                     {expanded && (
