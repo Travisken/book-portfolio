@@ -1,9 +1,9 @@
 // components/EmailTable.tsx
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+// import { useEffect, useState } from 'react';
+// import axios from 'axios';
 
 export default function EmailTable() {
-  const [emails, setEmails] = useState([]);
+  // const [emails, setEmails] = useState([]);
 
 //   useEffect(() => {
 //     axios.get('/api/emails').then((res) => setEmails(res.data));

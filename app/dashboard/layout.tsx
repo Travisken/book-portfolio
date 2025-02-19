@@ -1,7 +1,3 @@
-"use client";
-
-import { useState } from "react";
-import { usePathname } from "next/navigation";
 import DashboardNavbar from "@/components/DashboardNav";
 import Sidebar from "@/components/Sidebar";
 

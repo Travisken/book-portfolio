@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import EmailTable from "@/components/EmailTable";
 import TestimonialManager from "@/components/TestimonialManager";
-import AnalyticsChart from "@/components/AnalyticsChart";
-import DashboardNavbar from "@/components/DashboardNav";
-import Sidebar from "@/components/Sidebar";
+// import AnalyticsChart from "@/components/AnalyticsChart";
+// import DashboardNavbar from "@/components/DashboardNav";
+// import Sidebar from "@/components/Sidebar";
 import BookTable from "@/components/BookTable";
 // import BookTable from "@/components/BookTable";
 
@@ -18,6 +18,7 @@ export default function Dashboard() {
   useEffect(() => {
     axios.get("/api/analytics").then((res) => {
       setDownloadCount(res.data.downloadCount);
+      console.log(downloadCount)
     });
   }, []);
 
@@ -25,6 +26,7 @@ export default function Dashboard() {
   useEffect(() => {
     axios.get("/api/books").then((res) => {
       setBooks(res.data.books);
+      console.log(books)
     });
   }, []);
 

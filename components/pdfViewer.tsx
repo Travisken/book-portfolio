@@ -14,7 +14,7 @@ const Page = dynamic(() => import("react-pdf").then((mod) => mod.Page), { ssr: f
 pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
 
 export default function DocumentReader() {
-  const [file, setFile] = useState<string | null>("/sample.pdf");
+  const file=("/sample.pdf");
   const [numPages, setNumPages] = useState<number>(0);
 
   return (
@@ -27,8 +27,6 @@ export default function DocumentReader() {
             <Page key={`page_${index + 1}`} pageNumber={index + 1} className="border mb-2" />
           ))}
         </Document>
-      ) : file ? (
-        <img src={file} alt="Uploaded File" className="w-full rounded-md" />
       ) : (
         <p className="text-gray-500">No file available</p>
       )}

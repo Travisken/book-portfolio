@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FiLogOut, FiMenu, FiX } from "react-icons/fi";
+import { FiMenu, FiX } from "react-icons/fi";
 import Sidebar from "./Sidebar";
 
 export default function DashboardNavbar() {

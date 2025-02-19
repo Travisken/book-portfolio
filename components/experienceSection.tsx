@@ -86,7 +86,7 @@ export default function ExperienceSection() {
                                 Member
                             </p>
                             <p className="text-zinc-600 line-clamp-3">
-                            The Community of Nigerian Health Personnel in Diaspora (CNHPD) comprises a dedicated group of professionals who plan to return to Nigeria in the near future to enhance the country's health sector.
+                            The Community of Nigerian Health Personnel in Diaspora (CNHPD) comprises a dedicated group of professionals who plan to return to Nigeria in the near future to enhance the country&apos;s health sector.
                                 </p>
                         </div>
                     </div>

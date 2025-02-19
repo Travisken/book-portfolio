@@ -12,7 +12,7 @@ const LoginForm = () => {
   const router = useRouter();
 
   const validateForm = () => {
-    let newErrors: { email?: string; password?: string } = {};
+    const newErrors: { email?: string; password?: string } = {};
     if (!email) {
       newErrors.email = "Email is required";
     } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
@@ -26,6 +26,7 @@ const LoginForm = () => {
     }
 
     setErrors(newErrors);
+    console.log(errors)
     return Object.keys(newErrors).length === 0;
   };
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
+import Image from "next/image";
 
 const BookUploadForm = () => {
   const [bookData, setBookData] = useState({
@@ -121,7 +122,7 @@ const BookUploadForm = () => {
         >
           <input {...getInputProps()} />
           {preview ? (
-            <img src={preview} alt="Preview" className="w-[20rem] h-[20rem] object-cover rounded-lg" />
+            <Image layout="fill" src={preview} alt="Preview" className="w-[20rem] h-[20rem] object-cover rounded-lg" />
           ) : (
             <p className="text-gray-500 hover:text-[#3ca0ca]">Drag & Drop or Click to Upload</p>
           )}

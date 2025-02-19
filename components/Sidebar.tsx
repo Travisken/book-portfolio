@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { FiHome, FiMail, FiStar, FiUsers, FiLogOut, FiPlus } from "react-icons/fi";
+import { FiHome, FiLogOut, FiPlus } from "react-icons/fi";
 import Link from "next/link";
 import clsx from "clsx";
 
