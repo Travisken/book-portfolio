@@ -5,7 +5,7 @@ interface Book {
   title: string;
   description: string;
   image: string;
-  buyLink: string;
+  bookLink: string;
   published: boolean;
 }
 
@@ -17,7 +17,7 @@ interface BookProps {
 
 const BookCard: React.FC<BookProps> = ({ book, onReadMore }) => {
   return (
-    <div className="shadow rounded-xl p-2 flex flex-col md:w-[18rem] w-full gap-4">
+    <div id="bookCard" className="shadow rounded-xl p-2 flex flex-col md:w-[18rem] w-full gap-4">
       {/* Image Section */}
       <div className="relative h-52 rounded-xl overflow-hidden">
         <Image 

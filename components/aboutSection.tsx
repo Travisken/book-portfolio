@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import ExperienceSection from "./experienceSection";
+// import ExperienceSection from "./experienceSection";
 
 export default function AboutSection() {
     const [expanded, setExpanded] = useState(false);
@@ -12,8 +12,8 @@ export default function AboutSection() {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
         >
-            <section className="flex items-start justify-start md:px-[5.2rem]">
-                <section id="about" className=" flex-1 flex justify-start items-left flex-col mx-auto gap-8 text-left">
+            <section id="about" className="flex items-start justify-start md:mt-20 !mt-32 px-3 md:px-[5.2rem]">
+                <section className=" flex-1 flex justify-start items-left flex-col mx-auto gap-8 text-left">
                 <h2 className="text-4xl text-left font-bold">
                     Hi, I&apos;m Dr. Akinsiku Folarin
                 </h2>
@@ -49,7 +49,7 @@ export default function AboutSection() {
                 </div>
 
             </section>
-                <ExperienceSection></ExperienceSection>
+                {/* <ExperienceSection></ExperienceSection> */}
             </section>
             
         </motion.div>
