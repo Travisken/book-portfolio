@@ -1,28 +1,26 @@
 "use client";
 
 import TestimonialCard from "./testimonialCard";
-import testimonialData from "@/public/data.json";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
+import { database } from '@/app/firebase'; // Adjust path as necessary
+import { ref, get } from 'firebase/database';
 
-// Define the type for a single testimonial
 interface Testimonial {
-  id: string;
+  id: number;
   name: string;
-  message: string;
-  // Add other fields as needed
-}
-
-interface TestimonialData {
-  testimonials: Testimonial[];
+  rating: number;
+  review: string;
 }
 
 const TestimonialSection: React.FC = () => {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,6 +30,34 @@ const TestimonialSection: React.FC = () => {
     handleResize(); // Check on initial render
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const testimonialsRef = ref(database, 'data'); // Adjust the path based on your structure
+        const snapshot = await get(testimonialsRef);
+
+        if (snapshot.exists()) {
+          const data = snapshot.val(); // Log fetched data
+          
+          // Assuming testimonials are the fourth element in the array
+          const testimonialArray = data[3] ? data[3] : [];
+          console.log('Testimonials array:', testimonialArray); // Log testimonials array
+          setTestimonials(data.testimonials);
+        } else {
+          console.log('No testimonials found');
+          setTestimonials([]);
+        }
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+        setTestimonials([]);
+      } finally {
+        setLoading(false); // Stop loading when done
+      }
+    };
+
+    fetchTestimonials();
   }, []);
 
   return (
@@ -44,8 +70,11 @@ const TestimonialSection: React.FC = () => {
       <div id="testimonialForm" className="h-[70vh] flex items-center bg-g">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-left mb-6">Testimonials</h2>
-
-          {isMobile ? (
+          {loading ? ( // Show loader while fetching
+            <div className="flex justify-center items-center h-full">
+              <div className="loader">Loading...</div>
+            </div>
+          ) : isMobile ? (
             <Swiper
               slidesPerView={1}
               spaceBetween={10}
@@ -53,16 +82,16 @@ const TestimonialSection: React.FC = () => {
               modules={[Pagination]}
               className="w-full"
             >
-              {(testimonialData as unknown as TestimonialData).testimonials.map((testimonial) => (
+              {testimonials.map((testimonial) => (
                 <SwiperSlide key={testimonial.id}>
-                  <TestimonialCard review={""} rating={0} {...testimonial} />
+                  <TestimonialCard {...testimonial} />
                 </SwiperSlide>
               ))}
             </Swiper>
           ) : (
             <div className="flex gap-10">
-              {(testimonialData as unknown as TestimonialData).testimonials.map((testimonial) => (
-                <TestimonialCard review={""} rating={0} key={testimonial.id} {...testimonial} />
+              {testimonials.map((testimonial) => (
+                <TestimonialCard key={testimonial.id} {...testimonial} />
               ))}
             </div>
           )}
