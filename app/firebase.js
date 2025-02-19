@@ -1,17 +1,22 @@
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getDatabase } from 'firebase/database';
 
-// // Your web app's Firebase configuration
-// const firebaseConfig = {
-//   apiKey: process.env.REACT_APP_API_KEY,
-//   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-//   projectId: process.env.REACT_APP_PROJECT_ID,
-//   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-//   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-//   appId: process.env.REACT_APP_APP_ID,
-//   measurementId: process.env.REACT_APP_MEASUREMENT_ID
-// };
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCYqAo7GAsmJDvWpg31p_b-nucOFt3yqQs",
+  authDomain: "book-portfolio-4eccb.firebaseapp.com",
+  projectId: "book-portfolio-4eccb",
+  storageBucket: "book-portfolio-4eccb.firebasestorage.app",
+  databaseURL: "https://book-portfolio-4eccb-default-rtdb.firebaseio.com/",
+  messagingSenderId: "586599627581",
+  appId: "1:586599627581:web:1a5cb5bf5614044f23a354",
+  measurementId: "G-7V9BQZBCQ1"
+};
 
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const database = getDatabase(app);
+
+export { app, database }
