@@ -5,7 +5,7 @@
           "title": "Investing in healthcare",
           "description": "A guide to investment opportunities in global healthcare, empowering professionals to drive innovation and impact.",
           "image": "/book_cover.jpeg",
-          "buyLink": "/",
+          "bookLink": "./sample.pdf",
           "published": true,
           "rating": 4
         },
@@ -14,7 +14,7 @@
           "title": "Mysteries of the Mind",
           "description": "A psychological thriller that keeps you on the edge of your seat.",
           "image": "/images/book2.jpg",
-          "buyLink": "https://example.com/book2",
+          "bookLink": "https://example.com/book2",
           "published": false,
           "rating": 3
         },
@@ -23,7 +23,7 @@
           "title": "A Journey Through Time",
           "description": "A thrilling adventure novel that takes you through different eras of history.",
           "image": "/images/book1.jpg",
-          "buyLink": "https://example.com/book1",
+          "bookLink": "https://example.com/book1",
           "published": false,
           "rating": 4
         },
@@ -32,7 +32,7 @@
           "title": "A Journey Through Time",
           "description": "A thrilling adventure novel that takes you through different eras of history.",
           "image": "/images/book1.jpg",
-          "buyLink": "https://example.com/book1",
+          "bookLink": "https://example.com/book1",
           "published": false,
           "rating": 3
         }

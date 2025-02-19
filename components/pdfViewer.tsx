@@ -1,55 +1,39 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Document, Page } from "react-pdf";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import { pdfjs } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 
-// Load the worker from CDN
-// pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
+// Dynamically import react-pdf to avoid SSR issues
+const Document = dynamic(() => import("react-pdf").then((mod) => mod.Document), { ssr: false });
+const Page = dynamic(() => import("react-pdf").then((mod) => mod.Page), { ssr: false });
 
-const PdfViewer = ({ fileUrl }: { fileUrl: string }) => {
-  const [numPages, setNumPages] = useState<number | null>(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [mounted, setMounted] = useState(false);
+// ✅ Set the worker source correctly
+pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-    setNumPages(numPages);
-  };
-
-  if (!mounted) return <p>Loading PDF...</p>;
+export default function DocumentReader() {
+  const [file, setFile] = useState<string | null>("/sample.pdf");
+  const [numPages, setNumPages] = useState<number>(0);
 
   return (
-    <div className="flex flex-col items-center p-4">
-      <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page pageNumber={pageNumber} />
-      </Document>
 
-      <div className="flex justify-between w-full max-w-sm mt-2">
-        <button
-          onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
-          disabled={pageNumber === 1}
-          className="px-4 py-2 bg-gray-300 rounded"
-        >
-          Prev
-        </button>
-        <p>
-          Page {pageNumber} of {numPages}
-        </p>
-        <button
-          onClick={() => setPageNumber((prev) => Math.min(prev + 1, numPages!))}
-          disabled={pageNumber === numPages}
-          className="px-4 py-2 bg-gray-300 rounded"
-        >
-          Next
-        </button>
-      </div>
+    <>
+    <div className="p-4 w-full max-w-2xl mx-auto bg-white shadow-md rounded-lg">
+      {file && file.endsWith(".pdf") ? (
+        <Document file={file} onLoadSuccess={({ numPages }) => setNumPages(numPages)}>
+          {Array.from(new Array(numPages), (_, index) => (
+            <Page key={`page_${index + 1}`} pageNumber={index + 1} className="border mb-2" />
+          ))}
+        </Document>
+      ) : file ? (
+        <img src={file} alt="Uploaded File" className="w-full rounded-md" />
+      ) : (
+        <p className="text-gray-500">No file available</p>
+      )}
     </div>
+    </>
+    
   );
-};
-
-export default PdfViewer;
+}

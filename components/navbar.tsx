@@ -39,8 +39,18 @@ export default function Navbar() {
     }, []);
 
     return (
-        <nav className="flex w-full justify-end md:justify-between md:p-0 p-4 items-center">
-            <div className="hidden md:flex justify-between w-full px-20 py-3">
+        <nav className="flex w-full justify-between md:p-0 px-4 items-center">
+            
+                
+                <div className="hidden md:flex justify-between items-center w-full px-20">
+                <div className="bg-black justify-center text-xl font-semibold h-16 flex w-24 flex-col px-4 text-white">
+                    <span>
+                     Dr.   
+                    </span>
+                    <span>
+                    Folarin.
+                    </span>
+                </div>
                 <ul className="flex gap-12 items-center text-xl">
                     {navLinks.map(({ name, href }) => (
                         <li key={href}>

@@ -1,12 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-// Dynamically import PdfViewer with SSR disabled
-const PdfViewer = dynamic(() => import("@/components/pdfViewer"), { ssr: false });
+import PdfViewer from "@/components/pdfViewer";
 
 const BookPage = () => {
-  return <PdfViewer fileUrl="/sample.pdf" />;
+  return (<PdfViewer />);
 };
 
 export default BookPage;

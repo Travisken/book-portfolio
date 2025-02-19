@@ -16,6 +16,9 @@ section{
   font-size: medium ;
 }
 
+.card{
+  cursor: pointer;
+}
 
 .nav_link {
   position: relative;
