@@ -3,7 +3,11 @@
 import PdfViewer from "@/components/pdfViewer";
 
 const BookPage = () => {
-  return (<PdfViewer />);
+  return (
+  <>  
+  <PdfViewer />
+  </>
+);
 };
 
 export default BookPage;

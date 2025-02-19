@@ -11,6 +11,7 @@ const BookUploadForm = () => {
     aboutBook: "",
     contributors: "",
     bookCover: null as File | null,
+    isPublished: false,
   });
 
   const [preview, setPreview] = useState<string | null>(null);
@@ -51,6 +52,7 @@ const BookUploadForm = () => {
     formData.append("aboutBook", bookData.aboutBook);
     if (bookData.contributors) formData.append("contributors", bookData.contributors);
     if (bookData.bookCover) formData.append("bookCover", bookData.bookCover);
+    formData.append("isPublished", String(bookData.isPublished));
 
     console.log("Form submitted", formData);
   };
@@ -70,9 +72,6 @@ const BookUploadForm = () => {
         />
         {errors.bookName && <p className="text-red-500 text-sm">{errors.bookName}</p>}
       </div>
-
-      {/* Drag & Drop Upload Box */}
-
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Book Description</label>
@@ -107,6 +106,15 @@ const BookUploadForm = () => {
           onChange={(e) => setBookData({ ...bookData, contributors: e.target.value })}
           className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl"
         />
+      </div>
+
+      <div className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={bookData.isPublished}
+          onChange={(e) => setBookData({ ...bookData, isPublished: e.target.checked })}
+        />
+        <label className="text-sm font-medium text-gray-700">Is this book published?</label>
       </div>
 
       <button type="submit" className="w-full bg-[#3ca0ca] text-white p-3 rounded-xl hover:bg-[#3ca0ca]">

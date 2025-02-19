@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const isLoginPage = ["/login", "/dashboard", "/dashboard/add-book"].includes(pathname);
+  const isLoginPage = ["/login", "/dashboard", "/dashboard/add-book", "/pdf-viewer"].includes(pathname);
 
   return (
     <html lang="en" suppressHydrationWarning>

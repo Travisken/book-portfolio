@@ -41,18 +41,21 @@
       {
         "id": 1,
         "name": "John Doe",
+        "bookName": "Book name",
         "review": "An incredible book that changed my perspective on storytelling!",
         "rating": 3
       },
       {
         "id": 2,
         "name": "Jane Smith",
+        "bookName": "Book name",
         "review": "I couldn't put the book down! The narrative is gripping and full of twists.",
         "rating": 4
       },
       {
         "id": 3,
         "name": "Jane Smith",
+        "bookName": "Book name",
         "review": "I couldn't put the book down! The narrative is gripping and full of twists.",
         "rating": 2
       }

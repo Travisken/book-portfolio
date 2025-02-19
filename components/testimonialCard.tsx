@@ -7,9 +7,10 @@ interface TestimonialProps {
     name: string;
     review: string;
     rating: number;
+    bookName: string;
   }
 
-const TestimonialCard: React.FC<TestimonialProps> = ({ name, review, rating }) => {
+const TestimonialCard: React.FC<TestimonialProps> = ({ name, review, rating, bookName }) => {
   return (
   
     <>
@@ -20,7 +21,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ name, review, rating }) =
         {/* <img src={image} alt={name} className="w-14 h-14 rounded-full object-cover border-2 border-gray-300" /> */}
         <div>
           <h3 className="text-lg font-semibold">{name}</h3>
-          {/* <p className="text-sm text-gray-500">{role}</p> */}
+          <p className="text-sm text-gray-500">{bookName}</p>
         </div>
       </div>
 

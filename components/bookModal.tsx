@@ -6,6 +6,8 @@ import { Modal, Backdrop, Fade, Box, Typography, Button } from "@mui/material";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Star } from "lucide-react";
+import { useRouter } from "next/navigation"; 
+
 
 interface BookModalProps {
     open: boolean;
@@ -56,6 +58,13 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState<string | null>(null);
+    const router = useRouter();
+
+const handleReadNow = () => {
+    if (book?.bookLink) {
+        router.push(`/pdf-viewer?bookLink=${encodeURIComponent(book.bookLink)}`);
+    }
+};
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ email: event.target.value });
@@ -100,6 +109,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
             console.log("Email sent successfully:", response);
             setSuccess("Email sent! Check your inbox.");
+                router.push(`/pdf-viewer?bookLink=${encodeURIComponent(book.bookLink)}`);
             setFormData({ email: "" });
         } catch (error) {
             console.error("Failed to send email:", error);
