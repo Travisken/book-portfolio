@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { database } from '@/app/firebase'; // Adjust the path as necessary
+import { ref, update, remove, get } from 'firebase/database';
 
 interface Testimonial {
   id: number;
   name: string;
   review: string;
   rating: number;
-  approved: boolean;
+  approved: boolean; // Ensure this field exists in your database
 }
 
 export default function TestimonialManager() {
@@ -17,18 +18,30 @@ export default function TestimonialManager() {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const res = await axios.get<Testimonial[]>("/api/testimonials");
-        setTestimonials(res.data);
-      } catch (err) {
-        setError("Failed to fetch testimonials.");
+        const testimonialsRef = ref(database, 'data'); // Adjust the path based on your structure
+        const snapshot = await get(testimonialsRef);
+
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const testimonialArray = data.testimonials || []; // Use the correct path to testimonials
+          console.log('Testimonials array:', testimonialArray); // Log testimonials array
+          setTestimonials(testimonialArray);
+        } else {
+          console.log('No testimonials found');
+          setTestimonials([]);
+        }
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+        setTestimonials([]);
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading when done
       }
     };
 
     fetchTestimonials();
   }, []);
 
+  // Handle approving a testimonial
   const handleApprove = async (id: number) => {
     const approvedCount = testimonials.filter((t) => t.approved).length;
 
@@ -38,22 +51,29 @@ export default function TestimonialManager() {
     }
 
     try {
-      await axios.post("/api/approve-testimonial", { id });
+      const testimonialRef = ref(database, `data/testimonials/${id}`); // Adjust the path based on your structure
+      await update(testimonialRef, { approved: true }); // Update the approved status in Firebase
       setTestimonials((prev) =>
         prev.map((t) => (t.id === id ? { ...t, approved: true } : t))
       );
       setError(null); // Clear error if successful
     } catch (err) {
+      console.error("Failed to approve testimonial:", err);
       setError("Failed to approve testimonial.");
     }
   };
 
+  // Handle deleting a testimonial
   const handleDelete = async (id: number) => {
     try {
-      await axios.delete(`/api/delete-testimonial/${id}`);
+      const testimonialRef = ref(database, `data/testimonials/${id}`); // Adjust the path based on your structure
+      console.log(`Deleting testimonial with ID: ${id}`); // Debug log
+      await remove(testimonialRef); // Remove the testimonial from Firebase
+      console.log(`Successfully deleted testimonial with ID: ${id}`); // Debug log
       setTestimonials((prev) => prev.filter((t) => t.id !== id));
       setError(null);
     } catch (err) {
+      console.error("Failed to delete testimonial:", err);
       setError("Failed to delete testimonial.");
     }
   };
@@ -72,7 +92,7 @@ export default function TestimonialManager() {
           <p className="text-gray-500">No published testimonials.</p>
         ) : (
           testimonials
-            .filter((t) => t.approved)
+            .filter((t) => t.approved) // Filter for approved testimonials
             .map((testimonial) => (
               <div key={testimonial.id} className="p-4 border rounded mb-2">
                 <p className="font-bold">{testimonial.name}</p>
@@ -96,7 +116,7 @@ export default function TestimonialManager() {
           <p className="text-gray-500">No pending testimonials.</p>
         ) : (
           testimonials
-            .filter((t) => !t.approved)
+            .filter((t) => !t.approved) // Filter for pending testimonials
             .map((testimonial) => (
               <div key={testimonial.id} className="p-4 border rounded mb-2">
                 <p className="font-bold">{testimonial.name}</p>

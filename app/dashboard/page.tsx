@@ -1,34 +1,54 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { auth } from "@/app/firebase"; // Adjust the path as necessary
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import EmailTable from "@/components/EmailTable";
 import TestimonialManager from "@/components/TestimonialManager";
-// import AnalyticsChart from "@/components/AnalyticsChart";
-// import DashboardNavbar from "@/components/DashboardNav";
-// import Sidebar from "@/components/Sidebar";
 import BookTable from "@/components/BookTable";
-// import BookTable from "@/components/BookTable";
 
 export default function Dashboard() {
   const [downloadCount, setDownloadCount] = useState(0);
   const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  // Check authentication state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/login"); // Redirect to login if not authenticated
+      } else {
+        setLoading(false); // Set loading to false if authenticated
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup subscription on unmount
+  }, [router]);
 
   // Fetch download count from the API
   useEffect(() => {
-    axios.get("/api/analytics").then((res) => {
-      setDownloadCount(res.data.downloadCount);
-      console.log(downloadCount)
-    });
-  }, []);
+    if (!loading) {
+      axios.get("/api/analytics").then((res) => {
+        setDownloadCount(res.data.downloadCount);
+        console.log(res.data.downloadCount);
+      });
+    }
+  }, [loading]);
 
   // Fetch books from the API
   useEffect(() => {
-    axios.get("/api/books").then((res) => {
-      setBooks(res.data.books);
-      console.log(books)
-    });
-  }, []);
+    if (!loading) {
+      axios.get("/api/books").then((res) => {
+        setBooks(res.data.books);
+        console.log(res.data.books);
+      });
+    }
+  }, [loading]);
+
+  if (loading) return <p>Loading...</p>; // Show loading state
 
   return (
     <div className="p-6">
