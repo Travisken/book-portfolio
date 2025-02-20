@@ -90,18 +90,21 @@ const LoginForm = () => {
                         </button>
                     </div>
 
-                    <button type="submit"
-                        className="p-3 rounded-xl font-semibold bg-zinc-200 text-black text-xl capitalize hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white w-full flex items-center justify-center"
-                    >
-                        login
-                    </button>
-                    <Link href="/forgot-password" className="hover:text-[#3ca0ce] text-zinc-500 float-right transition-all font-medium hover:underline">
-                        Forgot Password?
-                    </Link>
-                </form>
-            </motion.div>
-        </div>
-    );
-};
+          {/* <button  className="w-full bg-[#3ca0ce] text-white py-3 rounded-xl font-medium hover:bg-[#135690] transition-all">
+            Login
+          </button> */}
+          <button type="submit"
+            className="p-3 rounded-xl font-semibold bg-zinc-200 text-black text-xl capitalize hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white w-full flex items-center justify-center"
+          >
+            login
+          </button>
+          {/* <Link href="/forgot-password" className="hover:text-[#3ca0ce] text-zinc-500 float-right transition-all font-medium hover:underline">
+            Forgot Password?
+          </Link> */}
+        </form>
+      </motion.div>
+    </div>
+  );
+}
 
 export default LoginForm;

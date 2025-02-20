@@ -42,7 +42,7 @@ export default function Navbar() {
         <nav className="flex w-full justify-between md:p-0 px-4 items-center">
             
                 
-                <div className="hidden md:flex justify-between items-center w-full px-20">
+                <div className="flex justify-between items-center w-full md:px-20">
                 <div className="bg-black justify-center text-xl font-semibold h-16 flex w-24 flex-col px-4 text-white">
                     <span>
                      Dr.   
@@ -51,7 +51,7 @@ export default function Navbar() {
                     Folarin.
                     </span>
                 </div>
-                <ul className="flex gap-12 items-center text-xl">
+                <ul className="hidden md:flex gap-12 items-center text-xl">
                     {navLinks.map(({ name, href }) => (
                         <li key={href}>
                             <Link
@@ -64,7 +64,7 @@ export default function Navbar() {
                     ))}
                 </ul>
                 <Link
-                    className="py-3 rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex w-[12rem] h-fit items-center justify-center"
+                    className="py-3 hidden md:flex  rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white w-[12rem] h-fit items-center justify-center"
                     to={"testimonialForm"}
                 >
                     Feedback

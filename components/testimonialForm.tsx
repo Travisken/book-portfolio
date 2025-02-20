@@ -26,11 +26,11 @@ export default function TestimonialForm() {
   };
 
   return (
-    <section className="md:px-20">
+    <section className="md:px-20 px-4">
       <div className="md:p-10 p-4 rounded-2xl bg-[#00000015] flex-1">
         <div className="flex flex-col gap-2 py-6">
           <h2 className="text-4xl font-bold">Feedback</h2>
-          <p className="text-sm text-zinc-500">Submit your feedback.</p>
+          <p className="text-sm text-zinc-500">Share your thoughts and help improve future books with your valuable feedback!</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
