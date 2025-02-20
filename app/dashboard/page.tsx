@@ -31,7 +31,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-6">
+    <div className="md:p-6 p-2">
       <h1 className="text-2xl font-bold mb-8">Admin Dashboard</h1>
 
       {/* Emails Section */}

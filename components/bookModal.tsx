@@ -1,8 +1,6 @@
 "use client";
 
 import { Modal, Backdrop, Fade, Box, Typography, Button } from "@mui/material";
-// import TestimonialCard from "./testimonialCard";
-// import testimonialData from "@/public/data.json";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Star } from "lucide-react";
@@ -13,29 +11,15 @@ interface BookModalProps {
     open: boolean;
     onClose: () => void;
     book: {
-        title: string;
-        description: string;
+        bookName: string;
+        bookDescription: string;
         image: string;
-        bookLink: string;
+        bookDocument: string;
         rating: number;
 
     } | null;
 }
 
-
-
-
-// interface TestimonialProps {
-//     name: string;
-//     review: string;
-//     rating: number;
-//   }
-
-// type Testimonial = {
-//     id: number;
-//     name: string;
-//     review: string;
-// };
 
 const modalStyle = {
     position: "absolute",
@@ -61,8 +45,8 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     const router = useRouter();
 
 const handleReadNow = () => {
-    if (book?.bookLink) {
-        router.push(`/pdf-viewer?bookLink=${encodeURIComponent(book.bookLink)}`);
+    if (book?.bookDocument) {
+        router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
     }
 };
 
@@ -95,8 +79,8 @@ const handleReadNow = () => {
 
         const templateParams = {
             user_email: formData.email,
-            book_title: book.title,
-            book_link: book.bookLink,
+            book_bookName: book.bookName,
+            book_link: book.bookDocument,
         };
 
         try {
@@ -109,7 +93,7 @@ const handleReadNow = () => {
 
             console.log("Email sent successfully:", response);
             setSuccess("Email sent! Check your inbox.");
-                router.push(`/pdf-viewer?bookLink=${encodeURIComponent(book.bookLink)}`);
+                router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
             setFormData({ email: "" });
         } catch (error) {
             console.error("Failed to send email:", error);
@@ -137,10 +121,10 @@ const handleReadNow = () => {
                         </div>
                         <div className="flex flex-col gap-4">
                             <Typography variant="h4" component="h2" className="font-semibold">
-                                {book.title}
+                                {book.bookName}
                             </Typography>
                             <h5 className="text-lg font-semibold">Description</h5>
-                            <Typography className="text-zinc-600">{book.description}</Typography>
+                            <Typography className="text-zinc-600">{book.bookDescription}</Typography>
 
                             <form className="flex relative flex-col gap-6" onSubmit={handleSubmit}>
                                 <input

@@ -92,9 +92,9 @@ const LoginForm = () => {
           >
             login
           </button>
-          <Link href="/forgot-password" className="hover:text-[#3ca0ce] text-zinc-500 float-right transition-all font-medium hover:underline">
+          {/* <Link href="/forgot-password" className="hover:text-[#3ca0ce] text-zinc-500 float-right transition-all font-medium hover:underline">
             Forgot Password?
-          </Link>
+          </Link> */}
         </form>
       </motion.div>
     </div>

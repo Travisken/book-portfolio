@@ -2,37 +2,37 @@
       "booksSection": [
         {
           "id": 1,
-          "title": "Investing in healthcare",
-          "description": "A guide to investment opportunities in global healthcare, empowering professionals to drive innovation and impact.",
+          "bookName": "Investing in healthcare",
+          "bookDescription": "A guide to investment opportunities in global healthcare, empowering professionals to drive innovation and impact.",
           "image": "/book_cover.jpeg",
-          "bookLink": "./sample.pdf",
+          "bookDocument": "./sample.pdf",
           "published": true,
           "rating": 4
         },
         {
           "id": 2,
-          "title": "Mysteries of the Mind",
-          "description": "A psychological thriller that keeps you on the edge of your seat.",
+          "bookName": "Mysteries of the Mind",
+          "bookDescription": "A psychological thriller that keeps you on the edge of your seat.",
           "image": "/images/book2.jpg",
-          "bookLink": "https://example.com/book2",
+          "bookDocument": "https://example.com/book2",
           "published": false,
           "rating": 3
         },
         {
           "id": 3,
-          "title": "A Journey Through Time",
-          "description": "A thrilling adventure novel that takes you through different eras of history.",
+          "bookName": "A Journey Through Time",
+          "bookDescription": "A thrilling adventure novel that takes you through different eras of history.",
           "image": "/images/book1.jpg",
-          "bookLink": "https://example.com/book1",
+          "bookDocument": "https://example.com/book1",
           "published": false,
           "rating": 4
         },
         {
           "id": 4,
-          "title": "A Journey Through Time",
-          "description": "A thrilling adventure novel that takes you through different eras of history.",
+          "bookName": "A Journey Through Time",
+          "bookDescription": "A thrilling adventure novel that takes you through different eras of history.",
           "image": "/images/book1.jpg",
-          "bookLink": "https://example.com/book1",
+          "bookDocument": "https://example.com/book1",
           "published": false,
           "rating": 3
         }

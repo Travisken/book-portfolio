@@ -14,10 +14,10 @@ import { ref, get } from 'firebase/database';
 
 interface Book {
   id: number;
-  title: string;
-  description: string;
+  bookName: string;
+  bookDescription: string;
   image: string;
-  bookLink: string;
+  bookDocument: string;
   published: boolean;
   rating: number;
 }

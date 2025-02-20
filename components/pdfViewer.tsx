@@ -4,16 +4,16 @@ import { useSearchParams } from "next/navigation";
 
 const PdfViewer = () => {
     const searchParams = useSearchParams();
-    const bookLink = searchParams.get("bookLink");
+    const bookDocument = searchParams.get("bookDocument");
 
-    if (!bookLink) {
+    if (!bookDocument) {
         return <p className="text-center text-red-500">No book link provided.</p>;
     }
 
     return (
         <div className="w-screen h-screen flex flex-col items-center justify-center">
             <iframe
-                src={bookLink}
+                src={bookDocument}
                 className="w-full h-full"
                 allowFullScreen
             />
