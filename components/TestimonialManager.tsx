@@ -48,6 +48,16 @@ export default function TestimonialManager() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(`/api/delete-testimonial/${id}`);
+      setTestimonials((prev) => prev.filter((t) => t.id !== id));
+      setError(null);
+    } catch (err) {
+      setError("Failed to delete testimonial.");
+    }
+  };
+
   if (loading) return <p>Loading testimonials...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
@@ -57,9 +67,9 @@ export default function TestimonialManager() {
 
       {/* Approved Testimonials */}
       <div className="mb-6">
-        <h3 className="text-lg font-medium">Approved Testimonials</h3>
+        <h3 className="text-lg font-medium">Published Testimonials</h3>
         {testimonials.filter((t) => t.approved).length === 0 ? (
-          <p className="text-gray-500">No approved testimonials.</p>
+          <p className="text-gray-500">No published testimonials.</p>
         ) : (
           testimonials
             .filter((t) => t.approved)
@@ -68,12 +78,18 @@ export default function TestimonialManager() {
                 <p className="font-bold">{testimonial.name}</p>
                 <p className="text-gray-600">&quot;{testimonial.review}&quot;</p>
                 <p className="text-yellow-500">Rating: {testimonial.rating} ⭐</p>
+                <button
+                  onClick={() => handleDelete(testimonial.id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded mt-2 ml-2"
+                >
+                  Delete
+                </button>
               </div>
             ))
         )}
       </div>
 
-      {/* Unapproved Testimonials */}
+      {/* Pending Approval */}
       <div>
         <h3 className="text-lg font-medium">Pending Approval</h3>
         {testimonials.filter((t) => !t.approved).length === 0 ? (
@@ -91,6 +107,12 @@ export default function TestimonialManager() {
                   className="bg-green-500 text-white px-4 py-2 rounded mt-2"
                 >
                   Approve
+                </button>
+                <button
+                  onClick={() => handleDelete(testimonial.id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded mt-2 ml-2"
+                >
+                  Delete
                 </button>
               </div>
             ))

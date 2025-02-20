@@ -3,7 +3,7 @@ import Sidebar from "@/components/Sidebar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen relative bg-gray-100">
+    <div className="min-h-screen overflow-x-hidden relative bg-gray-100">
       {/* Navbar */}
       <DashboardNavbar />
 
