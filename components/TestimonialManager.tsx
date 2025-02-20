@@ -3,11 +3,11 @@ import { database } from '@/app/firebase'; // Adjust the path as necessary
 import { ref, update, remove, get } from 'firebase/database';
 
 interface Testimonial {
-  id: number;
-  name: string;
+  id: string; // Use string for Firebase-generated keys
+  fullName: string;
   review: string;
   rating: number;
-  approved: boolean; // Ensure this field exists in your database
+  approved: boolean;
 }
 
 export default function TestimonialManager() {
@@ -18,12 +18,15 @@ export default function TestimonialManager() {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const testimonialsRef = ref(database, 'data'); // Adjust the path based on your structure
+        const testimonialsRef = ref(database, 'data/testimonials'); // Adjust the path based on your structure
         const snapshot = await get(testimonialsRef);
 
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const testimonialArray = data.testimonials || []; // Use the correct path to testimonials
+          const testimonialArray: Testimonial[] = Object.keys(data).map((key) => ({
+            id: key, // Use Firebase-generated key as ID
+            ...data[key], // Spread the testimonial data
+          }));
           console.log('Testimonials array:', testimonialArray); // Log testimonials array
           setTestimonials(testimonialArray);
         } else {
@@ -32,6 +35,7 @@ export default function TestimonialManager() {
         }
       } catch (error) {
         console.error("Error fetching testimonials:", error);
+        setError("Failed to fetch testimonials.");
         setTestimonials([]);
       } finally {
         setLoading(false); // Stop loading when done
@@ -42,7 +46,7 @@ export default function TestimonialManager() {
   }, []);
 
   // Handle approving a testimonial
-  const handleApprove = async (id: number) => {
+  const handleApprove = async (id: string) => {
     const approvedCount = testimonials.filter((t) => t.approved).length;
 
     if (approvedCount >= 3) {
@@ -64,7 +68,7 @@ export default function TestimonialManager() {
   };
 
   // Handle deleting a testimonial
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     try {
       const testimonialRef = ref(database, `data/testimonials/${id}`); // Adjust the path based on your structure
       console.log(`Deleting testimonial with ID: ${id}`); // Debug log
@@ -95,7 +99,7 @@ export default function TestimonialManager() {
             .filter((t) => t.approved) // Filter for approved testimonials
             .map((testimonial) => (
               <div key={testimonial.id} className="p-4 border rounded mb-2">
-                <p className="font-bold">{testimonial.name}</p>
+                <p className="font-bold">{testimonial.fullName }</p>
                 <p className="text-gray-600">&quot;{testimonial.review}&quot;</p>
                 <p className="text-yellow-500">Rating: {testimonial.rating} ⭐</p>
                 <button
@@ -119,7 +123,7 @@ export default function TestimonialManager() {
             .filter((t) => !t.approved) // Filter for pending testimonials
             .map((testimonial) => (
               <div key={testimonial.id} className="p-4 border rounded mb-2">
-                <p className="font-bold">{testimonial.name}</p>
+                <p className="font-bold">{testimonial.fullName}</p>
                 <p className="text-gray-600">&quot;{testimonial.review}&quot;</p>
                 <p className="text-yellow-500">Rating: {testimonial.rating} ⭐</p>
                 <button
