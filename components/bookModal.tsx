@@ -12,7 +12,7 @@ interface BookModalProps {
     onClose: () => void;
     book: {
         bookName: string;
-        description: string;
+        bookDescription: string;
         image: string;
         aboutBook: string;
         title: string;
