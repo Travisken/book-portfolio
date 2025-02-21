@@ -15,8 +15,11 @@ import { ref, get } from 'firebase/database';
 interface Book {
   id: number;
   bookName: string;
-  bookDescription: string;
+  description: string; // Add this line
   image: string;
+  aboutBook: string; // Add this line
+  title: string; // Add this line
+  bookDescription: string;
   bookDocument: string;
   published: boolean;
   rating: number;
@@ -33,59 +36,37 @@ const Home = () => {
     setOpen(true);
   };
 
-  // useEffect(() => {
-  //   const fetchBooks = async () => {
-  //     try {
-  //       const booksRef = ref(database, 'booksSection'); // Adjust the path based on your structure
-  //       const snapshot = await get(booksRef);
-
-  //       if (snapshot.exists()) {
-  //         const data = snapshot.val();
-  //         console.log('Fetched data:', data);
-
-  //         // Assuming data can be an object or an array
-  //         const booksArray = Array.isArray(data) ? data : Object.values(data);
-  //         setBooks(data.booksSection);
-  //       } else {
-  //         console.log('No books found');
-  //         setBooks([]);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching books:", error);
-  //       setBooks([]);
-  //     } finally {
-  //       setLoading(false); // Stop loading when done
-  //     }
-  //   };
-
-  //   fetchBooks();
-  // }, []);
-
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         const testimonialsRef = ref(database, 'data'); // Adjust the path based on your structure
         const snapshot = await get(testimonialsRef);
-
+  
         if (snapshot.exists()) {
-          const data = snapshot.val(); // Log fetched data
-          
-          // Assuming testimonials are the fourth element in the array
-          const testimonialArray = data[3] ? data[3] : [];
-          console.log('Testimonials array:', testimonialArray); // Log testimonials array
-          setBooks(data.booksSection);
+          const data = snapshot.val();
+          console.log('Fetched data:', data); // Log the entire data structure
+  
+          // Check if data has booksSection and whether it's an array
+          if (data.booksSection) {
+            const booksArray = Array.isArray(data.booksSection) ? data.booksSection : Object.values(data.booksSection);
+            setBooks(booksArray);
+            console.log(booksArray)
+          } else {
+            console.log('No books found in data');
+            setBooks([]);
+          }
         } else {
-          console.log('No testimonials found');
+          console.log('No data found');
           setBooks([]);
         }
       } catch (error) {
-        console.error("Error fetching testimonials:", error);
+        console.error("Error fetching books:", error);
         setBooks([]);
       } finally {
         setLoading(false); // Stop loading when done
       }
     };
-
+  
     fetchBooks();
   }, []);
 
