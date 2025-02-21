@@ -77,7 +77,7 @@ const handleReadNow = () => {
         setLoading(true);
         setError(null);
         setSuccess(null);
-        
+
 
         const templateParams = {
             user_email: formData.email,
@@ -126,7 +126,7 @@ const handleReadNow = () => {
                                 {book.title}
                             </Typography>
                             <h5 className="text-lg font-semibold">Description</h5>
-                            <Typography className="text-zinc-600 bg-red-500">{book.description}</Typography>
+                            <Typography className="text-zinc-600">{book.description}</Typography>
 
                             <form className="flex relative flex-col gap-6" onSubmit={handleSubmit}>
                                 <input

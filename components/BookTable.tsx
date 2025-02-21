@@ -32,7 +32,7 @@ const BookTable = () => {
             id: booksData[key].id,
             title: booksData[key].title, // Ensure the field names match your Firebase structure
             description: booksData[key].description,
-            image: booksData[key].bookLink, // Ensure this matches the field name in Firebase
+            image: booksData[key].image, // Ensure this matches the field name in Firebase
             bookDocument: booksData[key].bookDocument,
             published: booksData[key].published,
             rating: booksData[key].rating || 0, // Default to 0 if rating is not available
@@ -74,7 +74,7 @@ const BookTable = () => {
               className="bg-white md:shadow-lg rounded-lg p-4 w-[16rem] md:w-[20rem] flex flex-col items-center text-center"
             >
               <img
-                src={book.image}
+                src={`${book.image}`}
                 alt={book.title}
                 className="w-full h-48 object-cover rounded-md"
               />
