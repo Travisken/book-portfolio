@@ -105,7 +105,7 @@ export default function TestimonialForm() {
               {[1, 2, 3, 4, 5].map((star) => (
                 <FaStar
                   key={star}
-                  className={`cursor-pointer text-2xl ${formData.rating >= star ? 'text-yellow-400' : 'text-gray-300'}`}
+                  className={`cursor-pointer hover:text-gray-400 transition-all duration-300 text-2xl ${formData.rating >= star ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-300'}`}
                   onClick={() => handleRating(star)}
                 />
               ))}

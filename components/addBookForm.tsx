@@ -151,7 +151,7 @@ const BookUploadForm = () => {
           <div {...getRootProps()} className="mt-2 p-6 rounded-xl flex flex-col items-center justify-center cursor-pointer">
             <input {...getInputProps()} />
             {preview ? (
-              <Image layout="fill" src={preview} alt="Preview" className="w-[20rem] h-[20rem] object-cover rounded-lg" />
+              <Image height={300} width={300} src={preview} alt="Preview" className="w-[20rem] h-[20rem] object-cover rounded-lg" />
             ) : (
               <p className="text-gray-500 hover:text-[#3ca0ca]">Drag & Drop or Click to Upload</p>
             )}

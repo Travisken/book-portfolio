@@ -12,7 +12,7 @@ import { ref, get } from 'firebase/database';
 
 interface Testimonial {
   id: string; // Use string for Firebase-generated keys
-  name: string;
+  fullName: string;
   rating: number;
   review: string;
   approved: boolean; // Ensure this field exists in your database

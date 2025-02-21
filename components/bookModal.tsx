@@ -124,7 +124,7 @@ const handleReadNow = () => {
                                 {book.bookName}
                             </Typography>
                             <h5 className="text-lg font-semibold">Description</h5>
-                            <Typography className="text-zinc-600">{book.bookDescription}</Typography>
+                            <Typography className="text-zinc-600 bg-red-500">{book.bookDescription}</Typography>
 
                             <form className="flex relative flex-col gap-6" onSubmit={handleSubmit}>
                                 <input

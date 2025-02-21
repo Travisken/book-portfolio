@@ -10,7 +10,7 @@ const menuItems = [
   // { name: "Emails", href: "#emails", icon: FiMail },
   // { name: "Testimonials", href: "#testimonials", icon: FiStar },
   // { name: "Partners", href: "#partners", icon: FiUsers },
-  { name: "Add Book", href: "dashboard/add-book", icon: FiPlus },
+  { name: "Add Book", href: "/dashboard/add-book", icon: FiPlus },
 ];
 
 export default function Sidebar() {

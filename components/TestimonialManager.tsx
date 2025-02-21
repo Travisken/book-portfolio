@@ -124,7 +124,7 @@ export default function TestimonialManager() {
             .map((testimonial) => (
               <div key={testimonial.id} className="p-4 border rounded mb-2">
                 <p className="font-bold">{testimonial.fullName}</p>
-                <p className="text-gray-600">&quot;{testimonial.review}&quot;</p>
+                <p className="text-gray-600  whitespace-normal break-words">&quot;{testimonial.review}&quot;</p>
                 <p className="text-yellow-500">Rating: {testimonial.rating} ⭐</p>
                 <button
                   onClick={() => handleApprove(testimonial.id)}
