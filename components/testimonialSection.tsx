@@ -69,7 +69,7 @@ const TestimonialSection: React.FC = () => {
       exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 0.5 }}
     >
-      <div id="testimonialForm" className="h-[70vh] flex items-center bg-g">
+      <div id="testimonials" className="h-[70vh] flex items-center bg-g">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-left mb-6">Testimonials</h2>
           {loading ? ( // Show loader while fetching
