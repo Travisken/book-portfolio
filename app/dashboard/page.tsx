@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { auth } from "@/app/firebase"; // Adjust the path as necessary
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import EmailTable from "@/components/EmailTable";
 import TestimonialManager from "@/components/TestimonialManager";
 import BookTable from "@/components/BookTable";
@@ -27,26 +26,6 @@ export default function Dashboard() {
 
     return () => unsubscribe(); // Cleanup subscription on unmount
   }, [router]);
-
-  // Fetch download count from the API
-  useEffect(() => {
-    if (!loading) {
-      axios.get("/api/analytics").then((res) => {
-        setDownloadCount(res.data.downloadCount);
-        console.log(res.data.downloadCount);
-      });
-    }
-  }, [loading]);
-
-  // Fetch books from the API
-  useEffect(() => {
-    if (!loading) {
-      axios.get("/api/books").then((res) => {
-        setBooks(res.data.books);
-        console.log(res.data.books);
-      });
-    }
-  }, [loading]);
 
   if (loading) return <p>Loading...</p>; // Show loading state
 
