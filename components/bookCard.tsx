@@ -2,8 +2,8 @@ import Image from "next/image";
 
 interface Book {
   id: number;
-  bookName: string;
-  bookDescription: string;
+  title: string;
+  description: string;
   image: string;
   bookDocument: string;
   published: boolean;
@@ -22,7 +22,7 @@ const BookCard: React.FC<BookProps> = ({ book, onReadMore }) => {
       <div className="relative h-52 rounded-xl overflow-hidden">
         <Image 
           src={book.image} 
-          alt={book.bookName} 
+          alt={book.title} 
           layout="fill" 
           objectFit="cover" 
           className="rounded-xl"
@@ -31,8 +31,8 @@ const BookCard: React.FC<BookProps> = ({ book, onReadMore }) => {
 
       {/* Content Section */}
       <div className="flex flex-col gap-2">
-        <h3 className="font-semibold text-xl">{book.bookName}</h3>
-        <p className="text-zinc-600 line-clamp-3">{book.bookDescription}</p>
+        <h3 className="font-semibold text-xl">{book.title}</h3>
+        <p className="text-zinc-600 line-clamp-3">{book.description}</p>
         
         {/* Conditional Button */}
         {book.published ? (
