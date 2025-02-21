@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { database } from '@/app/firebase'; // Import the Realtime Database instance
 import { ref, push } from "firebase/database"; // Import Realtime Database functions
+import emailjs from 'emailjs-com'; // Import EmailJS
 
 export default function TestimonialForm() {
   const [formData, setFormData] = useState({
@@ -36,6 +37,18 @@ export default function TestimonialForm() {
         approved: false, // Set approved to false by default
         createdAt: new Date().toISOString() // Add a timestamp
       });
+
+      // Send email notification
+      const templateParams = {
+        from_name: formData.fullName,
+        to_name: 'Angolo Isaac',
+        message: `New feedback received from ${formData.fullName} (${formData.email}):\n\n` +
+                  `Book Name: ${formData.bookName}\n` +
+                  `Review: ${formData.review}\n` +
+                  `Rating: ${formData.rating}`
+      };
+
+      await emailjs.send('service_56znazp', 'template_22kln5n', templateParams, 'whMJPH_AhXYVn1L1U');
 
       alert("Thank you for your feedback! Your testimonial is pending approval.");
 

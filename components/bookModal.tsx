@@ -12,8 +12,10 @@ interface BookModalProps {
     onClose: () => void;
     book: {
         bookName: string;
-        bookDescription: string;
+        description: string;
         image: string;
+        aboutBook: string;
+        title: string;
         bookDocument: string;
         rating: number;
 
@@ -170,43 +172,10 @@ const handleReadNow = () => {
                             About this book
                         </h3>
                         <h2 className="text-xl font-bold text-left text-gray-800 mb-4">
-                            Unlocking Investment Opportunities in Global Healthcare
+                            {book.title}
                         </h2>
 
-                        <p className="text-gray-700 leading-relaxed mb-4">
-                            This book serves as a comprehensive guide to investment opportunities in the
-                            <span className="font-semibold text-[#3ca0ce] mx-1">global health sector</span>.
-                            Recognizing that governments alone cannot address all the challenges facing healthcare systems worldwide,
-                            I aim to encourage healthcare professionals, investors, and entrepreneurs to take an active role in shaping the future of healthcare
-                            in their respective countries.
-                        </p>
-
-                        <p className="text-gray-700 leading-relaxed mb-4">
-                            Healthcare is a rapidly evolving field with numerous gaps that require innovative solutions.
-                            From <span className="font-semibold text-[#3ca0ce] mx-1">infrastructure development</span> and
-                            <span className="font-semibold text-[#3ca0ce] mx-1">medical technology</span>
-                            to <span className="font-semibold text-[#3ca0ce] mx-1">telemedicine</span> and
-                            <span className="font-semibold text-[#3ca0ce] mx-1">specialized care services</span>,
-                            vast opportunities exist for professionals and investors to create impactful change.
-                            Rather than relying solely on public health interventions, private sector involvement and strategic investments
-                            can drive efficiency, accessibility, and improved patient outcomes.
-                        </p>
-
-                        <p className="text-gray-700 leading-relaxed mb-4">
-                            Drawing from my experience as an <span className="font-semibold text-[#3ca0ce] mx-1">MBA student</span>
-                            with a keen interest in healthcare business models and market dynamics,
-                            I have curated key areas where healthcare personnel and investors can contribute meaningfully.
-                            This book outlines various opportunities where individuals can leverage their expertise, capital, and innovation
-                            to address pressing healthcare challenges.
-                        </p>
-
-                        <p className="text-gray-700 leading-relaxed">
-                            Ultimately, my goal is to ignite conversations and empower professionals to see beyond their clinical or academic roles—
-                            encouraging them to take on entrepreneurial and investment-driven initiatives. These efforts not only improve healthcare delivery
-                            but also contribute to economic growth and sustainability in the industry.
-                            I hope to provide readers with actionable insights and a fresh perspective on how they can play a role in
-                            transforming healthcare, whether in their local communities or on a global scale.
-                        </p>
+                        <p className="text-gray-700 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: book.aboutBook }} />
                     </section>
                 </Box>
             </Fade>
