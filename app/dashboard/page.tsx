@@ -67,9 +67,9 @@ export default function Dashboard() {
       </div>
 
       {/* Partners Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+      {/* <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-xl font-semibold mb-4">Manage Partners</h2>
-      </div>
+      </div> */}
 
       {/* Books Section */}
       <div className="bg-white p-6 rounded-lg shadow-md">
