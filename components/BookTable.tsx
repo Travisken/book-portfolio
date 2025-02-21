@@ -6,8 +6,8 @@ import { ref, get } from "firebase/database";
 
 interface Book {
   id: number;
-  bookName: string;
-  bookDescription: string;
+  title: string;
+  description: string;
   image: string;
   bookDocument: string;
   published: boolean;
@@ -30,8 +30,8 @@ const BookTable = () => {
           const booksData = snapshot.val();
           const booksArray = Object.keys(booksData).map((key) => ({
             id: booksData[key].id,
-            bookName: booksData[key].title, // Ensure the field names match your Firebase structure
-            bookDescription: booksData[key].description,
+            title: booksData[key].title, // Ensure the field names match your Firebase structure
+            description: booksData[key].description,
             image: booksData[key].bookLink, // Ensure this matches the field name in Firebase
             bookDocument: booksData[key].bookDocument,
             published: booksData[key].published,
@@ -75,11 +75,11 @@ const BookTable = () => {
             >
               <img
                 src={book.image}
-                alt={book.bookName}
+                alt={book.title}
                 className="w-full h-48 object-cover rounded-md"
               />
-              <h2 className="text-xl font-semibold mt-4">{book.bookName}</h2>
-              <p className="text-gray-600 text-sm mt-2 line-clamp-3">{book.bookDescription}</p>
+              <h2 className="text-xl font-semibold mt-4">{book.title}</h2>
+              <p className="text-gray-600 text-sm mt-2 line-clamp-3">{book.description}</p>
               <div className="flex justify-between items-center w-full mt-4">
                 <span className="text-sm font-medium text-gray-700">
                   {book.published ? "Published" : "Unpublished"}

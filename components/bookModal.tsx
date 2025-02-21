@@ -11,11 +11,10 @@ interface BookModalProps {
     open: boolean;
     onClose: () => void;
     book: {
-        bookName: string;
-        bookDescription: string;
+        title: string;
+        description: string;
         image: string;
         aboutBook: string;
-        title: string;
         // bookDocument: string;
         bookLink: string;
         rating: number;
@@ -79,10 +78,11 @@ const handleReadNow = () => {
         setLoading(true);
         setError(null);
         setSuccess(null);
+        
 
         const templateParams = {
             user_email: formData.email,
-            book_bookName: book.bookName,
+            book_title: book.title,
             book_link: book.bookLink,
         };
 
@@ -124,10 +124,10 @@ const handleReadNow = () => {
                         </div>
                         <div className="flex flex-col gap-4">
                             <Typography variant="h4" component="h2" className="font-semibold">
-                                {book.bookName}
+                                {book.title}
                             </Typography>
                             <h5 className="text-lg font-semibold">Description</h5>
-                            <Typography className="text-zinc-600 bg-red-500">{book.bookDescription}</Typography>
+                            <Typography className="text-zinc-600 bg-red-500">{book.description}</Typography>
 
                             <form className="flex relative flex-col gap-6" onSubmit={handleSubmit}>
                                 <input
