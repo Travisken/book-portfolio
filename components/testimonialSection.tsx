@@ -11,10 +11,12 @@ import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get } from 'firebase/database';
 
 interface Testimonial {
-  id: number;
+  id: string; // Use string for Firebase-generated keys
   name: string;
   rating: number;
   review: string;
+  approved: boolean; // Ensure this field exists in your database
+  bookName: string; // Add bookName to the interface
 }
 
 const TestimonialSection: React.FC = () => {
@@ -31,29 +33,29 @@ const TestimonialSection: React.FC = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  
+
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const testimonialsRef = ref(database, 'data'); // Adjust the path based on your structure
+        const testimonialsRef = ref(database, 'data/testimonials');
         const snapshot = await get(testimonialsRef);
 
         if (snapshot.exists()) {
-          const data = snapshot.val(); // Log fetched data
-          
-          // Assuming testimonials are the fourth element in the array
-          const testimonialArray = data[3] ? data[3] : [];
-          console.log('Testimonials array:', testimonialArray); // Log testimonials array
-          setTestimonials(data.testimonials);
+          const data = snapshot.val();
+          // Assuming data.testimonials is an array of testimonials
+          const testimonialArray: Testimonial[] = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+          setTestimonials(testimonialArray);
         } else {
           console.log('No testimonials found');
           setTestimonials([]);
         }
       } catch (error) {
         console.error("Error fetching testimonials:", error);
-        setTestimonials([]);
       } finally {
-        setLoading(false); // Stop loading when done
+        setLoading(false);
       }
     };
 
@@ -82,17 +84,21 @@ const TestimonialSection: React.FC = () => {
               modules={[Pagination]}
               className="w-full"
             >
-              {testimonials.map((testimonial) => (
-                <SwiperSlide key={testimonial.id}>
-                  <TestimonialCard bookName={""} {...testimonial} />
-                </SwiperSlide>
-              ))}
+              {testimonials
+                .filter((t) => t.approved) // Only show approved testimonials
+                .map((testimonial) => (
+                  <SwiperSlide key={testimonial.id}>
+                    <TestimonialCard {...testimonial} /> {/* Ensure bookName is included */}
+                  </SwiperSlide>
+                ))}
             </Swiper>
           ) : (
             <div className="flex gap-10">
-              {testimonials.map((testimonial) => (
-                <TestimonialCard bookName={""} key={testimonial.id} {...testimonial} />
-              ))}
+              {testimonials
+                .filter((t) => t.approved) // Only show approved testimonials
+                .map((testimonial) => (
+                  <TestimonialCard key={testimonial.id} {...testimonial} /> 
+                ))}
             </div>
           )}
         </div>
