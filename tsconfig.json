@@ -22,7 +22,8 @@
       "@/*": ["./*"]
     },
     "noUnusedLocals": false, // Disable error for unused local variables
-    "noUnusedParameters": false // Disable error for unused function parameters
+    "noUnusedParameters": false, // Disable error for unused function parameters
+    // "noUnusedLabels": false // Ensures no unnecessary warnings
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
