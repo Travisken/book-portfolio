@@ -26,7 +26,7 @@ export default function TestimonialForm() {
   };
 
   return (
-    <section className="md:px-20 px-4">
+    <section id='testimonialForm' className="md:px-20 px-4">
       <div className="md:p-10 p-4 rounded-2xl bg-[#00000015] flex-1">
         <div className="flex flex-col gap-2 py-6">
           <h2 className="text-4xl font-bold">Feedback</h2>
