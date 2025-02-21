@@ -15,7 +15,8 @@ interface BookModalProps {
         description: string;
         image: string;
         aboutBook: string;
-        bookDocument: string;
+        // bookDocument: string;
+        bookLink: string;
         rating: number;
 
     } | null;
@@ -46,8 +47,8 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     const router = useRouter();
 
 const handleReadNow = () => {
-    if (book?.bookDocument) {
-        router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
+    if (book?.bookLink) {
+        router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookLink)}`);
     }
 };
 
@@ -82,7 +83,7 @@ const handleReadNow = () => {
         const templateParams = {
             user_email: formData.email,
             book_title: book.title,
-            book_link: book.bookDocument,
+            book_link: book.bookLink,
         };
 
         try {
@@ -95,7 +96,7 @@ const handleReadNow = () => {
 
             console.log("Email sent successfully:", response);
             setSuccess("Email sent! Check your inbox.");
-                router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
+                router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookLink)}`);
             setFormData({ email: "" });
         } catch (error) {
             console.error("Failed to send email:", error);

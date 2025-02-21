@@ -20,7 +20,7 @@ interface Book {
   aboutBook: string; // Add this line
   title: string; // Add this line
   bookDescription: string;
-  bookDocument: string;
+  bookLink: string;
   published: boolean;
   rating: number;
 }

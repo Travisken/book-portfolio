@@ -5,7 +5,7 @@ interface Book {
   title: string;
   description: string;
   image: string;
-  bookDocument: string;
+  bookLink: string;
   published: boolean;
 }
 
