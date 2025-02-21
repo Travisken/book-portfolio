@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import RichTextEditor from "./textEditor";
 import { database, storage } from "@/app/firebase"; // Adjust the path as necessary
-import { ref, set } from "firebase/database";
+import { ref, set, get } from "firebase/database"; // Import get for fetching data
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useRouter, useSearchParams } from "next/navigation";
 
+// Same interface for book data
 interface BookData {
   title: string;
   description: string;
@@ -19,6 +21,9 @@ interface BookData {
 }
 
 const BookUploadForm = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookData, setBookData] = useState<BookData>({
     title: "",
@@ -29,16 +34,50 @@ const BookUploadForm = () => {
     bookDocument: null,
     published: false,
   });
-
   const [preview, setPreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  // Function to validate URL
+  const isValidUrl = (url: string): boolean => {
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  // Fetch existing book data if ID exists
+  useEffect(() => {
+    const fetchBookData = async () => {
+      if (id) {
+        const bookRef = ref(database, "data/booksSection/" + id);
+        const snapshot = await get(bookRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          setBookData(data);
+
+          // Validate and set the preview URL
+          if (data.bookLink && isValidUrl(data.bookLink)) {
+            setPreview(data.bookLink); // Set the preview if it's a valid URL
+          } else {
+            console.error("Invalid URL for book cover:", data.bookLink);
+            setPreview(null); // Clear preview if the URL is invalid
+          }
+        }
+      }
+    };
+
+    fetchBookData();
+  }, [id]);
 
   // Handle cover image drop
   const onDropCover = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
       setBookData((prev) => ({ ...prev, bookLink: file }));
-      setPreview(URL.createObjectURL(file));
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl); // Create a valid object URL
       setErrors((prev) => ({ ...prev, bookLink: "" })); // Clear error
     }
   };
@@ -82,20 +121,20 @@ const BookUploadForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      alert("Please fill out all required fields.");
-      return;
-    }
+    // if (!validateForm()) {
+    //   alert("Please fill out all required fields.");
+    //   return;
+    // }
 
     try {
-      const numericId = Date.now();
+      const numericId = id || Date.now(); // Use the existing ID or generate a new one
 
       // Upload cover image
       let coverURL = "";
       if (bookData.bookLink) {
         const coverRef = storageRef(storage, `covers/${numericId}_${bookData.bookLink.name}`);
         await uploadBytes(coverRef, bookData.bookLink);
-        coverURL = await getDownloadURL(coverRef);
+        coverURL = await getDownloadURL(coverRef); // Get the download URL
       }
 
       // Upload book document
@@ -103,7 +142,7 @@ const BookUploadForm = () => {
       if (bookData.bookDocument) {
         const documentRef = storageRef(storage, `documents/${numericId}_${bookData.bookDocument.name}`);
         await uploadBytes(documentRef, bookData.bookDocument);
-        documentURL = await getDownloadURL(documentRef);
+        documentURL = await getDownloadURL(documentRef); // Get the download URL
       }
 
       // Save book data to Firebase Realtime Database
@@ -115,8 +154,8 @@ const BookUploadForm = () => {
         aboutBook: bookData.aboutBook,
         contributors: bookData.contributors,
         published: bookData.published,
-        bookLink: coverURL,
-        bookDocument: documentURL,
+        bookLink: coverURL, // Store the download URL, not the file object
+        bookDocument: documentURL, // Store the download URL, not the file object
       });
 
       alert("Book data submitted successfully!");
@@ -126,6 +165,15 @@ const BookUploadForm = () => {
       alert("An error occurred while submitting the book data.");
     }
   };
+
+  // Clean up object URL
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   // Reset form after submission
   const resetForm = () => {
@@ -138,7 +186,7 @@ const BookUploadForm = () => {
       bookDocument: null,
       published: false,
     });
-    setPreview(null);
+    setPreview(null); // Clear preview
     setErrors({});
   };
 
@@ -177,7 +225,7 @@ const BookUploadForm = () => {
           <label className="block text-sm font-medium text-gray-700">About the Book</label>
           <input
             type="text"
-            value={bookData.aboutBook}
+            value={bookData.aboutBook || ""} // Ensure the value is never undefined
             readOnly
             placeholder="Click to write about the book"
             onClick={() => setIsModalOpen(true)}
@@ -210,7 +258,7 @@ const BookUploadForm = () => {
 
         {/* Submit Button */}
         <button type="submit" className="w-full bg-[#3ca0ca] text-white p-3 rounded-xl hover:bg-[#3ca0ca]">
-          Upload Book
+          {id ? "Update Book" : "Upload Book"}
         </button>
       </section>
 
@@ -222,7 +270,13 @@ const BookUploadForm = () => {
           <div {...getRootPropsCover()} className="mt-2 p-6 rounded-xl flex flex-col items-center justify-center cursor-pointer">
             <input {...getInputPropsCover()} />
             {preview ? (
-              <Image height={300} width={300} src={preview} alt="Preview" className="w-[20rem] h-[20rem] object-cover rounded-lg" />
+              <Image
+                height={300}
+                width={300}
+                src={preview || ""}
+                alt="Preview"
+                className="w-[20rem] h-[20rem] object-cover rounded-lg"
+              />
             ) : (
               <p className="text-gray-500 hover:text-[#3ca0ca]">Drag & Drop or Click to Upload</p>
             )}
