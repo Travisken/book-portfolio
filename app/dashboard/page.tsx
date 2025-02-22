@@ -34,9 +34,10 @@ export default function Dashboard() {
       axios.get("/api/analytics").then((res) => {
         setDownloadCount(res.data.downloadCount);
         console.log(res.data.downloadCount);
+        console.log(downloadCount)
       });
     }
-  }, [loading]);
+  }, [loading, downloadCount]);
 
   // Fetch books from the API
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function Dashboard() {
       axios.get("/api/books").then((res) => {
         setBooks(res.data.books);
         console.log(res.data.books);
+        console.log(books)
       });
     }
   }, [loading]);

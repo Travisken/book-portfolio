@@ -96,7 +96,8 @@ const handleReadNow = () => {
 
             console.log("Email sent successfully:", response);
             setSuccess("Email sent! Check your inbox.");
-                router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookLink)}`);
+                // router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookLink)}`);
+                handleReadNow();
             setFormData({ email: "" });
         } catch (error) {
             console.error("Failed to send email:", error);

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { database } from "@/app/firebase"; // Adjust the path as necessary
 import { ref, get } from "firebase/database";
+import Image from "next/image";
 
 interface Book {
   id: number;
@@ -73,10 +74,12 @@ const BookTable = () => {
               key={book.id}
               className="bg-white md:shadow-lg rounded-lg p-4 w-[16rem] md:w-[20rem] flex flex-col items-center text-center"
             >
-              <img
+              <Image
+                height={200}
+                width={200}
                 src={`${book.image}`}
                 alt={book.title}
-                className="w-full h-48 object-cover rounded-md"
+                className="!w-full !h-48 object-cover rounded-md"
               />
               <h2 className="text-xl font-semibold mt-4">{book.title}</h2>
               <p className="text-gray-600 text-sm mt-2 line-clamp-3">{book.description}</p>

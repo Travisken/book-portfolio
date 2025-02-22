@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { 
-  FaBold, FaItalic, FaUnderline, FaStrikethrough, FaUndo, FaRedo, FaHighlighter 
+  FaBold, FaItalic, FaUnderline, FaStrikethrough, FaUndo, FaRedo 
 } from 'react-icons/fa';
 
 const fontList = ['Arial', 'Verdana', 'Times New Roman', 'Garamond', 'Georgia', 'Courier New', 'cursive'];
@@ -24,7 +24,7 @@ const RichTextEditor: React.FC<ModalProps> = ({ isOpen, onClose, onSave, value }
     if (editorRef.current) {
       editorRef.current.innerHTML = value;
     }
-  }, [value,isOpen]);
+  }, [value, isOpen]);
 
   if (!isOpen) return null;
 
@@ -37,6 +37,12 @@ const RichTextEditor: React.FC<ModalProps> = ({ isOpen, onClose, onSave, value }
     setActiveCommands((prev) =>
       prev.includes(command) ? prev.filter((cmd) => cmd !== command) : [...prev, command]
     );
+  };
+
+  const handleFontChange = (type: 'fontName' | 'fontSize', value: string) => {
+    modifyText(type, value);
+    if (type === 'fontName') setFontName(value);
+    if (type === 'fontSize') setFontSize(value);
   };
 
   return (
@@ -70,12 +76,12 @@ const RichTextEditor: React.FC<ModalProps> = ({ isOpen, onClose, onSave, value }
           ))}
 
           {/* Font Selectors */}
-          <select onChange={(e) => modifyText('fontName', e.target.value)} value={fontName} className="p-2 border rounded-md">
+          <select onChange={(e) => handleFontChange('fontName', e.target.value)} value={fontName} className="p-2 border rounded-md">
             {fontList.map((font) => (
               <option key={font} value={font}>{font}</option>
             ))}
           </select>
-          <select onChange={(e) => modifyText('fontSize', e.target.value)} value={fontSize} className="p-2 border rounded-md">
+          <select onChange={(e) => handleFontChange('fontSize', e.target.value)} value={fontSize} className="p-2 border rounded-md">
             {[...Array(7)].map((_, i) => (
               <option key={i + 1} value={(i + 1).toString()}>{i + 1}</option>
             ))}

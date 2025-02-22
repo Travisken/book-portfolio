@@ -7,7 +7,7 @@ import RichTextEditor from "./textEditor";
 import { database, storage } from "@/app/firebase"; // Adjust the path as necessary
 import { ref, set, get } from "firebase/database"; // Import get for fetching data
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 // Same interface for book data
 interface BookData {
@@ -21,7 +21,7 @@ interface BookData {
 }
 
 const BookUploadForm = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,6 +43,7 @@ const BookUploadForm = () => {
       new URL(url);
       return true;
     } catch (error) {
+      console.log(error)
       return false;
     }
   };
@@ -121,10 +122,10 @@ const BookUploadForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // if (!validateForm()) {
-    //   alert("Please fill out all required fields.");
-    //   return;
-    // }
+    if (!validateForm()) {
+      alert("Please fill out all required fields.");
+      return;
+    }
 
     try {
       const numericId = id || Date.now(); // Use the existing ID or generate a new one
