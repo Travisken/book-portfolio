@@ -37,7 +37,7 @@ export default function Dashboard() {
         console.log(downloadCount)
       });
     }
-  }, [loading, downloadCount]);
+  }, [loading, downloadCount, books]);
 
   // Fetch books from the API
   useEffect(() => {
