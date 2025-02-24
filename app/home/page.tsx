@@ -94,7 +94,7 @@ const Home = () => {
             <div className="loader">Loading...</div> {/* Add loader styling as needed */}
           </div>
         ) : (
-          <div className="flex gap-8 flex-wrap md:gap-0 justify-center md:!justify-between w-full items-center">
+          <div className="flex gap-8 flex-wrap md:gap-12 justify-start w-full items-start">
             {books.slice(0, 4).map((book) => (
               <BookCard key={book.id} book={book} onReadMore={() => handleOpen(book)} />
             ))}

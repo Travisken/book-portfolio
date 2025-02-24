@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { database } from '@/app/firebase';
 import { ref, update, remove, get } from 'firebase/database';
 import { CheckCircle, Trash2 } from 'lucide-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Testimonial {
   id: string;
@@ -14,7 +16,6 @@ interface Testimonial {
 export default function TestimonialManager() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -33,7 +34,7 @@ export default function TestimonialManager() {
           setTestimonials([]);
         }
       } catch (error) {
-        setError("Failed to fetch testimonials.");
+        toast.error("Failed to fetch testimonials.");
         setTestimonials([]);
       } finally {
         setLoading(false);
@@ -47,7 +48,7 @@ export default function TestimonialManager() {
     const approvedCount = testimonials.filter((t) => t.approved).length;
 
     if (approvedCount >= 3) {
-      setError("You can only approve up to three testimonials.");
+      toast.warning("You can only approve up to three testimonials.");
       return;
     }
 
@@ -57,9 +58,9 @@ export default function TestimonialManager() {
       setTestimonials((prev) =>
         prev.map((t) => (t.id === id ? { ...t, approved: true } : t))
       );
-      setError(null);
+      toast.success("Testimonial approved successfully!");
     } catch (err) {
-      setError("Failed to approve testimonial.");
+      toast.error("Failed to approve testimonial.");
     }
   };
 
@@ -68,14 +69,13 @@ export default function TestimonialManager() {
       const testimonialRef = ref(database, `data/testimonials/${id}`);
       await remove(testimonialRef);
       setTestimonials((prev) => prev.filter((t) => t.id !== id));
-      setError(null);
+      toast.success("Testimonial deleted successfully!");
     } catch (err) {
-      setError("Failed to delete testimonial.");
+      toast.error("Failed to delete testimonial.");
     }
   };
 
   if (loading) return <p>Loading testimonials...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
 
   const TestimonialCard = ({ testimonial, actions }: { testimonial: Testimonial; actions: React.ReactNode }) => (
     <div className="p-6 border md:w-[67vw] rounded-lg shadow-md bg-white mb-4">
@@ -88,6 +88,7 @@ export default function TestimonialManager() {
 
   return (
     <div className="p-8 bg-gray-50 h-fit">
+      <ToastContainer position="top-right" autoClose={3000} />
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Testimonials</h2>
 
       <section className="mb-12">

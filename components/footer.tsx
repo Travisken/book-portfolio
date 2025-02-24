@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaEnvelope, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -22,7 +23,21 @@ const Footer = () => {
           {/* <a href="#" className="hover:text-gray-400"><FaFacebookF size={20} /></a>
           <a href="#" className="hover:text-gray-400"><FaTwitter size={20} /></a>
           <a href="#" className="hover:text-gray-400"><FaInstagram size={20} /></a>
-          <a href="#" className="hover:text-gray-400"><FaLinkedinIn size={20} /></a> */}
+          <a href="#" className="hover:text-gray-400"></a> */}
+          <Link href={"https://www.linkedin.com/in/dr-oluwanimbe-f-akinsiku-a52092254/"}>
+            <FaLinkedinIn size={20} />
+          </Link>
+
+          <Link href={""}>
+            <FaWhatsapp size={20} />
+          </Link>
+
+          <Link href={"mailto:kentravis37@gmail.com"}>
+            <FaEnvelope size={20} />
+            <p>
+              
+            </p>
+          </Link>
         </div>
 
         {/* Copyright */}

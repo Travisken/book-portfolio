@@ -105,11 +105,12 @@ const BookTable = () => {
 
   const deleteBook = async (id: number) => {
     if (!selectedBook) return;
-
+    
     try {
       await remove(ref(database, `data/booksSection/${id.toString()}`));
       // Update book list after deletion
       setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+      setShowConfirm(false);
       closeModal();
     } catch (err) {
       console.error("Error deleting book:", err);
@@ -174,7 +175,7 @@ const BookTable = () => {
               </button>
               <button
                 onClick={() => deleteBook(selectedBook.id)}
-                className="px-4 py-2 text-white rounded-lg"
+                className="px-4 py-2 text-white bg-red-500 hover:bg-red-600 cursor-pointer rounded-lg"
               >
                 Confirm
               </button>
