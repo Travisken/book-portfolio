@@ -1,9 +1,10 @@
 {
   "name": "book-portfolio",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "concurrently \"next dev --turbopack\" \"nodemon server/server.js\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -26,7 +27,6 @@
     "express": "^4.21.2",
     "firebase": "^11.3.1",
     "framer-motion": "^12.4.2",
-    "lucide-react": "^0.475.0",
     "multer": "^1.4.5-lts.1",
     "next": "15.1.7",
     "nodemailer": "^6.10.0",
@@ -50,6 +50,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-scroll": "^1.8.10",
+    "concurrently": "^9.1.2",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "postcss": "^8",

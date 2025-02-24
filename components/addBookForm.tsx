@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import RichTextEditor from "./textEditor";
-import { database, storage } from "@/app/firebase"; // Adjust the path as necessary
+import axios from "axios"; // Import axios
+import { database } from "@/app/firebase"; // Adjust the path as necessary
 import { ref, set, get } from "firebase/database"; // Import get for fetching data
-import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useSearchParams } from "next/navigation";
 
 // Same interface for book data
@@ -21,7 +21,6 @@ interface BookData {
 }
 
 const BookUploadForm = () => {
-  // const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,7 +42,7 @@ const BookUploadForm = () => {
       new URL(url);
       return true;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return false;
     }
   };
@@ -127,26 +126,26 @@ const BookUploadForm = () => {
       return;
     }
 
+    const formData = new FormData();
+    formData.append('bookLink', bookData.bookLink as Blob);
+    formData.append('bookDocument', bookData.bookDocument as Blob);
+    formData.append('title', bookData.title);
+    formData.append('description', bookData.description);
+    formData.append('aboutBook', bookData.aboutBook);
+    formData.append('contributors', bookData.contributors);
+    formData.append('published', String(bookData.published));
+
     try {
-      const numericId = id || Date.now(); // Use the existing ID or generate a new one
+      const response = await axios.post('http://localhost:5000/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-      // Upload cover image
-      let coverURL = "";
-      if (bookData.bookLink) {
-        const coverRef = storageRef(storage, `covers/${numericId}_${bookData.bookLink.name}`);
-        await uploadBytes(coverRef, bookData.bookLink);
-        coverURL = await getDownloadURL(coverRef); // Get the download URL
-      }
-
-      // Upload book document
-      let documentURL = "";
-      if (bookData.bookDocument) {
-        const documentRef = storageRef(storage, `documents/${numericId}_${bookData.bookDocument.name}`);
-        await uploadBytes(documentRef, bookData.bookDocument);
-        documentURL = await getDownloadURL(documentRef); // Get the download URL
-      }
+      const { bookLink, bookDocument } = response.data;
 
       // Save book data to Firebase Realtime Database
+      const numericId = id || Date.now(); // Use the existing ID or generate a new one
       const bookRef = ref(database, "data/booksSection/" + numericId);
       await set(bookRef, {
         id: numericId,
@@ -155,8 +154,8 @@ const BookUploadForm = () => {
         aboutBook: bookData.aboutBook,
         contributors: bookData.contributors,
         published: bookData.published,
-        bookLink: coverURL, // Store the download URL, not the file object
-        bookDocument: documentURL, // Store the download URL, not the file object
+        bookLink, // Store the download URL
+        bookDocument, // Store the download URL
       });
 
       alert("Book data submitted successfully!");
