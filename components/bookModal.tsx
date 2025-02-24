@@ -15,7 +15,6 @@ interface BookModalProps {
         description: string;
         image: string;
         aboutBook: string;
-        // bookDocument: string;
         bookLink: string;
         rating: number;
 
@@ -106,8 +105,13 @@ const handleReadNow = () => {
             setLoading(false);
         }
     };
+    // console.log("aboutBook content:", book.aboutBook);
+
 
     if (!book) return null;
+console.log("Book object:", book);
+console.log("aboutBook content:", book.aboutBook);
+
 
     return (
         <Modal

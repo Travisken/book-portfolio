@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { database } from '@/app/firebase'; // Adjust the path as necessary
+import { database } from '@/app/firebase';
 import { ref, update, remove, get } from 'firebase/database';
+import { CheckCircle, Trash2 } from 'lucide-react';
 
 interface Testimonial {
-  id: string; // Use string for Firebase-generated keys
+  id: string;
   fullName: string;
   review: string;
   rating: number;
@@ -18,34 +19,30 @@ export default function TestimonialManager() {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const testimonialsRef = ref(database, 'data/testimonials'); // Adjust the path based on your structure
+        const testimonialsRef = ref(database, 'data/testimonials');
         const snapshot = await get(testimonialsRef);
 
         if (snapshot.exists()) {
           const data = snapshot.val();
           const testimonialArray: Testimonial[] = Object.keys(data).map((key) => ({
-            id: key, // Use Firebase-generated key as ID
-            ...data[key], // Spread the testimonial data
+            id: key,
+            ...data[key],
           }));
-          console.log('Testimonials array:', testimonialArray); // Log testimonials array
           setTestimonials(testimonialArray);
         } else {
-          console.log('No testimonials found');
           setTestimonials([]);
         }
       } catch (error) {
-        console.error("Error fetching testimonials:", error);
         setError("Failed to fetch testimonials.");
         setTestimonials([]);
       } finally {
-        setLoading(false); // Stop loading when done
+        setLoading(false);
       }
     };
 
     fetchTestimonials();
   }, []);
 
-  // Handle approving a testimonial
   const handleApprove = async (id: string) => {
     const approvedCount = testimonials.filter((t) => t.approved).length;
 
@@ -55,29 +52,24 @@ export default function TestimonialManager() {
     }
 
     try {
-      const testimonialRef = ref(database, `data/testimonials/${id}`); // Adjust the path based on your structure
-      await update(testimonialRef, { approved: true }); // Update the approved status in Firebase
+      const testimonialRef = ref(database, `data/testimonials/${id}`);
+      await update(testimonialRef, { approved: true });
       setTestimonials((prev) =>
         prev.map((t) => (t.id === id ? { ...t, approved: true } : t))
       );
-      setError(null); // Clear error if successful
+      setError(null);
     } catch (err) {
-      console.error("Failed to approve testimonial:", err);
       setError("Failed to approve testimonial.");
     }
   };
 
-  // Handle deleting a testimonial
   const handleDelete = async (id: string) => {
     try {
-      const testimonialRef = ref(database, `data/testimonials/${id}`); // Adjust the path based on your structure
-      console.log(`Deleting testimonial with ID: ${id}`); // Debug log
-      await remove(testimonialRef); // Remove the testimonial from Firebase
-      console.log(`Successfully deleted testimonial with ID: ${id}`); // Debug log
+      const testimonialRef = ref(database, `data/testimonials/${id}`);
+      await remove(testimonialRef);
       setTestimonials((prev) => prev.filter((t) => t.id !== id));
       setError(null);
     } catch (err) {
-      console.error("Failed to delete testimonial:", err);
       setError("Failed to delete testimonial.");
     }
   };
@@ -85,63 +77,74 @@ export default function TestimonialManager() {
   if (loading) return <p>Loading testimonials...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
-  return (
-    <div className="p-6">
-      <h2 className="text-xl font-semibold mb-4">Testimonials</h2>
+  const TestimonialCard = ({ testimonial, actions }: { testimonial: Testimonial; actions: React.ReactNode }) => (
+    <div className="p-6 border md:w-[67vw] rounded-lg shadow-md bg-white mb-4">
+      <p className="font-semibold text-lg">{testimonial.fullName}</p>
+      <p className="text-gray-600 my-2">&quot;{testimonial.review}&quot;</p>
+      <p className="text-yellow-500">Rating: {testimonial.rating} ⭐</p>
+      <div className="mt-4 flex space-x-4">{actions}</div>
+    </div>
+  );
 
-      {/* Approved Testimonials */}
-      <div className="mb-6">
-        <h3 className="text-lg font-medium">Published Testimonials</h3>
+  return (
+    <div className="p-8 bg-gray-50 h-fit">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">Testimonials</h2>
+
+      <section className="mb-12">
+        <h3 className="text-xl font-semibold mb-4">Published Testimonials</h3>
         {testimonials.filter((t) => t.approved).length === 0 ? (
           <p className="text-gray-500">No published testimonials.</p>
         ) : (
           testimonials
-            .filter((t) => t.approved) // Filter for approved testimonials
+            .filter((t) => t.approved)
             .map((testimonial) => (
-              <div key={testimonial.id} className="p-4 border rounded mb-2">
-                <p className="font-bold">{testimonial.fullName }</p>
-                <p className="text-gray-600">&quot;{testimonial.review}&quot;</p>
-                <p className="text-yellow-500">Rating: {testimonial.rating} ⭐</p>
-                <button
-                  onClick={() => handleDelete(testimonial.id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded mt-2 ml-2"
-                >
-                  Delete
-                </button>
-              </div>
+              <TestimonialCard
+                key={testimonial.id}
+                testimonial={testimonial}
+                actions={(
+                  <button
+                    onClick={() => handleDelete(testimonial.id)}
+                    className="flex items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                  >
+                    <Trash2 className="mr-2" /> Delete
+                  </button>
+                )}
+              />
             ))
         )}
-      </div>
+      </section>
 
-      {/* Pending Approval */}
-      <div>
-        <h3 className="text-lg font-medium">Pending Approval</h3>
+      <section>
+        <h3 className="text-xl font-semibold mb-4">Pending Approval</h3>
         {testimonials.filter((t) => !t.approved).length === 0 ? (
           <p className="text-gray-500">No pending testimonials.</p>
         ) : (
           testimonials
-            .filter((t) => !t.approved) // Filter for pending testimonials
+            .filter((t) => !t.approved)
             .map((testimonial) => (
-              <div key={testimonial.id} className="p-4 border rounded mb-2">
-                <p className="font-bold">{testimonial.fullName}</p>
-                <p className="text-gray-600  whitespace-normal break-words">&quot;{testimonial.review}&quot;</p>
-                <p className="text-yellow-500">Rating: {testimonial.rating} ⭐</p>
-                <button
-                  onClick={() => handleApprove(testimonial.id)}
-                  className="bg-green-500 text-white px-4 py-2 rounded mt-2"
-                >
-                  Approve
-                </button>
-                <button
-                  onClick={() => handleDelete(testimonial.id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded mt-2 ml-2"
-                >
-                  Delete
-                </button>
-              </div>
+              <TestimonialCard
+                key={testimonial.id}
+                testimonial={testimonial}
+                actions={(
+                  <>
+                    <button
+                      onClick={() => handleApprove(testimonial.id)}
+                      className="flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                    >
+                      <CheckCircle className="mr-2" /> Approve
+                    </button>
+                    <button
+                      onClick={() => handleDelete(testimonial.id)}
+                      className="flex items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                    >
+                      <Trash2 className="mr-2" /> Delete
+                    </button>
+                  </>
+                )}
+              />
             ))
         )}
-      </div>
+      </section>
     </div>
   );
 }

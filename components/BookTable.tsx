@@ -1,42 +1,48 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { database } from "@/app/firebase"; // Adjust the path as necessary
-import { ref, get } from "firebase/database";
+import { database } from "@/app/firebase";
+import { ref, get, remove } from "firebase/database";
+import { useDropzone } from "react-dropzone";
 import Image from "next/image";
+import RichTextEditor from "./textEditor";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface Book {
   id: number;
   title: string;
   description: string;
   image: string;
-  bookDocument: string;
+  bookLink: string;
   published: boolean;
   rating: number;
+  aboutBook?: string;
+  contributors?: string;
 }
 
 const BookTable = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [errors, setErrors] = useState<Partial<Book>>({});
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  // Fetch books from Firebase Realtime Database
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const booksRef = ref(database, "data/booksSection"); // Adjust the path to your Firebase structure
+        const booksRef = ref(database, "data/booksSection");
         const snapshot = await get(booksRef);
 
         if (snapshot.exists()) {
           const booksData = snapshot.val();
           const booksArray = Object.keys(booksData).map((key) => ({
-            id: booksData[key].id,
-            title: booksData[key].title, // Ensure the field names match your Firebase structure
-            description: booksData[key].description,
-            image: booksData[key].image, // Ensure this matches the field name in Firebase
-            bookDocument: booksData[key].bookDocument,
-            published: booksData[key].published,
-            rating: booksData[key].rating || 0, // Default to 0 if rating is not available
+            ...booksData[key],
+            id: key,
+            rating: booksData[key].rating || 0,
           }));
           setBooks(booksArray);
         } else {
@@ -53,52 +59,266 @@ const BookTable = () => {
     fetchBooks();
   }, []);
 
-  const handleEdit = (id: number) => {
-    console.log(`Edit book with ID: ${id}`);
+
+  const confirmDelete = (book: Book) => {
+    setSelectedBook(book);
+    setShowConfirm(true);
   };
 
-  if (loading) {
-    return <div className="text-center py-4">Loading books...</div>;
-  }
+  const openEditModal = (book: Book) => {
+    setSelectedBook(book);
+    setIsModalOpen(true);
+    setImagePreview(book.image || null);
+  };
 
-  if (error) {
-    return <div className="text-center py-4 text-red-500">{error}</div>;
-  }
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedBook(null);
+    setErrors({});
+    setImagePreview(null);
+  };
+
+  const validateForm = () => {
+    if (!selectedBook) return false;
+    const newErrors: Partial<Book> = {};
+
+    if (!selectedBook.title) newErrors.title = "Title is required";
+    if (!selectedBook.description) newErrors.description = "Description is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleImageChange = (file: File) => {
+    if (file && selectedBook) {
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
+      setSelectedBook({ ...selectedBook, image: imageUrl });
+    }
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (acceptedFiles) => handleImageChange(acceptedFiles[0]),
+    accept: { "image/*": [] },
+    maxFiles: 1,
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (selectedBook) {
+      const { name, value } = e.target;
+      setSelectedBook({ ...selectedBook, [name]: value });
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      console.log("Updated book details:", selectedBook);
+      closeModal();
+    }
+  };
+
+  const deleteBook = async (id: number) => {
+    if (!selectedBook) return; // Ensure selectedBook is not null
+
+    try {
+      await remove(ref(database, `data/booksSection/${id.toString()}`));
+      // Update book list after deletion
+      setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+      closeModal();
+    } catch (err) {
+      console.error("Error deleting book:", err);
+      alert("Failed to delete the book. Please try again later.");
+    }
+  };
+
+
+
+
+  if (loading) return <div className="text-center py-4">Loading books...</div>;
+  if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
 
   return (
-    <section>
-      <div className="flex flex-col gap-10 items-start overflow-x-scroll w-[80vw] md:w-[70vw]">
-        <div className="flex overflow-scroll gap-8 md:gap-4 py-4 justify-center md:justify-between">
-          {books.map((book) => (
-            <div
-              key={book.id}
-              className="bg-white md:shadow-lg rounded-lg p-4 w-[16rem] md:w-[20rem] flex flex-col items-center text-center"
+    <section className="w-[70vw] overflow-scroll">
+      <div className="flex min-w-[80vw] overflow-scroll gap-8 py-4">
+        {books.map((book) => (
+          <div
+            key={book.id}
+            className="bg-white shadow-lg rounded-lg p-4 w-64 text-center"
+          >
+            <Image
+              height={200}
+              width={200}
+              src={book.image}
+              alt={book.title}
+              className="w-full h-48 object-cover rounded-md"
+            />
+            <h2 className="text-xl font-semibold mt-4 whitespace-normal break-words">{book.title}</h2>
+            <p className="text-gray-600 text-sm mt-2 line-clamp-3 whitespace-normal break-words">{book.description}</p>
+            <button
+              onClick={() => openEditModal(book)}
+              className="mt-4 bg-[#3ca0ca] text-white w-full  py-2 rounded-xl hover:bg-[#245e77]"
             >
-              <Image
-                height={200}
-                width={200}
-                src={`${book.image}`}
-                alt={book.title}
-                className="!w-full !h-48 object-cover rounded-md"
-              />
-              <h2 className="text-xl font-semibold mt-4">{book.title}</h2>
-              <p className="text-gray-600 text-sm mt-2 line-clamp-3">{book.description}</p>
-              <div className="flex justify-between items-center w-full mt-4">
-                <span className="text-sm font-medium text-gray-700">
-                  {book.published ? "Published" : "Unpublished"}
-                </span>
-                <span className="text-yellow-500 font-semibold">⭐ {book.rating}</span>
-              </div>
+              Edit Book
+            </button>
+            {/* <!-- From Uiverse.io by andrew-demchenk0 -->  */}
+            <button
+              onClick={() => confirmDelete(book)}
+              className="button mt-4" type="button">
+              <span className="button__text text-center">Delete book</span>
+              <span className="button__icon">
+                <svg className="icon" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                </svg>
+              </span>
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <p>Are you sure you want to delete this book?</p>
+            <div className="flex justify-end gap-4 mt-4">
               <button
-                onClick={() => handleEdit(book.id)}
-                className="mt-4 bg-[#3ca0ca] text-white w-full py-3 rounded-xl hover:bg-[#245e77]"
+                onClick={() => setShowConfirm(false)}
+                className="px-4 py-2 bg-gray-300 rounded-lg"
               >
-                Edit Book
+                Cancel
+              </button>
+              <button
+                onClick={() => deleteBook(selectedBook.id)}
+                className="px-4 py-2 text-white rounded-lg"
+              >
+                Confirm
               </button>
             </div>
-          ))}
+          </div>
         </div>
-      </div>
+      )}
+
+
+      <AnimatePresence>
+        {isModalOpen && selectedBook && (
+          <section className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 bg-[#00000002] h-[100vh] w-[100vw]">
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-white p-6 rounded-2xl shadow-lg max-w-md w-full"
+            >
+              <form onSubmit={handleSubmit} className="p-6 bg-white flex md:flex-nowrap flex-wrap gap-8 rounded-lg md:w-[70vw]">
+
+
+
+                <section className="flex flex-col justify-between ">
+                  <div>
+                    <label className="block text-sm font-medium">Book Title</label>
+                    <input
+                      type="text"
+                      name="aboutBook"
+                      value={selectedBook.title || ""}
+                      onChange={handleInputChange}
+                      className="w-full mt-1 p-3 border rounded-xl"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">Book Description</label>
+                    <input
+                      type="text"
+                      name="aboutBook"
+                      value={selectedBook.description || ""}
+                      onChange={handleInputChange}
+                      className="w-full mt-1 p-3 border rounded-xl"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">Book contributors</label>
+                    <input
+                      type="text"
+                      name="aboutBook"
+                      value={selectedBook.contributors || ""}
+                      onChange={handleInputChange}
+                      className="w-full mt-1 p-3 border rounded-xl"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium">About the Book</label>
+                    <input
+                      type="text"
+                      value={selectedBook.aboutBook || ""}
+                      readOnly
+                      placeholder="Click to write about the book"
+                      onClick={() => setIsEditorOpen(true)}
+                      className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl cursor-pointer"
+                    />
+                  </div>
+                </section>
+
+                <section className="w-[300px]">
+                  <div className="mt-4" {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    {imagePreview ? (
+                      <div className="relative group w-[300px] h-[300px] cursor-pointer">
+                        <Image
+                          src={imagePreview}
+                          alt="Preview"
+                          layout="fill"
+                          className="rounded-lg w-[28rem] object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <span className="text-white text-md font-medium">Click to add new image</span>
+                        </div>
+                      </div>
+
+                    ) : (
+                      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">Upload Image</button>
+                    )}
+                  </div>
+
+                  <div className="mt-6 gap-4 flex items-center justify-center">
+                    <button
+                      type="submit"
+                      className=" w-full bg-[#3ca0ca] text-white p-[0.9rem] rounded-xl hover:bg-[#245e77]"
+                    >
+                      Update Book
+                    </button>
+                    {/* <button
+              onClick={() => deleteBook(selectedBook.id)}
+              className="mt-2 bg-red-500 text-white w-full py-2 rounded-xl hover:bg-red-700"
+            >
+              Delete Book
+            </button> */}
+
+                  </div>
+
+                </section>
+
+
+
+
+
+              </form>
+
+            </motion.div>
+
+          </section>
+        )}
+      </AnimatePresence>
+      {isEditorOpen && selectedBook && (
+        <RichTextEditor
+          isOpen={isEditorOpen}
+          onClose={() => setIsEditorOpen(false)}
+          onSave={(text) => {
+            setSelectedBook((prev) => prev ? { ...prev, aboutBook: text } : prev);
+            setIsEditorOpen(false);
+          }}
+          value={selectedBook.aboutBook || ""}
+        />
+      )}
     </section>
   );
 };

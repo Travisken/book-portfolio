@@ -43,11 +43,11 @@ export default function Navbar() {
             
                 
                 <div className="flex justify-between items-center w-full md:px-20">
-                <div className="bg-black justify-center text-xl font-semibold h-16 flex w-24 flex-col px-4 text-white">
-                    <span>
+                <div className="bg-[#3ca0ca] justify-center font-bold h-24 flex w-32 flex-col px-4 text-white">
+                    <span className="text-xl">
                      Dr.   
                     </span>
-                    <span>
+                    <span className="text-2xl">
                     Folarin.
                     </span>
                 </div>
@@ -55,7 +55,7 @@ export default function Navbar() {
                     {navLinks.map(({ name, href }) => (
                         <li key={href}>
                             <Link
-                                className={`nav_link cursor-pointer ${pathname.startsWith(href) || activeSection === href ? "text-[#3ca0ce] font-bold" : "text-black"} transition-colors duration-300`}
+                                className={`nav_link cursor-pointer ${pathname.startsWith(href) || activeSection === href ? "text-[#3ca0ce] font-bold" : "text-black"} transition-colors text-lg duration-300`}
                                 smooth={true} duration={500} to={href}
                             >
                                 {name}

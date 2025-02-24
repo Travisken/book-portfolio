@@ -41,11 +41,11 @@ const Home = () => {
       try {
         const testimonialsRef = ref(database, 'data'); // Adjust the path based on your structure
         const snapshot = await get(testimonialsRef);
-  
+
         if (snapshot.exists()) {
           const data = snapshot.val();
           console.log('Fetched data:', data); // Log the entire data structure
-  
+
           // Check if data has booksSection and whether it's an array
           if (data.booksSection) {
             const booksArray = Array.isArray(data.booksSection) ? data.booksSection : Object.values(data.booksSection);
@@ -66,7 +66,7 @@ const Home = () => {
         setLoading(false); // Stop loading when done
       }
     };
-  
+
     fetchBooks();
   }, []);
 
@@ -80,8 +80,8 @@ const Home = () => {
         <div className="flex w-full justify-between items-center mt-8">
           <h2 className="text-3xl font-bold">Books</h2>
           {books.length > 4 && (
-            <Link 
-              href="/books" 
+            <Link
+              href="/books"
               className="p-2 rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex w-[8rem] items-center justify-center"
             >
               See more
@@ -95,11 +95,12 @@ const Home = () => {
           </div>
         ) : (
           <div className="flex gap-8 flex-wrap md:gap-0 justify-center md:!justify-between w-full items-center">
-            {books.map((book) => (
+            {books.slice(0, 4).map((book) => (
               <BookCard key={book.id} book={book} onReadMore={() => handleOpen(book)} />
             ))}
           </div>
         )}
+
       </div>
 
       <TestimonialSection />
