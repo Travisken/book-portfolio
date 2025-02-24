@@ -27,9 +27,8 @@ const BookTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [errors, setErrors] = useState<Partial<Book>>({});
-  const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -68,14 +67,13 @@ const BookTable = () => {
   const openEditModal = (book: Book) => {
     setSelectedBook(book);
     setIsModalOpen(true);
-    setImagePreview(book.image || null);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedBook(null);
     setErrors({});
-    setImagePreview(null);
+    // setIsOpen(false)
   };
 
   const validateForm = () => {
@@ -88,20 +86,7 @@ const BookTable = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  const handleImageChange = (file: File) => {
-    if (file && selectedBook) {
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-      setSelectedBook({ ...selectedBook, image: imageUrl });
-    }
-  };
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (acceptedFiles) => handleImageChange(acceptedFiles[0]),
-    accept: { "image/*": [] },
-    maxFiles: 1,
-  });
+;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (selectedBook) {
@@ -119,7 +104,7 @@ const BookTable = () => {
   };
 
   const deleteBook = async (id: number) => {
-    if (!selectedBook) return; // Ensure selectedBook is not null
+    if (!selectedBook) return;
 
     try {
       await remove(ref(database, `data/booksSection/${id.toString()}`));
@@ -198,127 +183,6 @@ const BookTable = () => {
         </div>
       )}
 
-
-      <AnimatePresence>
-        {isModalOpen && selectedBook && (
-          <section className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 bg-[#00000002] h-[100vh] w-[100vw]">
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white p-6 rounded-2xl shadow-lg max-w-md w-full"
-            >
-              <form onSubmit={handleSubmit} className="p-6 bg-white flex md:flex-nowrap flex-wrap gap-8 rounded-lg md:w-[70vw]">
-
-
-
-                <section className="flex flex-col justify-between ">
-                  <div>
-                    <label className="block text-sm font-medium">Book Title</label>
-                    <input
-                      type="text"
-                      name="aboutBook"
-                      value={selectedBook.title || ""}
-                      onChange={handleInputChange}
-                      className="w-full mt-1 p-3 border rounded-xl"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium">Book Description</label>
-                    <input
-                      type="text"
-                      name="aboutBook"
-                      value={selectedBook.description || ""}
-                      onChange={handleInputChange}
-                      className="w-full mt-1 p-3 border rounded-xl"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium">Book contributors</label>
-                    <input
-                      type="text"
-                      name="aboutBook"
-                      value={selectedBook.contributors || ""}
-                      onChange={handleInputChange}
-                      className="w-full mt-1 p-3 border rounded-xl"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium">About the Book</label>
-                    <input
-                      type="text"
-                      value={selectedBook.aboutBook || ""}
-                      readOnly
-                      placeholder="Click to write about the book"
-                      onClick={() => setIsEditorOpen(true)}
-                      className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl cursor-pointer"
-                    />
-                  </div>
-                </section>
-
-                <section className="w-[300px]">
-                  <div className="mt-4" {...getRootProps()}>
-                    <input {...getInputProps()} />
-                    {imagePreview ? (
-                      <div className="relative group w-[300px] h-[300px] cursor-pointer">
-                        <Image
-                          src={imagePreview}
-                          alt="Preview"
-                          layout="fill"
-                          className="rounded-lg w-[28rem] object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <span className="text-white text-md font-medium">Click to add new image</span>
-                        </div>
-                      </div>
-
-                    ) : (
-                      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">Upload Image</button>
-                    )}
-                  </div>
-
-                  <div className="mt-6 gap-4 flex items-center justify-center">
-                    <button
-                      type="submit"
-                      className=" w-full bg-[#3ca0ca] text-white p-[0.9rem] rounded-xl hover:bg-[#245e77]"
-                    >
-                      Update Book
-                    </button>
-                    {/* <button
-              onClick={() => deleteBook(selectedBook.id)}
-              className="mt-2 bg-red-500 text-white w-full py-2 rounded-xl hover:bg-red-700"
-            >
-              Delete Book
-            </button> */}
-
-                  </div>
-
-                </section>
-
-
-
-
-
-              </form>
-
-            </motion.div>
-
-          </section>
-        )}
-      </AnimatePresence>
-      {isEditorOpen && selectedBook && (
-        <RichTextEditor
-          isOpen={isEditorOpen}
-          onClose={() => setIsEditorOpen(false)}
-          onSave={(text) => {
-            setSelectedBook((prev) => prev ? { ...prev, aboutBook: text } : prev);
-            setIsEditorOpen(false);
-          }}
-          value={selectedBook.aboutBook || ""}
-        />
-      )}
     </section>
   );
 };

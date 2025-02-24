@@ -50,18 +50,18 @@ export default function EmailTable() {
 
   return (
     <div className="overflow-x-auto text-center w-full">
-      <table className="min-w-full bg-white">
+      <table className="w-full ">
         <thead>
-          <tr>
-            <th className="py-2 px-4 border-b">Email</th>
-            <th className="py-2 px-4 border-b">Date Submitted</th>
+          <tr className='flex border-b justify-between'>
+            <th className="py-2 px-4 ">Email</th>
+            <th className="py-2 px-4">Date Submitted</th>
           </tr>
         </thead>
-        <tbody className='text-center w-full'>
+        <tbody className='text-center flex flex-col w-[100%]'>
           {emails.map((email) => (
-            <tr key={email.id}>
-              <td className="py-2 px-4 border-b">{email.email}</td>
-              <td className="py-2 px-4 border-b">
+            <tr key={email.id} className='flex border-b justify-between w-full'>
+              <td className="py-2 px-4">{email.email}</td>
+              <td className="py-2 px-4">
                 {new Date(email.createdAt).toLocaleDateString()} {/* Format the date */}
               </td>
             </tr>
