@@ -9,7 +9,7 @@ const PORT = 5000;
 
 // Define directory paths
 const __dirname = path.resolve();
-const uploadDir = path.join(__dirname, "uploads");
+const uploadDir = path.join(__dirname, "public");
 const coverDir = path.join(uploadDir, "covers");
 const documentDir = path.join(uploadDir, "documents");
 
@@ -22,7 +22,7 @@ const documentDir = path.join(uploadDir, "documents");
 
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static(uploadDir)); // Serve uploaded files
+app.use("../public", express.static(uploadDir)); // Serve uploaded files
 
 // Multer storage setup
 const storage = multer.diskStorage({
@@ -44,8 +44,8 @@ const upload = multer({ storage });
 app.post("/upload", upload.fields([{ name: "bookLink" }, { name: "bookDocument" }]), (req, res) => {
   if (!req.files) return res.status(400).json({ error: "No files uploaded" });
 
-  const bookLink = req.files.bookLink ? `/uploads/covers/${req.files.bookLink[0].filename}` : null;
-  const bookDocument = req.files.bookDocument ? `/uploads/documents/${req.files.bookDocument[0].filename}` : null;
+  const bookLink = req.files.bookLink ? `/covers/${req.files.bookLink[0].filename}` : null;
+  const bookDocument = req.files.bookDocument ? `/documents/${req.files.bookDocument[0].filename}` : null;
 
   res.json({ bookLink, bookDocument });
 });

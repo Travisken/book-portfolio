@@ -21,7 +21,7 @@ const BookCard: React.FC<BookProps> = ({ book, onReadMore }) => {
       {/* Image Section */}
       <div className="relative h-52 rounded-xl overflow-hidden">
         <Image 
-          src={book.image} 
+          src={book.bookLink} 
           alt={book.title} 
           layout="fill" 
           objectFit="cover" 

@@ -4,6 +4,7 @@ import { database } from "@/app/firebase";
 import { ref, get, remove } from "firebase/database";
 import Image from "next/image";
 import Link from "next/link";
+import { FiPenTool } from "react-icons/fi";
 
 interface Book {
   id: string; // Ensure id is treated as a string since Firebase uses string keys
@@ -88,7 +89,7 @@ const BookTable = () => {
             <Image
               height={200}
               width={200}
-              src={book.image}
+              src={book.bookLink}
               alt={book.title}
               className="w-full h-48 object-cover rounded-md"
             />
@@ -97,9 +98,12 @@ const BookTable = () => {
               {book.description}
             </p>
             <Link href={`/dashboard/add-book?id=${book.id}`}><button
-              className="mt-4 bg-[#3ca0ca] text-white w-full py-2 rounded-xl hover:bg-[#245e77]"
+              className="mt-4 bg-[#3ca0ca] flex items-center justify-between pl-8 font-semibold text-white w-full py-2 rounded-xl hover:bg-[#245e77]"
             >
               Edit Book
+              <span className="h-full px-4 bg-[#1b5973]">
+              <FiPenTool/>
+              </span>
             </button></Link>
             <button
               onClick={() => confirmDelete(book)}
