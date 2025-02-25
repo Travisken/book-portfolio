@@ -34,7 +34,7 @@ export default function TestimonialForm() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const booksRef = ref(database, 'data/books');
+        const booksRef = ref(database, 'data');
         const snapshot = await get(booksRef);
         if (snapshot.exists()) {
           const bookData = snapshot.val();
