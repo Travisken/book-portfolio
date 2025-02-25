@@ -7,8 +7,8 @@ const HeroSection: React.FC = () => {
         <>
             <section className="flex mt-[5rem] relative flex-wrap text-center md:text-left md:justify-between md:p-0 p-4 md:h-[90vh] md:px-20  items-center">
                 <div className="flex flex-col md:w-[50%] gap-4 items-center md:items-start">
-                    <h3 className=" m-0 p-0 text-3xl md:w-[80%] font-extrabold">
-                        Akinsiku Folarin
+                    <h3 className=" m-0 p-0 md:text-5xl text-3xl md:w-[80%] font-extrabold">
+                        Dr. Akinsiku Folarin
                     </h3>
                     <p>
                         CEO of Pentspace, integrates e-commerce, healthcare innovation, and global collaboration to enhance business connections, bridge local and global healthcare standards, and drive sustainable, technology-driven solutions for Nigeria’s healthcare sector.
