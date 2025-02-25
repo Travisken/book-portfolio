@@ -125,7 +125,7 @@ console.log("aboutBook content:", book.aboutBook);
                 <Box sx={modalStyle} className="w-full max-w-2xl p-5 md:p-6 flex flex-col gap-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="relative w-full min-h-48 h-full md:h-full rounded-lg bg-cover bg-center"
-                            style={{ backgroundImage: `url(${book.image})` }}>
+                            style={{ backgroundImage: `url(${book.bookLink})` }}>
                         </div>
                         <div className="flex flex-col gap-4">
                             <Typography variant="h4" component="h2" className="font-semibold">

@@ -1,12 +1,27 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { database } from '@/app/firebase';
-import { ref, push } from 'firebase/database';
+import { ref, push, get } from 'firebase/database';
 import emailjs from 'emailjs-com';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SelectInput from './selectInput';
+
+interface Book {
+  id: number;
+  bookName: string;
+  description: string;
+  image: string;
+  aboutBook: string;
+  title: string;
+  bookDescription: string;
+  bookLink: string;
+  published: boolean;
+  rating: number;
+}
 
 export default function TestimonialForm() {
+  const [books, setBooks] = useState<Book[]>([]);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -16,6 +31,32 @@ export default function TestimonialForm() {
   });
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const booksRef = ref(database, 'data/books');
+        const snapshot = await get(booksRef);
+        if (snapshot.exists()) {
+          const bookData = snapshot.val();
+          console.log('Fetched books data:', bookData.booksSection);
+  
+          const loadedBooks: Book[] = Object.keys(bookData.booksSection).map((key) => ({
+            id: parseInt(key),
+            ...bookData.booksSection[key],
+          }));
+          setBooks(loadedBooks);
+        } else {
+          console.log('No books found.');
+        }
+      } catch (error) {
+        console.error('Error fetching books:', error);
+      }
+    };
+  
+    fetchBooks();
+  }, []);
+  
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -23,6 +64,10 @@ export default function TestimonialForm() {
 
   const handleRating = (rating: number) => {
     setFormData((prev) => ({ ...prev, rating }));
+  };
+
+  const handleSelectChange = (bookName: string) => {
+    setFormData((prev) => ({ ...prev, bookName }));
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -93,15 +138,9 @@ export default function TestimonialForm() {
             className='w-full p-3 rounded-lg focus:outline-[#3ca0ce]'
             required
           />
-          <input
-            type='text'
-            name='bookName'
-            placeholder='Book Name'
-            value={formData.bookName}
-            onChange={handleChange}
-            className='w-full p-3 rounded-lg focus:outline-[#3ca0ce]'
-            required
-          />
+
+          <SelectInput books={books} onChange={handleSelectChange} />
+
           <textarea
             name='review'
             placeholder='Write your review...'
@@ -117,7 +156,7 @@ export default function TestimonialForm() {
               {[1, 2, 3, 4, 5].map((star) => (
                 <FaStar
                   key={star}
-                  className={`cursor-pointer hover:text-gray-400  transition-all duration-300 text-2xl ${formData.rating >= star ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-300'}`}
+                  className={`cursor-pointer hover:text-gray-400 transition-all duration-300 text-2xl ${formData.rating >= star ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-300'}`}
                   onClick={() => handleRating(star)}
                 />
               ))}

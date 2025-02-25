@@ -44,13 +44,13 @@ const Home = () => {
 
         if (snapshot.exists()) {
           const data = snapshot.val();
-          console.log('Fetched data:', data); // Log the entire data structure
+          // console.log('Fetched data:', data); // Log the entire data structure
 
           // Check if data has booksSection and whether it's an array
           if (data.booksSection) {
             const booksArray = Array.isArray(data.booksSection) ? data.booksSection : Object.values(data.booksSection);
             setBooks(booksArray);
-            console.log(booksArray)
+            // console.log(booksArray)
           } else {
             console.log('No books found in data');
             setBooks([]);

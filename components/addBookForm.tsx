@@ -4,18 +4,17 @@ import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import RichTextEditor from "./textEditor";
-import axios from "axios"; // Import axios
-import { database } from "@/app/firebase"; // Adjust the path as necessary
-import { ref, set, get } from "firebase/database"; // Import get for fetching data
+import axios from "axios";
+import { database } from "@/app/firebase";
+import { ref, set, get } from "firebase/database";
 import { useSearchParams } from "next/navigation";
 
-// Same interface for book data
 interface BookData {
   title: string;
   description: string;
   aboutBook: string;
   contributors: string;
-  bookLink: File | null;
+  bookLink: File | string | null;
   bookDocument: File | null;
   published: boolean;
 }
@@ -36,18 +35,15 @@ const BookUploadForm = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // Function to validate URL
   const isValidUrl = (url: string): boolean => {
     try {
-      new URL(url);
+      new URL(url, window.location.origin);
       return true;
-    } catch (error) {
-      console.log(error);
+    } catch {
       return false;
     }
   };
 
-  // Fetch existing book data if ID exists
   useEffect(() => {
     const fetchBookData = async () => {
       if (id) {
@@ -57,12 +53,11 @@ const BookUploadForm = () => {
           const data = snapshot.val();
           setBookData(data);
 
-          // Validate and set the preview URL
           if (data.bookLink && isValidUrl(data.bookLink)) {
-            setPreview(data.bookLink); // Set the preview if it's a valid URL
+            setPreview(data.bookLink);
           } else {
             console.error("Invalid URL for book cover:", data.bookLink);
-            setPreview(null); // Clear preview if the URL is invalid
+            setPreview(null);
           }
         }
       }
@@ -71,27 +66,24 @@ const BookUploadForm = () => {
     fetchBookData();
   }, [id]);
 
-  // Handle cover image drop
   const onDropCover = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
       setBookData((prev) => ({ ...prev, bookLink: file }));
       const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl); // Create a valid object URL
-      setErrors((prev) => ({ ...prev, bookLink: "" })); // Clear error
+      setPreview(objectUrl);
+      setErrors((prev) => ({ ...prev, bookLink: "" }));
     }
   };
 
-  // Handle document drop
   const onDropDocument = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
       setBookData((prev) => ({ ...prev, bookDocument: file }));
-      setErrors((prev) => ({ ...prev, bookDocument: "" })); // Clear error
+      setErrors((prev) => ({ ...prev, bookDocument: "" }));
     }
   };
 
-  // Dropzone configurations
   const { getRootProps: getRootPropsCover, getInputProps: getInputPropsCover } = useDropzone({
     onDrop: onDropCover,
     accept: { "image/*": [] },
@@ -104,7 +96,6 @@ const BookUploadForm = () => {
     maxFiles: 1,
   });
 
-  // Validate form fields
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     if (!bookData.title) newErrors.title = "Title is required";
@@ -117,7 +108,6 @@ const BookUploadForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -127,35 +117,30 @@ const BookUploadForm = () => {
     }
 
     const formData = new FormData();
-    formData.append('bookLink', bookData.bookLink as Blob);
-    formData.append('bookDocument', bookData.bookDocument as Blob);
-    formData.append('title', bookData.title);
-    formData.append('description', bookData.description);
-    formData.append('aboutBook', bookData.aboutBook);
-    formData.append('contributors', bookData.contributors);
-    formData.append('published', String(bookData.published));
+    if (bookData.bookLink instanceof File) {
+      formData.append("bookLink", bookData.bookLink);
+    }
+    formData.append("bookDocument", bookData.bookDocument as Blob);
+    formData.append("title", bookData.title);
+    formData.append("description", bookData.description);
+    formData.append("aboutBook", bookData.aboutBook);
+    formData.append("contributors", bookData.contributors);
+    formData.append("published", String(bookData.published));
 
     try {
-      const response = await axios.post('http://localhost:5000/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const response = await axios.post("http://localhost:5000/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       const { bookLink, bookDocument } = response.data;
 
-      // Save book data to Firebase Realtime Database
-      const numericId = id || Date.now(); // Use the existing ID or generate a new one
+      const numericId = id || Date.now();
       const bookRef = ref(database, "data/booksSection/" + numericId);
       await set(bookRef, {
         id: numericId,
-        title: bookData.title,
-        description: bookData.description,
-        aboutBook: bookData.aboutBook,
-        contributors: bookData.contributors,
-        published: bookData.published,
-        bookLink, // Store the download URL
-        bookDocument, // Store the download URL
+        ...bookData,
+        bookLink,
+        bookDocument,
       });
 
       alert("Book data submitted successfully!");
@@ -166,7 +151,6 @@ const BookUploadForm = () => {
     }
   };
 
-  // Clean up object URL
   useEffect(() => {
     return () => {
       if (preview) {
@@ -175,7 +159,6 @@ const BookUploadForm = () => {
     };
   }, [preview]);
 
-  // Reset form after submission
   const resetForm = () => {
     setBookData({
       title: "",
@@ -186,7 +169,7 @@ const BookUploadForm = () => {
       bookDocument: null,
       published: false,
     });
-    setPreview(null); // Clear preview
+    setPreview(null);
     setErrors({});
   };
 
