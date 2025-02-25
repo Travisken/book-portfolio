@@ -1,26 +1,34 @@
 "use client";
 
 import { Modal, Backdrop, Fade, Box, Typography, Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Star } from "lucide-react";
-import { useRouter } from "next/navigation"; 
+import { database } from '@/app/firebase'; // Adjust path as necessary
+import { ref, get, set } from 'firebase/database';
+import { useRouter } from "next/navigation";
 
+interface Testimonial {
+    bookName: string;
+    rating: number;
+}
+
+interface Book {
+    id: number;
+    title: string;
+    description: string;
+    image: string;
+    bookDocument: string;
+    aboutBook: string;
+    bookLink: string;
+    peopleRead?: { email: string; date: string }[]; // Optional array for storing emails and dates
+}
 
 interface BookModalProps {
     open: boolean;
     onClose: () => void;
-    book: {
-        title: string;
-        description: string;
-        image: string;
-        aboutBook: string;
-        bookLink: string;
-        rating: number;
-
-    } | null;
+    book: Book | null;
 }
-
 
 const modalStyle = {
     position: "absolute",
@@ -35,7 +43,7 @@ const modalStyle = {
     width: "90vw",
     maxWidth: "800px",
     maxHeight: "90vh",
-    overflowY: "auto"
+    overflowY: "auto",
 };
 
 const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
@@ -43,13 +51,54 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState<string | null>(null);
+    const [averageRating, setAverageRating] = useState<number>(0);
     const router = useRouter();
 
-const handleReadNow = () => {
-    if (book?.bookLink) {
-        router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookLink)}`);
-    }
-};
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            if (!book) return; // Ensure book is defined
+
+            try {
+                const testimonialsRef = ref(database, 'data/testimonials');
+                const snapshot = await get(testimonialsRef);
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const testimonials: Testimonial[] = Object.keys(data).map((key) => ({
+                        bookName: data[key].bookName,
+                        rating: data[key].rating,
+                    }));
+
+                    // Filter testimonials for the current book
+                    const filteredTestimonials = testimonials.filter(
+                        (testimonial) => testimonial.bookName === book.title
+                    );
+
+                    // Calculate average rating
+                    if (filteredTestimonials.length > 0) {
+                        const totalRating = filteredTestimonials.reduce((acc, testimonial) => acc + testimonial.rating, 0);
+                        const avgRating = totalRating / filteredTestimonials.length;
+                        setAverageRating(avgRating);
+                    } else {
+                        setAverageRating(0);
+                    }
+                } else {
+                    console.log('No testimonials found');
+                    setAverageRating(0);
+                }
+            } catch (error) {
+                console.error("Error fetching testimonials:", error);
+            }
+        };
+
+        fetchTestimonials();
+    }, [book]);
+
+    const handleReadNow = () => {
+        if (book?.bookLink) {
+            router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
+        }
+    };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ email: event.target.value });
@@ -61,30 +110,30 @@ const handleReadNow = () => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
 
+    
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-
+    
         if (!validateEmail(formData.email)) {
             setError("Please enter a valid email address.");
             return;
         }
-
+    
         if (!book) {
             setError("Book details are missing.");
             return;
         }
-
+    
         setLoading(true);
         setError(null);
         setSuccess(null);
-
-
+    
         const templateParams = {
             user_email: formData.email,
             book_title: book.title,
             book_link: book.bookLink,
         };
-
+    
         try {
             const response = await emailjs.send(
                 process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
@@ -92,11 +141,30 @@ const handleReadNow = () => {
                 templateParams,
                 process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
             );
-
+    
             console.log("Email sent successfully:", response);
             setSuccess("Email sent! Check your inbox.");
-                // router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookLink)}`);
-                handleReadNow();
+    
+            // Create the new entry for peopleRead
+            const peopleReadEntry = {
+                email: formData.email,
+                date: new Date().toISOString(), // Store current date
+            };
+    
+            // Reference to the book's peopleRead
+            const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
+    
+            // Fetch existing peopleRead data
+            const snapshot = await get(bookRef);
+            let peopleReadList = snapshot.exists() ? snapshot.val() : [];
+    
+            // Append the new entry
+            peopleReadList = [...peopleReadList, peopleReadEntry];
+    
+            // Update the database with the new peopleRead list
+            await set(bookRef, peopleReadList);
+    
+            handleReadNow();
             setFormData({ email: "" });
         } catch (error) {
             console.error("Failed to send email:", error);
@@ -105,13 +173,8 @@ const handleReadNow = () => {
             setLoading(false);
         }
     };
-    // console.log("aboutBook content:", book.aboutBook);
-
 
     if (!book) return null;
-console.log("Book object:", book);
-console.log("aboutBook content:", book.aboutBook);
-
 
     return (
         <Modal
@@ -124,9 +187,11 @@ console.log("aboutBook content:", book.aboutBook);
             <Fade in={open}>
                 <Box sx={modalStyle} className="w-full max-w-2xl p-5 md:p-6 flex flex-col gap-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="relative w-full min-h-48 h-full md:h-full rounded-lg bg-cover bg-center"
-                            style={{ backgroundImage: `url(${book.bookLink})` }}>
-                        </div>
+                    <div
+                        className="relative w-full min-h-48 h-full md:h-full rounded-lg bg-cover bg-center"
+                        style={{ backgroundImage: `url(${book.bookLink})` }}
+                    ></div>
+
                         <div className="flex flex-col gap-4">
                             <Typography variant="h4" component="h2" className="font-semibold">
                                 {book.title}
@@ -162,25 +227,16 @@ console.log("aboutBook content:", book.aboutBook);
                                     {[...Array(5)].map((_, index) => (
                                         <Star
                                             key={index}
-                                            className={`w-5 h-5 ${index < (book?.rating || 0) ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`}
+                                            className={`w-5 h-5 ${index < averageRating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`}
                                         />
                                     ))}
                                 </div>
-
                             </div>
-
                         </div>
-
-
                     </div>
                     <section className="flex flex-col w-full">
-                        <h3 className="py-3 text-3xl font-semibold">
-                            About this book
-                        </h3>
-                        <h2 className="text-xl font-bold text-left text-gray-800 mb-4">
-                            {book.title}
-                        </h2>
-
+                        <h3 className="py-3 text-3xl font-semibold">About this book</h3>
+                        <h2 className="text-xl font-bold text-left text-gray-800 mb-4">{book.title}</h2>
                         <p className="text-gray-700 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: book.aboutBook }} />
                     </section>
                 </Box>
