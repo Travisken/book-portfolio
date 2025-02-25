@@ -27,6 +27,7 @@
     "express": "^4.21.2",
     "firebase": "^11.3.1",
     "framer-motion": "^12.4.2",
+    "lucide-react": "^0.476.0",
     "multer": "^1.4.5-lts.1",
     "next": "15.1.7",
     "nodemailer": "^6.10.0",
