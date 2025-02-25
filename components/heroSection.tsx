@@ -1,11 +1,12 @@
 // import Image from "next/image";
 import Link from "next/link";
+import HealthQuotesCarousel from "./healthQuotes";
 
 
 const HeroSection: React.FC = () => {
     return (
         <>
-            <section className="flex mt-[5rem] relative flex-wrap text-center md:text-left md:justify-between md:p-0 p-4 md:h-[90vh] md:px-20  items-center">
+            <section className="flex  mt-[8rem] relative flex-wrap text-center md:text-left md:justify-between md:p-0 p-4 md:h-[90vh] md:px-20 items-start">
                 <div className="flex flex-col md:w-[50%] gap-4 items-center md:items-start">
                     <h3 className=" m-0 p-0 md:text-5xl text-3xl md:w-[80%] font-extrabold">
                         Dr. Akinsiku Folarin
@@ -16,6 +17,8 @@ const HeroSection: React.FC = () => {
                     <Link href="#books" className=" rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white  flex w-[8rem] md:w-[14rem] py-3 mt-2 items-center justify-center">
                         Books
                     </Link>
+
+                    <HealthQuotesCarousel/>
                 </div>
                 <div style={{
                     backgroundImage: "url('/author.jpeg')",

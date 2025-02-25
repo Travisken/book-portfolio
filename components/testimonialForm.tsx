@@ -26,7 +26,7 @@ export default function TestimonialForm() {
     fullName: '',
     email: '',
     review: '',
-    bookName: '',
+    title: '',
     rating: 0
   });
   const [loading, setLoading] = useState(false);
@@ -66,8 +66,8 @@ export default function TestimonialForm() {
     setFormData((prev) => ({ ...prev, rating }));
   };
 
-  const handleSelectChange = (bookName: string) => {
-    setFormData((prev) => ({ ...prev, bookName }));
+  const handleSelectChange = (title: string) => {
+    setFormData((prev) => ({ ...prev, title }));
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -86,7 +86,7 @@ export default function TestimonialForm() {
         from_name: formData.fullName,
         to_name: 'Angolo Isaac',
         message: `New feedback received from ${formData.fullName} (${formData.email}):\n\n` +
-          `Book Name: ${formData.bookName}\n` +
+          `Book Name: ${formData.title}\n` +
           `Review: ${formData.review}\n` +
           `Rating: ${formData.rating}`
       };
@@ -99,7 +99,7 @@ export default function TestimonialForm() {
         fullName: '',
         email: '',
         review: '',
-        bookName: '',
+        title: '',
         rating: 0
       });
     } catch (error) {

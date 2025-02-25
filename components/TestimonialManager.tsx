@@ -11,6 +11,7 @@ interface Testimonial {
   review: string;
   rating: number;
   approved: boolean;
+  bookName: string;
 }
 
 export default function TestimonialManager() {
@@ -80,6 +81,7 @@ export default function TestimonialManager() {
   const TestimonialCard = ({ testimonial, actions }: { testimonial: Testimonial; actions: React.ReactNode }) => (
     <div className="p-6 border md:w-[67vw] rounded-lg shadow-md bg-white mb-4">
       <p className="font-semibold text-lg">{testimonial.fullName}</p>
+      <p className="font-semibold text-zinc-500 text-md">{testimonial.bookName}</p>
       <p className="text-gray-600 my-2">&quot;{testimonial.review}&quot;</p>
       <p className="text-yellow-500">Rating: {testimonial.rating} ⭐</p>
       <div className="mt-4 flex space-x-4">{actions}</div>

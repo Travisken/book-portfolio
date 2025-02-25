@@ -45,7 +45,7 @@
     "react-scroll": "^1.9.2",
     "react-toastify": "^11.0.3",
     "recharts": "^2.15.1",
-    "swiper": "^11.2.3"
+    "swiper": "^11.2.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

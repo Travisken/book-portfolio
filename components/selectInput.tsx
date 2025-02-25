@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface SelectInputProps {
-  books: { id: number; title: string }[];
+  books: { id: number; title: string; bookName: string }[];
   onChange: (title: string) => void;
 }
 
@@ -9,7 +9,6 @@ interface SelectInputProps {
 const SelectInput: React.FC<SelectInputProps> = ({ books, onChange }) => {
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onChange(e.target.value);
-        console.log(books)
   };
 
   return (

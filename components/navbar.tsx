@@ -43,7 +43,7 @@ export default function Navbar() {
             
                 
                 <div className="flex justify-between items-center w-full md:px-20">
-                <div className="bg-[#3ca0ca] justify-center font-bold h-24 flex w-32 flex-col px-4 text-white">
+                <div className="bg-[#3ca0ca] logo justify-center font-bold h-24 flex w-32 flex-col px-4 text-white">
                     <span className="text-xl">
                      Dr.   
                     </span>

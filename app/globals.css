@@ -16,6 +16,37 @@ section{
   font-size: medium ;
 }
 
+.clip-bookmark {
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.logo{
+  position: relative;
+}
+
+.logo::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-right: 6rem solid transparent; /* Adjust for triangle width */
+  border-top: 4rem solid #3ca0ce; /* Triangle height and color */
+  top: 5rem; /* Position from the top */
+  left: 0; /* Align to the right */
+}
+
+.logo::before {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 6rem solid transparent; /* Adjust for triangle width */
+  border-top: 4rem solid #3ca0ce; /* Triangle height and color */
+  top: 5rem; /* Position from the top */
+  right: 0; /* Align to the right */
+}
+
+
 #file-upload-button{
   display: none;
 }

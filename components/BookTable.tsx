@@ -97,14 +97,20 @@ const BookTable = () => {
             <p className="text-gray-600 text-sm mt-2 line-clamp-3 whitespace-normal break-words">
               {book.description}
             </p>
-            <Link href={`/dashboard/add-book?id=${book.id}`}><button
-              className="mt-4 bg-[#3ca0ca] flex items-center justify-between pl-8 font-semibold text-white w-full py-2 rounded-xl hover:bg-[#245e77]"
+
+          
+           
+            <Link
+              href={`/dashboard/add-book?id=${book.id}`}
+              className="button mt-4 !bg-[#3ca0ca] !border-none"
+              type="button"
             >
-              Edit Book
-              <span className="h-full px-4 bg-[#1b5973]">
-              <FiPenTool/>
+              <span className="button__text text-center">Edit book</span>
+              <span className="button__icon hover:!bg-[#1d6787] !bg-[#1d6787] text-white text-3xl font-semibold">
+              <FiPenTool className="text-2xl font-semibold"/>
               </span>
-            </button></Link>
+            </Link>
+            
             <button
               onClick={() => confirmDelete(book)}
               className="button mt-4"
