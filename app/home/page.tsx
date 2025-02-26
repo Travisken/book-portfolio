@@ -20,6 +20,7 @@ interface Book {
   aboutBook: string; // Add this line
   title: string; // Add this line
   bookDescription: string;
+  bookDocument: string;
   bookLink: string;
   published: boolean;
   rating: number;
@@ -106,7 +107,9 @@ const Home = () => {
       <TestimonialSection />
       <TestimonialForm />
 
-      <BookModal open={open} onClose={() => setOpen(false)} book={selectedBook} />
+      {open && selectedBook && (
+        <BookModal open={open} onClose={() => setOpen(false)} book={selectedBook} />
+      )}
     </section>
   );
 };

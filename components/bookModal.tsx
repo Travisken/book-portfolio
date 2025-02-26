@@ -27,7 +27,7 @@ interface Book {
 interface BookModalProps {
     open: boolean;
     onClose: () => void;
-    book: Book | null;
+    book?: Book;
 }
 
 const modalStyle = {
