@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { database } from "@/app/firebase";
 import { ref, get, remove } from "firebase/database";
@@ -7,7 +8,7 @@ import Link from "next/link";
 import { FiPenTool } from "react-icons/fi";
 
 interface Book {
-  id: string; // Ensure id is treated as a string since Firebase uses string keys
+  id: string;
   title: string;
   description: string;
   image: string;
@@ -22,9 +23,7 @@ const BookTable = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-  // const [errors, setErrors] = useState<Partial<Book>>({});
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const BookTable = () => {
           const booksData = snapshot.val();
           const booksArray = Object.keys(booksData).map((key) => ({
             ...booksData[key],
-            id: key, // Firebase keys are strings
+            id: key,
             rating: booksData[key].rating || 0,
           }));
           setBooks(booksArray);
@@ -62,14 +61,10 @@ const BookTable = () => {
 
   const deleteBook = async () => {
     if (!selectedBook) return;
-    
+
     try {
       await remove(ref(database, `data/booksSection/${selectedBook.id}`));
-
-      // Update book list after deletion
       setBooks((prevBooks) => prevBooks.filter((book) => book.id !== selectedBook.id));
-
-      // Close confirmation modal
       setShowConfirm(false);
       setSelectedBook(null);
     } catch (err) {
@@ -93,30 +88,23 @@ const BookTable = () => {
               alt={book.title}
               className="w-full h-48 object-cover rounded-md"
             />
-            <h2 className="text-xl font-semibold mt-4 whitespace-normal break-words">{book.title}</h2>
-            <p className="text-gray-600 text-sm mt-2 line-clamp-3 whitespace-normal break-words">
+            <h2 className="text-xl font-semibold mt-4 break-words">{book.title}</h2>
+            <p className="text-gray-600 text-sm mt-2 line-clamp-3 break-words">
               {book.description}
             </p>
 
-          
-           
             <Link
               href={`/dashboard/add-book?id=${book.id}`}
               className="button mt-4 !bg-[#3ca0ca] !border-none"
-              type="button"
             >
-              <span className="button__text text-center">Edit book</span>
+              <span className="button__text">Edit book</span>
               <span className="button__icon hover:!bg-[#1d6787] !bg-[#1d6787] text-white text-3xl font-semibold">
-              <FiPenTool className="text-2xl font-semibold"/>
+                <FiPenTool className="text-2xl" />
               </span>
             </Link>
-            
-            <button
-              onClick={() => confirmDelete(book)}
-              className="button mt-4"
-              type="button"
-            >
-              <span className="button__text text-center">Delete book</span>
+
+            <button onClick={() => confirmDelete(book)} className="button mt-4">
+              <span className="button__text">Delete book</span>
               <span className="button__icon">
                 <svg
                   className="icon"
@@ -140,7 +128,7 @@ const BookTable = () => {
         ))}
       </div>
 
-      {showConfirm && (
+      {showConfirm && selectedBook && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <p>Are you sure you want to delete this book?</p>
@@ -152,8 +140,8 @@ const BookTable = () => {
                 Cancel
               </button>
               <button
-                onClick={() => deleteBook(selectedBook.id)}
-                className="px-4 py-2 text-white bg-red-500 hover:bg-red-600 cursor-pointer rounded-lg"
+                onClick={deleteBook}
+                className="px-4 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg"
               >
                 Confirm
               </button>
