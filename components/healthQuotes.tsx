@@ -29,7 +29,10 @@ const quotes = [
 
 const HealthQuotesCarousel = () => {
   return (
-    <div className="w-[30rem] mt-[4rem] hidden md:flex py-10">
+    <div className="w-[30rem] relative mt-[4rem] hidden md:flex py-10">
+        <span className='absolute -top-20 right-0 text-[15rem] text-[#3ca0ca]'>
+            &quot;
+        </span>
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
@@ -42,7 +45,7 @@ const HealthQuotesCarousel = () => {
           <SwiperSlide key={index}>
             <div className="p-8 rounded-2xl font-extralight tracking-wide text-black">
               <p className="text-2xl italic  mb-4">&quot;{quote.text}&quot;</p>
-              <p className="text-lg font-semibold italic">- {quote.author}</p>
+              <p className="text-lg font-semibold italic text-[#3ca0ca]">- {quote.author}</p>
             </div>
           </SwiperSlide>
         ))}

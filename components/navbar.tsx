@@ -55,7 +55,7 @@ export default function Navbar() {
                     {navLinks.map(({ name, href }) => (
                         <li key={href}>
                             <Link
-                                className={`nav_link cursor-pointer ${pathname.startsWith(href) || activeSection === href ? "text-[#3ca0ce] font-bold" : "text-black"} transition-colors text-lg duration-300`}
+                                className={`nav_link cursor-pointer ${pathname.startsWith(href) || activeSection === href ? "text-[#3ca0ce] font-bold" : "text-black"} transition-colors text-xl duration-300`}
                                 smooth={true} duration={500} to={href}
                             >
                                 {name}
