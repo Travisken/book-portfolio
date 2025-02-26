@@ -48,7 +48,7 @@ export default function Dashboard() {
         console.log(books)
       });
     }
-  }, [loading]);
+  }, [loading, books]);
 
   if (loading) return <p>Loading...</p>; // Show loading state
 

@@ -22,9 +22,9 @@ const BookTable = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-  const [errors, setErrors] = useState<Partial<Book>>({});
+  // const [errors, setErrors] = useState<Partial<Book>>({});
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {

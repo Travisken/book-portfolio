@@ -36,6 +36,7 @@ export default function TestimonialManager() {
         }
       } catch (error) {
         toast.error("Failed to fetch testimonials.");
+        console.log(error)
         setTestimonials([]);
       } finally {
         setLoading(false);
@@ -61,6 +62,7 @@ export default function TestimonialManager() {
       );
       toast.success("Testimonial approved successfully!");
     } catch (err) {
+      console.log(err)
       toast.error("Failed to approve testimonial.");
     }
   };
@@ -72,6 +74,7 @@ export default function TestimonialManager() {
       setTestimonials((prev) => prev.filter((t) => t.id !== id));
       toast.success("Testimonial deleted successfully!");
     } catch (err) {
+      console.log(err)
       toast.error("Failed to delete testimonial.");
     }
   };

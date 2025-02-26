@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/autoplay';
@@ -41,7 +41,7 @@ const HealthQuotesCarousel = () => {
         {quotes.map((quote, index) => (
           <SwiperSlide key={index}>
             <div className="p-8 rounded-2xl font-extralight tracking-wide text-black">
-              <p className="text-2xl italic  mb-4">"{quote.text}"</p>
+              <p className="text-2xl italic  mb-4">&quot;{quote.text}&quot;</p>
               <p className="text-lg font-semibold italic">- {quote.author}</p>
             </div>
           </SwiperSlide>
