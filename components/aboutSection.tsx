@@ -12,7 +12,7 @@ export default function AboutSection() {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
         >
-            <section id="about" className="flex items-start justify-start px-3 md:px-[5.2rem]">
+            <section id="about" className="flex items-start justify-start md:mt-10 px-3 md:px-[5.2rem]">
                 <section className=" flex-1 flex justify-start items-left flex-col mx-auto gap-8 text-left">
                 <h2 className="text-4xl text-left font-bold">
                     Hi, I&apos;m Dr. Akinsiku Folarin

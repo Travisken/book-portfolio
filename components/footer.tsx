@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaEnvelope, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
+import { FaEnvelope, FaLinkedinIn } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -28,9 +28,9 @@ const Footer = () => {
             <FaLinkedinIn size={20} />
           </Link>
 
-          <Link href={""}>
+          {/* <Link href={""}>
             <FaWhatsapp size={20} />
-          </Link>
+          </Link> */}
 
           <Link href={"mailto:kentravis37@gmail.com"}>
             <FaEnvelope size={20} />
@@ -41,7 +41,7 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <p className="text-sm mt-4 md:mt-0">&copy; {new Date().getFullYear()} Your Website. All Rights Reserved.</p>
+        <p className="text-sm mt-4 md:mt-0">&copy; {new Date().getFullYear()} Dr. Akinsiku Folarin . All Rights Reserved.</p>
       </div>
     </footer>
   );
