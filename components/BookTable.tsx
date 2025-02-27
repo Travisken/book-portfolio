@@ -95,7 +95,7 @@ const BookTable = () => {
 
             <Link
               href={`/dashboard/add-book?id=${book.id}`}
-              className="button mt-4 !bg-[#3ca0ca] !border-none"
+              className="button_book mt-4 !bg-[#3ca0ca] !border-none"
             >
               <span className="button__text">Edit book</span>
               <span className="button__icon hover:!bg-[#1d6787] !bg-[#1d6787] text-white text-3xl font-semibold">
@@ -103,7 +103,7 @@ const BookTable = () => {
               </span>
             </Link>
 
-            <button onClick={() => confirmDelete(book)} className="button mt-4">
+            <button onClick={() => confirmDelete(book)} className="button_book mt-4">
               <span className="button__text">Delete book</span>
               <span className="button__icon">
                 <svg

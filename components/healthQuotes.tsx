@@ -30,7 +30,7 @@ const quotes = [
 const HealthQuotesCarousel = () => {
   return (
     <div className="w-[30rem] relative mt-[4rem] hidden md:flex py-10">
-        <span className='absolute -top-20 right-0 text-[15rem] text-[#3ca0ca]'>
+        <span className='absolute -top-20 right-0 text-[14rem] text-[#3ca0ca]'>
             &quot;
         </span>
       <Swiper
