@@ -13,7 +13,11 @@ const menuItems = [
   { name: "Add Book", href: "/dashboard/add-book", icon: FiPlus },
 ];
 
-export default function Sidebar() {
+type SidebarProps = {
+  closeSidebar: () => void;
+};
+
+export default function Sidebar({ closeSidebar }: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -24,6 +28,7 @@ export default function Sidebar() {
             <li key={href}>
               <Link
                 href={href}
+                onClick={closeSidebar} 
                 className={clsx(
                   "flex items-center p-3 rounded-lg transition-all duration-300",
                   pathname == href

@@ -30,7 +30,7 @@ export default function DashboardNavbar() {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 md:translate-x-0 md:w-64`}
       >
-        <Sidebar />
+        <Sidebar closeSidebar={() => setIsSidebarOpen(false)} />
       </div>
 
       {/* Overlay (For closing sidebar on click outside) */}
