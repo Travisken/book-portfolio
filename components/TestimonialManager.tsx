@@ -82,7 +82,7 @@ export default function TestimonialManager() {
   if (loading) return <p>Loading testimonials...</p>;
 
   const TestimonialCard = ({ testimonial, actions }: { testimonial: Testimonial; actions: React.ReactNode }) => (
-    <div className="p-6 border md:w-[67vw] rounded-lg shadow-md bg-white mb-4">
+    <div className="p-6 border md:w-[67vw] w-[65vw] rounded-lg shadow-md bg-white mb-4">
       <p className="font-semibold text-lg">{testimonial.fullName}</p>
       <p className="font-semibold text-zinc-500 text-md">{testimonial.bookName}</p>
       <p className="text-gray-600 my-2">&quot;{testimonial.review}&quot;</p>
@@ -92,7 +92,7 @@ export default function TestimonialManager() {
   );
 
   return (
-    <div className="p-8 bg-gray-50 h-fit">
+    <div className="md:p-8 p-2 bg-gray-50  h-fit">
       <ToastContainer position="top-right" autoClose={3000} />
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Testimonials</h2>
 
@@ -110,7 +110,7 @@ export default function TestimonialManager() {
                 actions={(
                   <button
                     onClick={() => handleDelete(testimonial.id)}
-                    className="flex items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                    className="flex md:flex-initial flex-1 items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
                   >
                     <Trash2 className="mr-2" /> Delete
                   </button>
@@ -132,20 +132,20 @@ export default function TestimonialManager() {
                 key={testimonial.id}
                 testimonial={testimonial}
                 actions={(
-                  <>
+                  <div className="flex md:flex-initial flex-1 gap-4 md:flex-row flex-col">
                     <button
                       onClick={() => handleApprove(testimonial.id)}
-                      className="flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                      className="flex flex-1 w-full items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                     >
                       <CheckCircle className="mr-2" /> Approve
                     </button>
                     <button
                       onClick={() => handleDelete(testimonial.id)}
-                      className="flex items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                      className="flex flex-1 items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
                     >
                       <Trash2 className="mr-2" /> Delete
                     </button>
-                  </>
+                  </div>
                 )}
               />
             ))
