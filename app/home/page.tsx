@@ -11,6 +11,7 @@ import Link from "next/link";
 import ExperienceSection from "@/components/experienceSection";
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get } from 'firebase/database';
+import BttButton from "@/components/bttButton";
 
 interface Book {
   id: number;
@@ -110,6 +111,8 @@ const Home = () => {
       {open && selectedBook && (
         <BookModal open={open} onClose={() => setOpen(false)} book={selectedBook} />
       )}
+
+      <BttButton/>
     </section>
   );
 };
