@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function BttButton() {
     return (
         <>
-        <div className="fixed bottom-10 right-10">
+        <div className="fixed md:block hidden bottom-10 right-10">
 
         
             <Link className="button" href={"#heroSection"} >
