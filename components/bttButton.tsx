@@ -6,7 +6,7 @@ export default function BttButton() {
         <div className="fixed md:block hidden bottom-10 right-10">
 
         
-            <Link className="button" href={"#heroSection"} >
+            <Link className="button_btt" href={"#heroSection"} >
                 {/* <!-- From Uiverse.io by vinodjangid07 -->  */}
                 {/* <button> */}
                 <svg className="svgIcon" viewBox="0 0 384 512">

@@ -146,7 +146,7 @@ section{
 
 /* From Uiverse.io by boryanakrasteva */ 
 /* From Uiverse.io by andrew-demchenk0 */ 
-.button {
+.button_book {
   position: relative;
   width: 100%;
   height: 40px;
@@ -159,17 +159,17 @@ section{
   border-radius: 12px;
 }
 
-.button, .button__icon, .button__text {
+.button_book, .button__icon, .button__text {
   transition: all 0.3s;
 }
 
-.button .button__text {
+.button_book .button__text {
   transform: translateX(35px);
   color: #fff;
   font-weight: 600;
 }
 
-.button .button__icon {
+.button_book .button__icon {
   position: absolute;
   transform: translateX(185px);
 
@@ -181,34 +181,34 @@ section{
   justify-content: center;
 }
 
-.button .svg {
+.button_book .svg {
   width: 20px;
 }
 
-.button:hover {
+.button_book:hover {
   background: #cc0000;
 }
 
-.button:hover .button__text {
+.button_book:hover .button__text {
   color: transparent;
 }
 
-.button:hover .button__icon {
+.button_book:hover .button__icon {
   width: 100%;
   transform: translateX(0);
 }
 
-.button:active .button__icon {
+.button_book:active .button__icon {
   background-color: #b20000;
 }
 
-.button:active {
+.button_book:active {
   border: 1px solid #b20000;
 }
 
 
 /* From Uiverse.io by vinodjangid07 */ 
-.button {
+.button_btt {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -234,7 +234,7 @@ section{
   fill: white;
 }
 
-.button:hover {
+.button_btt:hover {
   width: 140px;
   border-radius: 50px;
   transition-duration: 0.3s;
@@ -242,13 +242,13 @@ section{
   align-items: center;
 }
 
-.button:hover .svgIcon {
+.button_btt:hover .svgIcon {
   /* width: 20px; */
   transition-duration: 0.3s;
   transform: translateY(-200%);
 }
 
-.button::before {
+.button_btt::before {
   position: absolute;
   bottom: -20px;
   content: "Back to Top";
@@ -257,7 +257,7 @@ section{
   font-size: 0px;
 }
 
-.button:hover::before {
+.button_btt:hover::before {
   font-size: 13px;
   opacity: 1;
   bottom: unset;

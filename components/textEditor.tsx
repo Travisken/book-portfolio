@@ -106,7 +106,7 @@ const RichTextEditor: React.FC<ModalProps> = ({ isOpen, onClose, onSave, value }
         <div
           ref={editorRef}
           contentEditable
-          className="border p-5 min-h-[50vh] focus:outline-none"
+          className="border p-5 h-[50vh] overflow-scroll focus:outline-none"
         />
 
         {/* Action Buttons */}
