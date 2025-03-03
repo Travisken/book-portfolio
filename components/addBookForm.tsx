@@ -128,7 +128,7 @@ const BookUploadForm = () => {
     formData.append("published", String(bookData.published));
 
     try {
-      const response = await axios.post("http://localhost:5000/upload", formData, {
+      const response = await axios.post("https://server-uc0a.onrender.com/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
