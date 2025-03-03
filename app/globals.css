@@ -171,7 +171,7 @@ section{
 
 .button_book .button__icon {
   position: absolute;
-  transform: translateX(185px);
+  transform: translateX(216px);
 
   height: 100%;
   width: 39px;
@@ -180,6 +180,8 @@ section{
   align-items: center;
   justify-content: center;
 }
+
+
 
 .button_book .svg {
   width: 20px;

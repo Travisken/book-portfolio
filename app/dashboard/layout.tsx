@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* <Sidebar /> */}
 
         {/* Main Content */}
-        <main className="md:w-[88%] float-right ml-auto w-full md:pl-[7.5rem] md:pt-24 p-4 md:p-8 pt-20">
+        <main className="md:w-[88%] float-right ml-auto w-full md:pl-[7.5rem] md:pt-24 p-2 md:p-8 pt-20">
           {children}
         </main>
       </div>

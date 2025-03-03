@@ -57,13 +57,13 @@ export default function Dashboard() {
       <h1 className="text-2xl font-bold mb-8">Admin Dashboard</h1>
 
       {/* Emails Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+      <div className="bg-white md:p-6 p-2 rounded-lg shadow-md mb-8">
         <h2 className="text-xl font-semibold mb-4">Submitted Emails</h2>
         <EmailTable />
       </div>
 
       {/* Testimonials Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+      <div className="bg-white md:p-6 p-2 rounded-lg shadow-md mb-8">
         <h2 className="text-xl font-semibold mb-4">Manage Testimonials</h2>
         <TestimonialManager />
       </div>
@@ -74,7 +74,7 @@ export default function Dashboard() {
       </div> */}
 
       {/* Books Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-white md:p-6 p-2 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Added Books</h2>
         <BookTable />
       </div>

@@ -77,10 +77,10 @@ const BookTable = () => {
   if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
 
   return (
-    <section className="w-[70vw] overflow-scroll">
-      <div className="flex min-w-[80vw] overflow-scroll gap-8 py-4">
+    <section className="md:w-[70vw] w-[84vw] overflow-scroll">
+      <div className="flex min-w-[80vw] overflow-scroll snap-proximity snap-x gap-8 py-4">
         {books.map((book) => (
-          <div key={book.id} className="bg-white shadow-lg rounded-lg p-4 w-64 text-center">
+          <div key={book.id} className="bg-white shadow-lg rounded-lg md:p-4 p-2 shrink-0 md:w-[18rem] w-[17rem] text-center">
             <Image
               height={200}
               width={200}

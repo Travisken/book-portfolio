@@ -82,7 +82,7 @@ export default function TestimonialManager() {
   if (loading) return <p>Loading testimonials...</p>;
 
   const TestimonialCard = ({ testimonial, actions }: { testimonial: Testimonial; actions: React.ReactNode }) => (
-    <div className="p-6 border md:w-[67vw] w-[65vw] rounded-lg shadow-md bg-white mb-4">
+    <div className="p-6 border lg:w-[67vw] md:w-[52%] w-[80%] rounded-lg shadow-md bg-white mb-4">
       <p className="font-semibold text-lg">{testimonial.fullName}</p>
       <p className="font-semibold text-zinc-500 text-md">{testimonial.bookName}</p>
       <p className="text-gray-600 my-2">&quot;{testimonial.review}&quot;</p>
