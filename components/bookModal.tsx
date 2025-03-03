@@ -56,7 +56,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
     useEffect(() => {
         const fetchTestimonials = async () => {
-            if (!book) return; // Ensure book is defined
+            if (!book) return;
 
             try {
                 const testimonialsRef = ref(database, 'data/testimonials');
@@ -64,26 +64,19 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
                 if (snapshot.exists()) {
                     const data = snapshot.val();
-                    const testimonials: Testimonial[] = Object.keys(data).map((key) => ({
-                        bookName: data[key].bookName,
-                        rating: data[key].rating,
-                    }));
+                    const testimonials: Testimonial[] = Object.values(data);
 
-                    // Filter testimonials for the current book
                     const filteredTestimonials = testimonials.filter(
                         (testimonial) => testimonial.bookName === book.title
                     );
 
-                    // Calculate average rating
                     if (filteredTestimonials.length > 0) {
                         const totalRating = filteredTestimonials.reduce((acc, testimonial) => acc + testimonial.rating, 0);
-                        const avgRating = totalRating / filteredTestimonials.length;
-                        setAverageRating(avgRating);
+                        setAverageRating(totalRating / filteredTestimonials.length);
                     } else {
                         setAverageRating(0);
                     }
                 } else {
-                    console.log('No testimonials found');
                     setAverageRating(0);
                 }
             } catch (error) {
@@ -95,7 +88,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     }, [book]);
 
     const handleReadNow = () => {
-        if (book?.bookLink) {
+        if (book?.bookDocument) {
             router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
         }
     };
@@ -110,60 +103,48 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
 
-    
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-    
+
         if (!validateEmail(formData.email)) {
             setError("Please enter a valid email address.");
             return;
         }
-    
+
         if (!book) {
             setError("Book details are missing.");
             return;
         }
-    
+
         setLoading(true);
         setError(null);
         setSuccess(null);
-    
+
         const templateParams = {
             user_email: formData.email,
             book_title: book.title,
             book_link: book.bookLink,
         };
-    
+
         try {
-            const response = await emailjs.send(
+            await emailjs.send(
                 process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
                 process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
                 templateParams,
                 process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
             );
-    
-            console.log("Email sent successfully:", response);
-            setSuccess("Email sent! Check your inbox.");
-    
-            // Create the new entry for peopleRead
+
             const peopleReadEntry = {
                 email: formData.email,
-                date: new Date().toISOString(), // Store current date
+                date: new Date().toISOString(),
             };
-    
-            // Reference to the book's peopleRead
+
             const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
-    
-            // Fetch existing peopleRead data
             const snapshot = await get(bookRef);
-            let peopleReadList = snapshot.exists() ? snapshot.val() : [];
-    
-            // Append the new entry
-            peopleReadList = [...peopleReadList, peopleReadEntry];
-    
-            // Update the database with the new peopleRead list
-            await set(bookRef, peopleReadList);
-    
+            const peopleReadList = snapshot.exists() ? snapshot.val() : [];
+
+            await set(bookRef, [...peopleReadList, peopleReadEntry]);
+
             handleReadNow();
             setFormData({ email: "" });
         } catch (error) {
@@ -175,6 +156,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     };
 
     if (!book) return null;
+
 
     return (
         <Modal
