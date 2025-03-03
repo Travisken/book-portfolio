@@ -281,9 +281,9 @@ const BookUploadForm = () => {
           </div>
 
           {/* Document Dropzone */}
-          <div className="border-4 border-dashed border-gray-400 p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#3ca0ca] transition">
+          <div{...getRootPropsDocument()} className="border-4 border-dashed border-gray-400 p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#3ca0ca] transition">
             <label className="block text-xl font-medium text-gray-500">Book Document</label>
-            <div {...getRootPropsDocument()} className="p-2 rounded-xl flex flex-col items-center justify-center cursor-pointer">
+            <div  className="p-2 rounded-xl flex flex-col items-center justify-center cursor-pointer">
               <input {...getInputPropsDocument()} />
               {bookData.bookDocument ? (
                 <p>Document uploaded</p>

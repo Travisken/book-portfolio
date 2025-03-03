@@ -47,7 +47,7 @@ const RichTextEditor: React.FC<ModalProps> = ({ isOpen, onClose, onSave, value }
   };
 
   return (
-    <section className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <section className="fixed inset-0 z-10 flex items-center justify-center bg-gray-900 bg-opacity-50">
       <div className="bg-white w-[90vmin] p-6 rounded-lg shadow-xl mx-auto mt-20">
         <h3 className='text-xl font-semibold pb-4'>About Book</h3>
 
