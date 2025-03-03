@@ -15,7 +15,7 @@ export default function ExperienceSection() {
                     <p>Showcasing skills, achievements, and career growth through professional experiences.</p>
                 </div>
 
-                <section className="flex items-start flex-wrap p-6 gap-10 justify-center">
+                <section className="flex items-start flex-wrap p-6  lg:h-[65vh] gap-10 justify-center">
                     {/** Card Component */}
                     {[
                         {

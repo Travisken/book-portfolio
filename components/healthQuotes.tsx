@@ -30,9 +30,9 @@ const quotes = [
 const HealthQuotesCarousel = () => {
   return (
     <div className="w-[30rem] relative mt-[4rem] hidden md:flex py-10">
-      <span className='absolute -top-20 right-0 text-[14rem] text-[#3ca0ca]'>
+      <span className='absolute  -top-1 right-0 text-[14rem] text-[#3ca0ca]'>
         {/* &quot; */}
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3ca0ca" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-quote"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="70" viewBox="0 0 24 24" fill="none" stroke="#3ca0ca" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-quote"><path fill='#3ca0ca' d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /><path fill='#3ca0ca' d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /></svg>
       </span>
       <Swiper
         modules={[Autoplay]}
@@ -44,8 +44,8 @@ const HealthQuotesCarousel = () => {
       >
         {quotes.map((quote, index) => (
           <SwiperSlide key={index}>
-            <div className="p-8 rounded-2xl font-extralight tracking-wide text-black">
-              <p className="text-2xl italic  mb-4">&quot;{quote.text}&quot;</p>
+            <div className="p-8 rounded-2xl tracking-wide text-black">
+              <p className="text-2xl font-thin italic  mb-4">&quot;{quote.text}&quot;</p>
               <p className="text-lg font-semibold italic text-[#3ca0ca]">- {quote.author}</p>
             </div>
           </SwiperSlide>
