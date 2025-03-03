@@ -105,46 +105,49 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-
+    
         if (!validateEmail(formData.email)) {
             setError("Please enter a valid email address.");
             return;
         }
-
+    
         if (!book) {
             setError("Book details are missing.");
             return;
         }
-
+    
         setLoading(true);
         setError(null);
         setSuccess(null);
-
+    
         const templateParams = {
             user_email: formData.email,
             book_title: book.title,
-            book_link: book.bookLink,
+            book_link: book.bookDocument,
         };
-
+    
         try {
             await emailjs.send(
-                process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-                process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+                "service_pcg8s7k",
+                "template_2pphbzh",
                 templateParams,
-                process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+                "zZljp-c12W6mwkno9"
             );
-
+    
             const peopleReadEntry = {
                 email: formData.email,
                 date: new Date().toISOString(),
             };
-
+    
             const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
             const snapshot = await get(bookRef);
             const peopleReadList = snapshot.exists() ? snapshot.val() : [];
-
+    
             await set(bookRef, [...peopleReadList, peopleReadEntry]);
-
+    
+            // Open the book document in a new tab (Document Reader)
+            // window.open(book.bookDocument, "_blank");
+    
             handleReadNow();
             setFormData({ email: "" });
         } catch (error) {
@@ -154,76 +157,83 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             setLoading(false);
         }
     };
-
+    
     if (!book) return null;
 
 
     return (
-        <Modal
-            open={open}
-            onClose={onClose}
-            closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{ backdrop: { timeout: 500 } }}
-        >
-            <Fade in={open}>
-                <Box sx={modalStyle} className="w-full max-w-2xl p-5 md:p-6 flex flex-col gap-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div
-                        className="relative w-full min-h-48 h-full md:h-full rounded-lg bg-cover bg-center"
-                        style={{ backgroundImage: `url(${book.bookLink})` }}
-                    ></div>
 
-                        <div className="flex flex-col gap-4">
-                            <Typography variant="h4" component="h2" className="font-semibold">
-                                {book.title}
-                            </Typography>
-                            <h5 className="text-lg font-semibold">Description</h5>
-                            <Typography className="text-zinc-600">{book.description}</Typography>
+        <>
+            <Modal
+                open={open}
+                onClose={onClose}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{ backdrop: { timeout: 500 } }}
+            >
 
-                            <form className="flex relative flex-col gap-6" onSubmit={handleSubmit}>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Enter your email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border rounded-lg focus:outline-[#3ca0ce]"
-                                    required
-                                />
-                                {error && <p className="text-red-500 bottom-0 absolute text-sm">{error}</p>}
-                                {success && <p className="text-green-500 top-[3rem] absolute text-sm">{success}</p>}
-                                <Button
-                                    variant="contained"
-                                    className="mt-4 !py-3 !rounded-xl !bg-[#3ca0ce] hover:!bg-[#135690]"
-                                    type="submit"
-                                    disabled={loading}
-                                >
-                                    {loading ? "Sending..." : "Read now"}
-                                </Button>
-                            </form>
+                <Fade in={open}>
+                    <Box sx={modalStyle} className="w-full relative max-w-2xl p-5 md:p-6 flex flex-col gap-6">
+                        <div className="border bg-white rounded-full h-12 aspect-square absolute top-0 right-0 z-10 ">
 
-                            <div className="flex flex-col mt-2 items-start">
-                                <p className="text-xl">Rating</p>
-                                <div className="flex">
-                                    {[...Array(5)].map((_, index) => (
-                                        <Star
-                                            key={index}
-                                            className={`w-5 h-5 ${index < averageRating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`}
-                                        />
-                                    ))}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div
+                                className="relative w-full min-h-48 h-full md:h-full rounded-lg bg-cover bg-center"
+                                style={{ backgroundImage: `url(${book.bookLink})` }}
+                            ></div>
+
+                            <div className="flex flex-col gap-4">
+                                <Typography variant="h4" component="h2" className="font-semibold">
+                                    {book.title}
+                                </Typography>
+                                <h5 className="text-lg font-semibold">Description</h5>
+                                <Typography className="text-zinc-600">{book.description}</Typography>
+
+                                <form className="flex relative flex-col gap-6" onSubmit={handleSubmit}>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Enter your email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className="w-full p-3 border rounded-lg focus:outline-[#3ca0ce]"
+                                        required
+                                    />
+                                    {error && <p className="text-red-500 bottom-0 absolute text-sm">{error}</p>}
+                                    {success && <p className="text-green-500 top-[3rem] absolute text-sm">{success}</p>}
+                                    <Button
+                                        variant="contained"
+                                        className="mt-4 !py-3 !rounded-xl !bg-[#3ca0ce] hover:!bg-[#135690]"
+                                        type="submit"
+                                        disabled={loading}
+                                    >
+                                        {loading ? "Sending..." : "Read now"}
+                                    </Button>
+                                </form>
+
+                                <div className="flex flex-col mt-2 items-start">
+                                    <p className="text-xl">Rating</p>
+                                    <div className="flex">
+                                        {[...Array(5)].map((_, index) => (
+                                            <Star
+                                                key={index}
+                                                className={`w-5 h-5 ${index < averageRating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <section className="flex flex-col w-full">
-                        <h3 className="py-3 text-3xl font-semibold">About this book</h3>
-                        <h2 className="text-xl font-bold text-left text-gray-800 mb-4">{book.title}</h2>
-                        <p className="text-gray-700 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: book.aboutBook }} />
-                    </section>
-                </Box>
-            </Fade>
-        </Modal>
+                        <section className="flex flex-col w-full">
+                            <h3 className="py-3 text-3xl font-semibold">About this book</h3>
+                            <h2 className="text-xl font-bold text-left text-gray-800 mb-4">{book.title}</h2>
+                            <p className="text-gray-700 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: book.aboutBook }} />
+                        </section>
+                    </Box>
+                </Fade>
+            </Modal>
+        </>
     );
 };
 
