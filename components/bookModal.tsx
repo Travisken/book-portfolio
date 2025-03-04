@@ -180,7 +180,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div
                                 className="relative w-full min-h-48 h-full md:h-full rounded-lg bg-cover bg-center"
-                                style={{ backgroundImage: `url(${book.bookLink})` }}
+                                style={{ background: `url(${book.image})` }}
                             ></div>
 
                             <div className="flex flex-col gap-4">

@@ -43,7 +43,7 @@ const HealthQuotesCarousel = () => {
         className="rounded-2xl !h-[10rem] bg-[#00000015]"
       >
         {quotes.map((quote, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={index} className=''>
             <div className="p-8 rounded-2xl tracking-wide text-black">
               <p className="text-2xl font-thin italic  mb-4">&quot;{quote.text}&quot;</p>
               <p className="text-lg font-semibold italic text-[#3ca0ca]">- {quote.author}</p>
