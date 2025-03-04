@@ -16,6 +16,18 @@ export default function Navbar() {
     const [activeSection, setActiveSection] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    // Handle scroll lock when menu is open
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+        return () => {
+            document.body.style.overflow = "auto"; // Clean up on unmount
+        };
+    }, [isMenuOpen]);
+
     useEffect(() => {
         const handleScroll = () => {
             const sections = navLinks.filter(link => link.href.startsWith("#"));
@@ -39,17 +51,11 @@ export default function Navbar() {
     }, []);
 
     return (
-        <nav className="flex w-full justify-between md:p-0 px-4 items-center">
-            
-                
-                <div className="flex justify-between items-center w-full md:px-20">
+        <nav className="flex w-full justify-between md:p-0 px-4 items-center relative">
+            <div className="flex justify-between items-center w-full md:px-20">
                 <div className="bg-[#3ca0ca] logo justify-center font-bold h-24 flex w-32 flex-col px-4 text-white">
-                    <span className="text-xl">
-                     Dr.   
-                    </span>
-                    <span className="text-2xl">
-                    Folarin.
-                    </span>
+                    <span className="text-xl">Dr.</span>
+                    <span className="text-2xl">Folarin.</span>
                 </div>
                 <ul className="hidden md:flex gap-12 items-center text-xl">
                     {navLinks.map(({ name, href }) => (
@@ -64,7 +70,7 @@ export default function Navbar() {
                     ))}
                 </ul>
                 <Link
-                    className="py-3 hidden md:flex  rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white w-[12rem] h-fit items-center justify-center"
+                    className="py-3 hidden md:flex rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white w-[12rem] h-fit items-center justify-center"
                     to={"testimonialForm"}
                 >
                     Feedback
@@ -76,56 +82,61 @@ export default function Navbar() {
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     className="relative flex flex-col gap-1 w-6 h-5 justify-center"
                 >
-                    {/* Top line */}
                     <span
-                        className={`block w-6 h-0.5 bg-black transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-[8px]" : ""
-                            }`}
+                        className={`block w-6 h-0.5 bg-black transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-[8px]" : ""}`}
                     ></span>
-
-                    {/* Middle line (hides when open) */}
                     <span
-                        className={`block w-6 h-0.5 bg-black transition-all duration-300 ${isMenuOpen ? "opacity-0" : ""
-                            }`}
+                        className={`block w-6 h-0.5 bg-black transition-all duration-300 ${isMenuOpen ? "opacity-0" : ""}`}
                     ></span>
-
-                    {/* Bottom line */}
                     <span
-                        className={`block w-6 h-0.5 bg-black transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-[4px]" : ""
-                            }`}
+                        className={`block w-6 h-0.5 bg-black transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-[4px]" : ""}`}
                     ></span>
                 </button>
 
                 <AnimatePresence>
                     {isMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.3 }}
-                            className="absolute top-12 -right-4 bg-white z-10 shadow-md p-4 w-[100vw]"
-                        >
-                            <ul className="flex flex-col gap-4">
-                                {navLinks.map(({ name, href }) => (
-                                    <li key={href}>
-                                        <Link
-                                            className="block text-black hover:text-[#3ca0ce] font-semibold cursor-pointer"
-                                            smooth={true} duration={500} to={href}
-                                            onClick={() => setIsMenuOpen(false)}
-                                        >
-                                            {name}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
+                        <>
+                            {/* Overlay */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="fixed inset-0 bg-black bg-opacity-50 z-10"
+                                onClick={() => setIsMenuOpen(false)}
+                            ></motion.div>
 
-                            <Link
-                    className="py-3 mt-8 rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex w-full h-fit items-center justify-center"
-                    to={"testimonialForm"}
-                    onClick={() => setIsMenuOpen(false)}
-                >
-                    Feedback
-                </Link>
-                        </motion.div>
+                            {/* Menu */}
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.3 }}
+                                className="absolute top-12 -right-4 bg-white z-20 shadow-md p-4 w-[100vw]"
+                            >
+                                <ul className="flex flex-col gap-4">
+                                    {navLinks.map(({ name, href }) => (
+                                        <li key={href}>
+                                            <Link
+                                                className="block text-black hover:text-[#3ca0ce] font-semibold cursor-pointer"
+                                                smooth={true} duration={500} to={href}
+                                                onClick={() => setIsMenuOpen(false)}
+                                            >
+                                                {name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <Link
+                                    className="py-3 mt-8 rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex w-full h-fit items-center justify-center"
+                                    to={"testimonialForm"}
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Feedback
+                                </Link>
+                            </motion.div>
+                        </>
                     )}
                 </AnimatePresence>
             </div>

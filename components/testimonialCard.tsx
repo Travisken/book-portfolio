@@ -25,7 +25,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ fullName, review, rating,
           </div>
         </div>
 
-        <p className="text-gray-700 mt-4 italic whitespace-normal break-words">
+        <p className="text-gray-700 mt-4 italic line-clamp-4 whitespace-normal break-words">
         &quot;{review}&quot;
         </p>
 

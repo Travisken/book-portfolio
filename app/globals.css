@@ -266,3 +266,13 @@ section{
   /* transform: translateY(-30px); */
   transition-duration: 0.3s;
 }
+
+.swiper-initialized{
+  height: 40vh;
+  /* background-color: red; */
+}
+
+.swiper-pagination-bullet-active{
+  width: 2rem !important;
+  border-radius: 4px !important;
+}

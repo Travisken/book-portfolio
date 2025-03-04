@@ -139,16 +139,15 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 date: new Date().toISOString(),
             };
     
-            const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
-            const snapshot = await get(bookRef);
-            const peopleReadList = snapshot.exists() ? snapshot.val() : [];
+            // const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
+            // const snapshot = await get(bookRef);
+            // const peopleReadList = snapshot.exists() ? snapshot.val() : [];
     
-            await set(bookRef, [...peopleReadList, peopleReadEntry]);
+            // await set(bookRef, [...peopleReadList, peopleReadEntry]);
     
-            // Open the book document in a new tab (Document Reader)
-            // window.open(book.bookDocument, "_blank");
-    
-            handleReadNow();
+            // Navigate to the pdf-viewer page with the book document
+            router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
+            
             setFormData({ email: "" });
         } catch (error) {
             console.error("Failed to send email:", error);
@@ -157,9 +156,10 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             setLoading(false);
         }
     };
-    
-    if (!book) return null;
 
+    
+
+    if (!book) return null;
 
     return (
 
