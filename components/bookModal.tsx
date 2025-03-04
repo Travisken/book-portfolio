@@ -182,7 +182,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                                 className="relative w-full min-h-48 h-full md:h-full rounded-lg bg-cover bg-center"
                                 style={{ backgroundImage: `url(${book.bookLink})` , backgroundSize: "cover"}}
                             >
-                            <img src={book.bookLink} alt=""  />
+                            <img src={book.bookLink} alt="book cover"  />
                             </div>
 
                             <div className="flex flex-col gap-4">

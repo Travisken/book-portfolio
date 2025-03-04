@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**.dropboxusercontent.com', // Allow Dropbox dynamic URLs
+        hostname: '**.dropboxusercontent.com',
       },
     ],
   },
