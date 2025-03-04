@@ -87,11 +87,11 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
         fetchTestimonials();
     }, [book]);
 
-    const handleReadNow = () => {
-        if (book?.bookDocument) {
-            router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
-        }
-    };
+    // const handleReadNow = () => {
+    //     if (book?.bookDocument) {
+    //         router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
+    //     }
+    // };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ email: event.target.value });
@@ -139,11 +139,11 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 date: new Date().toISOString(),
             };
     
-            // const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
-            // const snapshot = await get(bookRef);
-            // const peopleReadList = snapshot.exists() ? snapshot.val() : [];
+            const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
+            const snapshot = await get(bookRef);
+            const peopleReadList = snapshot.exists() ? snapshot.val() : [];
     
-            // await set(bookRef, [...peopleReadList, peopleReadEntry]);
+            await set(bookRef, [...peopleReadList, peopleReadEntry]);
     
             // Navigate to the pdf-viewer page with the book document
             router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);

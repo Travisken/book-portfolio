@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get } from 'firebase/database';
@@ -81,7 +81,8 @@ const TestimonialSection: React.FC = () => {
               slidesPerView={1}
               spaceBetween={10}
               pagination={{ clickable: true }}
-              modules={[Pagination]}
+              autoplay={{ delay: 30000, disableOnInteraction: false }}
+              modules={[Pagination, Autoplay]}
               className="w-full"
             >
               {testimonials
