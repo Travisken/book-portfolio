@@ -5,7 +5,7 @@ import { Star, X } from "lucide-react";
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get, set } from 'firebase/database';
 import { useRouter } from "next/navigation";
-import Image from 'next/image';
+// import Image from 'next/image';
 
 interface Testimonial {
     bookName: string;
