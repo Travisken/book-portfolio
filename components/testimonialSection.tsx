@@ -69,8 +69,8 @@ const TestimonialSection: React.FC = () => {
       exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 0.5 }}
     >
-      <div id="testimonials" className="h-[70vh] flex items-center bg-g">
-        <div className="container mx-auto px-4">
+      <div id="testimonials" className="h-[70vh] md:px-20 flex items-center bg-g">
+        <div className="container px-4">
           <h2 className="text-3xl font-bold text-left mb-6">Testimonials</h2>
           {loading ? ( // Show loader while fetching
             <div className="flex justify-center items-center h-full">

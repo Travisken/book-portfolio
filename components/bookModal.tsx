@@ -1,12 +1,11 @@
-"use client";
-
 import { Modal, Backdrop, Fade, Box, Typography, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import emailjs from "@emailjs/browser";
-import { Star } from "lucide-react";
+import { Star, X } from "lucide-react";
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get, set } from 'firebase/database';
 import { useRouter } from "next/navigation";
+import Image from 'next/image';
 
 interface Testimonial {
     bookName: string;
@@ -87,12 +86,6 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
         fetchTestimonials();
     }, [book]);
 
-    // const handleReadNow = () => {
-    //     if (book?.bookDocument) {
-    //         router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
-    //     }
-    // };
-
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ email: event.target.value });
         setError(null);
@@ -105,27 +98,27 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-    
+
         if (!validateEmail(formData.email)) {
             setError("Please enter a valid email address.");
             return;
         }
-    
+
         if (!book) {
             setError("Book details are missing.");
             return;
         }
-    
+
         setLoading(true);
         setError(null);
         setSuccess(null);
-    
+
         const templateParams = {
             user_email: formData.email,
             book_title: book.title,
             book_link: book.bookDocument,
         };
-    
+
         try {
             await emailjs.send(
                 "service_pcg8s7k",
@@ -133,21 +126,21 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 templateParams,
                 "zZljp-c12W6mwkno9"
             );
-    
+
             const peopleReadEntry = {
                 email: formData.email,
                 date: new Date().toISOString(),
             };
-    
+
             const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
             const snapshot = await get(bookRef);
             const peopleReadList = snapshot.exists() ? snapshot.val() : [];
-    
+
             await set(bookRef, [...peopleReadList, peopleReadEntry]);
-    
+
             // Navigate to the pdf-viewer page with the book document
             router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
-            
+
             setFormData({ email: "" });
         } catch (error) {
             console.error("Failed to send email:", error);
@@ -157,12 +150,9 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
         }
     };
 
-    
-
     if (!book) return null;
 
     return (
-
         <>
             <Modal
                 open={open}
@@ -171,18 +161,21 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 slots={{ backdrop: Backdrop }}
                 slotProps={{ backdrop: { timeout: 500 } }}
             >
-
                 <Fade in={open}>
-                    <Box sx={modalStyle} className="w-full relative max-w-2xl p-5 md:p-6 flex flex-col gap-6">
-                        <div className="border bg-white rounded-full h-12 aspect-square absolute top-0 right-0 z-10 ">
+                    <Box sx={modalStyle} className="relative">
+                        <button
+                            className="absolute top-4 right-4 bg-transparent border-none cursor-pointer"
+                            onClick={onClose}
+                            aria-label="Close"
+                        >
+                            <X className="w-6 h-6 text-gray-600" />
+                        </button>
 
-                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div
                                 className="relative w-full min-h-48 h-full md:h-full rounded-lg bg-cover bg-center"
-                                style={{ backgroundImage: `url(${book.bookLink})` , backgroundSize: "cover"}}
+                                style={{ backgroundImage: `url(${book.bookLink})`, backgroundSize: "cover" }}
                             >
-                            <img src={book.bookLink} alt="book cover"  />
                             </div>
 
                             <div className="flex flex-col gap-4">
