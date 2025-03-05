@@ -9,6 +9,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get } from 'firebase/database';
+import { Typography } from "@mui/material";
 
 interface Testimonial {
   id: string; // Use string for Firebase-generated keys
@@ -71,7 +72,7 @@ const TestimonialSection: React.FC = () => {
     >
       <div id="testimonials" className="h-[70vh] md:px-20 flex items-center bg-g">
         <div className="container px-4">
-          <h2 className="text-3xl font-bold text-left mb-6">Testimonials</h2>
+          <Typography variant="h1" className="text-3xl font-bold text-left mb-6">Testimonials</Typography>
           {loading ? ( // Show loader while fetching
             <div className="flex justify-center items-center h-full">
               <div className="loader">Loading...</div>
