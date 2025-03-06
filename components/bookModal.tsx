@@ -98,28 +98,30 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-    
+
         if (!validateEmail(formData.email)) {
             setError("Please enter a valid email address.");
             return;
         }
-    
+
         if (!book) {
             setError("Book details are missing.");
             return;
         }
-    
+
         setLoading(true);
         setError(null);
         setSuccess(null);
-    
+
         // Ensure the templateParams includes the correct recipient email
         const templateParams = {
             to_email: formData.email, // Ensure this matches your EmailJS template
             book_title: book.title,
             book_link: book.bookDocument,
+            from_name: "Dr. Folarin",
+            reply_to: formData.email,
         };
-    
+
         try {
             await emailjs.send(
                 "service_pcg8s7k",
@@ -127,21 +129,21 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 templateParams,
                 "zZljp-c12W6mwkno9"
             );
-    
+
             const peopleReadEntry = {
                 email: formData.email,
                 date: new Date().toISOString(),
             };
-    
+
             const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
             const snapshot = await get(bookRef);
             const peopleReadList = snapshot.exists() ? snapshot.val() : [];
-    
+
             await set(bookRef, [...peopleReadList, peopleReadEntry]);
-    
+
             // Navigate to the pdf-viewer page with the book document
             router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
-    
+
             setFormData({ email: "" });
             setSuccess("Email sent successfully!");
         } catch (error) {
@@ -151,7 +153,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             setLoading(false);
         }
     };
-    
+
 
     if (!book) return null;
 
