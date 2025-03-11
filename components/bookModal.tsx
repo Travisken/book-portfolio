@@ -117,7 +117,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
         const templateParams = {
             to_email: formData.email, // Ensure this matches your EmailJS template
             book_title: book.title,
-            book_link: book.bookDocument,
+            book_link: `https://www.drnimbs.com/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`,
             from_name: "Dr. Folarin",
             reply_to: formData.email,
         };
