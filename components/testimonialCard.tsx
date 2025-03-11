@@ -15,10 +15,14 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ fullName, review, rating,
 
     <>
 
-      <div className="bg-white w-full md:max-w-[26rem] md:shadow-lg border md:border-none rounded-2xl p-6 max-w-md transition-all duration-300 hover:scale-105 ">
+      <div className="bg-white w-full md:max-w-[26rem] md:shadow-lg border md:border-none rounded-2xl p-6 max-w-md transition-all duration-300 md:hover:scale-105 ">
         <div className="flex items-center space-x-4 ">
-          <div className="border-2 border-gray-300 w-14 h-14 flex-shrink-0 flex rounded-full "></div>
-          {/* <img src={image} alt={name} className="w-14 h-14 rounded-full object-cover border-2 border-gray-300" /> */}
+          <div id="userProfile" className="border-2 text-center shadow-inner flex items-center  justify-center border-gray-300 text-grsy-300 text-2xl font-semibold w-14 h-14 flex-shrink-0 rounded-full ">
+            <p className="text-gray-500 font-light text-3xl">
+              {fullName.charAt(0).toUpperCase()}
+            </p>
+          </div>
+
           <div>
             <h3 className="text-lg font-semibold whitespace-normal break-words">{fullName}</h3>
             <p className="text-sm text-gray-500">{bookName}</p>
@@ -26,7 +30,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ fullName, review, rating,
         </div>
 
         <p className="text-gray-700 mt-4 italic line-clamp-4 whitespace-normal break-words">
-        &quot;{review}&quot;
+          &quot;{review}&quot;
         </p>
 
 
