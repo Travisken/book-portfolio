@@ -112,51 +112,53 @@ const BookUploadForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!validateForm()) {
-      toast.error("Please fill out all required fields.");
-      return;
-    }
+  if (!validateForm()) {
+    toast.error("Please fill out all required fields.");
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    const formData = new FormData();
-    if (bookData.bookLink instanceof File) {
-      formData.append("bookLink", bookData.bookLink);
-    }
-    formData.append("bookDocument", bookData.bookDocument as Blob);
-    formData.append("title", bookData.title);
-    formData.append("description", bookData.description);
-    formData.append("aboutBook", bookData.aboutBook);
-    formData.append("contributors", bookData.contributors);
-    formData.append("published", String(bookData.published));
+  const formData = new FormData();
+  // Include the book ID to differentiate between creating and updating
+  const numericId = id || Date.now();
+  formData.append("bookId", numericId); // Send the ID to the server
+  if (bookData.bookLink instanceof File) {
+    formData.append("bookLink", bookData.bookLink);
+  }
+  formData.append("bookDocument", bookData.bookDocument as Blob);
+  formData.append("title", bookData.title);
+  formData.append("description", bookData.description);
+  formData.append("aboutBook", bookData.aboutBook);
+  formData.append("contributors", bookData.contributors);
+  formData.append("published", String(bookData.published));
 
-    try {
-      const response = await axios.post("https://server-uc0a.onrender.com/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+  try {
+    const response = await axios.post("https://server-uc0a.onrender.com/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
-      const { bookLink, bookDocument } = response.data;
+    const { bookLink, bookDocument } = response.data;
 
-      const numericId = id || Date.now();
-      const bookRef = ref(database, "data/booksSection/" + numericId);
-      await set(bookRef, {
-        id: numericId,
-        ...bookData,
-        bookLink,
-        bookDocument,
-      });
+    const bookRef = ref(database, "data/booksSection/" + numericId);
+    await set(bookRef, {
+      id: numericId,
+      ...bookData,
+      bookLink,
+      bookDocument,
+    });
 
-      toast.success("Book data submitted successfully!");
-      resetForm();
-    } catch (error) {
-      console.error("Error submitting book data:", error);
-      toast.error("An error occurred while submitting the book data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    toast.success("Book data submitted successfully!");
+    resetForm();
+  } catch (error) {
+    console.error("Error submitting book data:", error);
+    toast.error("An error occurred while submitting the book data.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     return () => {
