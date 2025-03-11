@@ -50,15 +50,12 @@ const BookTable = () => {
         setLoading(false);
       }
     };
-
     fetchBooks();
   }, []);
-
   const confirmDelete = (book: Book) => {
     setSelectedBook(book);
     setShowConfirm(true);
   };
-
   const deleteBook = async () => {
     if (!selectedBook) return;
 
@@ -74,7 +71,15 @@ const BookTable = () => {
   };
 
   if (loading) return <div className="text-center py-4">Loading books...</div>;
-  if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
+  if (error) return <div className="text-center py-4"><div className="text-center py-10">
+    <p className="text-lg">No books available.</p>
+    <Link
+      href="/dashboard/add-book"
+      className=" px-16 inline-block py-3 text-white bg-[#3ca0ca] hover:bg-[#2f7fa1] rounded-lg"
+    >
+      Add Book
+    </Link>
+  </div></div>;
 
   return (
     <section className="md:w-[70vw] w-[84vw] overflow-scroll">
@@ -92,7 +97,6 @@ const BookTable = () => {
             <p className="text-gray-600 text-sm mt-2 line-clamp-3 break-words">
               {book.description}
             </p>
-
             <Link
               href={`/dashboard/add-book?id=${book.id}`}
               className="button_book mt-4 !bg-[#3ca0ca] !border-none"
@@ -102,7 +106,6 @@ const BookTable = () => {
                 <FiPenTool className="text-2xl" />
               </span>
             </Link>
-
             <button onClick={() => confirmDelete(book)} className="button_book mt-4">
               <span className="button__text">Delete book</span>
               <span className="button__icon">
