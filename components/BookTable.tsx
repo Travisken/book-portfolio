@@ -84,51 +84,66 @@ const BookTable = () => {
   return (
     <section className="md:w-[70vw] w-[84vw] overflow-scroll">
       <div className="flex min-w-[80vw] overflow-scroll snap-proximity snap-x gap-8 py-4">
-        {books.map((book) => (
-          <div key={book.id} className="bg-white shadow-lg rounded-lg md:p-4 p-2 shrink-0 md:w-[18rem] w-[17rem] text-center">
-            <Image
-              height={200}
-              width={200}
-              src={book.bookLink}
-              alt={book.title}
-              className="w-full h-48 object-cover rounded-md"
-            />
-            <h2 className="text-xl font-semibold mt-4 break-words">{book.title}</h2>
-            <p className="text-gray-600 text-sm mt-2 line-clamp-3 break-words">
-              {book.description}
-            </p>
+        {books.length === 0 ? (
+          <div className="text-center py-10">
+            <p className="text-lg">No books available.</p>
             <Link
-              href={`/dashboard/add-book?id=${book.id}`}
-              className="button_book mt-4 !bg-[#3ca0ca] !border-none"
+              href="/dashboard/add-book"
+              className="px-16 inline-block py-3 text-white bg-[#3ca0ca] hover:bg-[#2f7fa1] rounded-lg"
             >
-              <span className="button__text">Edit book</span>
-              <span className="button__icon hover:!bg-[#1d6787] !bg-[#1d6787] text-white text-3xl font-semibold">
-                <FiPenTool className="text-2xl" />
-              </span>
+              Add Book
             </Link>
-            <button onClick={() => confirmDelete(book)} className="button_book mt-4">
-              <span className="button__text">Delete book</span>
-              <span className="button__icon">
-                <svg
-                  className="icon"
-                  width="30px"
-                  height="30px"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16"
-                    stroke="#fff"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </span>
-            </button>
           </div>
-        ))}
+        ) : (
+          <div className="flex min-w-[80vw] overflow-scroll snap-proximity snap-x gap-8 py-4">
+            {books.map((book) => (
+              <div key={book.id} className="bg-white shadow-lg rounded-lg md:p-4 p-2 shrink-0 md:w-[18rem] w-[17rem] text-center">
+                <Image
+                  height={200}
+                  width={200}
+                  src={book.bookLink}
+                  alt={book.title}
+                  className="w-full h-48 object-cover rounded-md"
+                />
+                <h2 className="text-xl font-semibold mt-4 break-words">{book.title}</h2>
+                <p className="text-gray-600 text-sm mt-2 line-clamp-3 break-words">
+                  {book.description}
+                </p>
+                <Link
+                  href={`/dashboard/add-book?id=${book.id}`}
+                  className="button_book mt-4 !bg-[#3ca0ca] !border-none"
+                >
+                  <span className="button__text">Edit book</span>
+                  <span className="button__icon hover:!bg-[#1d6787] !bg-[#1d6787] text-white text-3xl font-semibold">
+                    <FiPenTool className="text-2xl" />
+                  </span>
+                </Link>
+                <button onClick={() => confirmDelete(book)} className="button_book mt-4">
+                  <span className="button__text">Delete book</span>
+                  <span className="button__icon">
+                    <svg
+                      className="icon"
+                      width="30px"
+                      height="30px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16"
+                        stroke="#fff"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
       </div>
 
       {showConfirm && selectedBook && (
