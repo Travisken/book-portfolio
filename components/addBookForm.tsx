@@ -187,7 +187,7 @@ const BookUploadForm = () => {
       <ToastContainer />
       <form onSubmit={handleSubmit} className="w-full md:flex-nowrap flex-wrap gap-6 flex p-6 bg-white rounded-lg">
         <section className="space-y-4 max-w-lg mx-auto">
-          {/* Book Name */}
+         
           <div>
             <label className="block text-sm font-medium text-gray-700">Book Name</label>
             <input
