@@ -58,6 +58,8 @@ const BookUploadForm = () => {
           const data = snapshot.val();
           setBookData(data);
 
+        console.log("Fetched Book Data:", data);
+
           if (data.bookLink && isValidUrl(data.bookLink)) {
             setPreview(data.bookLink);
           } else {
@@ -78,7 +80,7 @@ const BookUploadForm = () => {
       setErrors((prev) => ({ ...prev, bookLink: "" }));
     }
   };
-
+  
   const onDropDocument = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
@@ -125,55 +127,73 @@ const BookUploadForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const logFormData = (formData: any[] | FormData) => {
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
+  
+    if (!validateForm()) {
+      toast.error("Please fill out all required fields.");
+      return;
+    }
+  
+    setLoading(true);
+  
+    const formData = new FormData();
+    const numericId = id || Date.now();
+    formData.append("bookId", String(numericId));
+  
+    // Handle bookLink. If it's a URL, convert it to a file-like object.
+    if (bookData.bookLink instanceof File) {
+      formData.append("bookLink", bookData.bookLink);
+    } else if (typeof bookData.bookLink === "string") {
+      // Convert URL to a Blob for upload
+      const response = await fetch(bookData.bookLink);
+      const blob = await response.blob();
+      const file = new File([blob], "uploaded-image.jpg", { type: blob.type });
+      formData.append("bookLink", file);
+    }
+  
+    // Handle bookDocument
+    if (bookData.bookDocument instanceof File) {
+      formData.append("bookDocument", bookData.bookDocument);
+    } else {
+      console.warn("No valid book document to upload.");
+    }
+  
+    // Add other book details
+    formData.append("title", bookData.title);
+    formData.append("description", bookData.description);
+    formData.append("aboutBook", bookData.aboutBook);
+    formData.append("contributors", bookData.contributors);
+    formData.append("published", String(bookData.published));
+  
+    // Log FormData for debugging
+    logFormData(formData);
+  
+    try {
+      const response = await axios.post("https://server-uc0a.onrender.com/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+  
+      // Handle the response...
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("Server responded with an error:", error.response?.data);
+      } else {
+        console.error("Error submitting book data:", error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
-  if (!validateForm()) {
-    toast.error("Please fill out all required fields.");
-    return;
-  }
 
-  setLoading(true);
-
-  const formData = new FormData();
-  // Include the book ID to differentiate between creating and updating
-  const numericId = id || Date.now();
-  formData.append("bookId", String(numericId));
- // Send the ID to the server
-  if (bookData.bookLink instanceof File) {
-    formData.append("bookLink", bookData.bookLink);
-  }
-  formData.append("bookDocument", bookData.bookDocument as Blob);
-  formData.append("title", bookData.title);
-  formData.append("description", bookData.description);
-  formData.append("aboutBook", bookData.aboutBook);
-  formData.append("contributors", bookData.contributors);
-  formData.append("published", String(bookData.published));
-
-  try {
-    const response = await axios.post("https://server-uc0a.onrender.com/upload", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    const { bookLink, bookDocument } = response.data;
-
-    const bookRef = ref(database, "data/booksSection/" + numericId);
-    await set(bookRef, {
-      id: numericId,
-      ...bookData,
-      bookLink,
-      bookDocument,
-    });
-
-    toast.success("Book data submitted successfully!");
-    resetForm();
-  } catch (error) {
-    console.error("Error submitting book data:", error);
-    toast.error("An error occurred while submitting the book data.");
-  } finally {
-    setLoading(false);
-  }
-};
 
   useEffect(() => {
     return () => {
@@ -186,7 +206,7 @@ const BookUploadForm = () => {
       <ToastContainer />
       <form onSubmit={handleSubmit} className="w-full md:flex-nowrap flex-wrap gap-6 flex p-6 bg-white rounded-lg">
         <section className="space-y-4 max-w-lg mx-auto">
-         
+
           <div>
             <label className="block text-sm font-medium text-gray-700">Book Name</label>
             <input
@@ -284,7 +304,7 @@ const BookUploadForm = () => {
           {/* Document Dropzone */}
           <div{...getRootPropsDocument()} className="border-4 border-dashed border-gray-400 p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#3ca0ca] transition">
             <label className="block text-xl font-medium text-gray-500">Book Document</label>
-            <div  className="p-2 rounded-xl flex flex-col items-center justify-center cursor-pointer">
+            <div className="p-2 rounded-xl flex flex-col items-center justify-center cursor-pointer">
               <input {...getInputPropsDocument()} />
               {bookData.bookDocument ? (
                 <p>Document uploaded</p>
