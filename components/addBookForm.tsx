@@ -139,7 +139,8 @@ const BookUploadForm = () => {
   const formData = new FormData();
   // Include the book ID to differentiate between creating and updating
   const numericId = id || Date.now();
-  formData.append("bookId", numericId); // Send the ID to the server
+  formData.append("bookId", String(numericId));
+ // Send the ID to the server
   if (bookData.bookLink instanceof File) {
     formData.append("bookLink", bookData.bookLink);
   }
