@@ -127,63 +127,53 @@ const BookUploadForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-  
-    if (!validateForm()) {
-      toast.error("Please fill out all required fields.");
-      return;
-    }
-  
-    setLoading(true);
-  
-    try {
-      const formData = new FormData();
-      const numericId = id || Date.now();
-      formData.append("bookId", numericId.toString());
-  
-      // Append only if it's a new file upload
-      if (bookData.bookLink instanceof File) {
-        formData.append("bookLink", bookData.bookLink);
-      } else if (typeof bookData.bookLink === "string") {
-        formData.append("existingBookLink", bookData.bookLink); // Send existing URL instead
-      }
-  
-      if (bookData.bookDocument instanceof File) {
-        formData.append("bookDocument", bookData.bookDocument);
-      } else if (typeof bookData.bookDocument === "string") {
-        formData.append("existingBookDocument", bookData.bookDocument); // Send existing URL instead
-      }
-  
-      formData.append("title", bookData.title);
-      formData.append("description", bookData.description);
-      formData.append("aboutBook", bookData.aboutBook);
-      formData.append("contributors", bookData.contributors);
-      formData.append("published", String(bookData.published));
-  
-      const response = await axios.post("https://www.drnimbs.com/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-  
-      const { bookLink, bookDocument } = response.data;
-  
-      const bookRef = ref(database, "data/booksSection/" + numericId);
-      await set(bookRef, {
-        id: numericId,
-        ...bookData,
-        bookLink: bookLink || bookData.bookLink, // Use new URL if available, otherwise keep existing
-        bookDocument: bookDocument || bookData.bookDocument, // Same for document
-      });
-  
-      toast.success("Book data submitted successfully!");
-      resetForm();
-    } catch (error) {
-      console.error("Error submitting book data:", error);
-      toast.error("An error occurred while uploading.");
-    } finally {
-      setLoading(false);
-    }
-  };
-  
+  e.preventDefault();
+
+  if (!validateForm()) {
+    toast.error("Please fill out all required fields.");
+    return;
+  }
+
+  setLoading(true);
+
+  const formData = new FormData();
+  // Include the book ID to differentiate between creating and updating
+  const numericId = id || Date.now();
+  formData.append("bookId", numericId); // Send the ID to the server
+  if (bookData.bookLink instanceof File) {
+    formData.append("bookLink", bookData.bookLink);
+  }
+  formData.append("bookDocument", bookData.bookDocument as Blob);
+  formData.append("title", bookData.title);
+  formData.append("description", bookData.description);
+  formData.append("aboutBook", bookData.aboutBook);
+  formData.append("contributors", bookData.contributors);
+  formData.append("published", String(bookData.published));
+
+  try {
+    const response = await axios.post("https://server-uc0a.onrender.com/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    const { bookLink, bookDocument } = response.data;
+
+    const bookRef = ref(database, "data/booksSection/" + numericId);
+    await set(bookRef, {
+      id: numericId,
+      ...bookData,
+      bookLink,
+      bookDocument,
+    });
+
+    toast.success("Book data submitted successfully!");
+    resetForm();
+  } catch (error) {
+    console.error("Error submitting book data:", error);
+    toast.error("An error occurred while submitting the book data.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     return () => {
