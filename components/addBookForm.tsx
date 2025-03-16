@@ -39,7 +39,6 @@ const BookUploadForm = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const isValidUrl = (url: string): boolean => {
     try {

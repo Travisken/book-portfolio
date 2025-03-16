@@ -30,7 +30,6 @@ interface Book {
 
 const Home = () => {
   const [books, setBooks] = useState<Book[]>([]);
-  const [book, setBook] = useState<Book[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true); // Loading state
@@ -54,7 +53,6 @@ const Home = () => {
           if (data.booksSection) {
             const booksArray = Array.isArray(data.booksSection) ? data.booksSection : Object.values(data.booksSection);
             setBooks(booksArray);
-            setBook(booksArray)
             // console.log(booksArray)
           } else {
             console.log('No books found in data');

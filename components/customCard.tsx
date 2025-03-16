@@ -31,13 +31,13 @@ const CustomCard = ({ book }: { book: Book }) => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState<string | null>(null);
     const router = useRouter();
-    const [averageRating, setAverageRating] = useState<number>(5);
+    const [averageRating, setAverageRating] = useState<number>(0);
 
     useEffect(() => {
         if (book?.rating) {
             // setAverageRating(Math.round(book.rating)); // Round the rating to the nearest whole number
         }
-        // setAverageRating(5)
+        setAverageRating(5)
     }, [book]);
 
     console.log(book.rating)
