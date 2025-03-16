@@ -12,6 +12,7 @@ import ExperienceSection from "@/components/experienceSection";
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get } from 'firebase/database';
 import BttButton from "@/components/bttButton";
+import CustomCard from "@/components/customCard";
 
 interface Book {
   id: number;
@@ -29,6 +30,7 @@ interface Book {
 
 const Home = () => {
   const [books, setBooks] = useState<Book[]>([]);
+  const [book, setBook] = useState<Book[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true); // Loading state
@@ -52,6 +54,7 @@ const Home = () => {
           if (data.booksSection) {
             const booksArray = Array.isArray(data.booksSection) ? data.booksSection : Object.values(data.booksSection);
             setBooks(booksArray);
+            setBook(booksArray)
             // console.log(booksArray)
           } else {
             console.log('No books found in data');
@@ -61,6 +64,8 @@ const Home = () => {
           console.log('No data found');
           setBooks([]);
         }
+
+
       } catch (error) {
         console.error("Error fetching books:", error);
         setBooks([]);
@@ -77,6 +82,8 @@ const Home = () => {
       <HeroSection />
       <AboutSection />
       <ExperienceSection />
+
+      {/* <CustomCard book={books[0]}></CustomCard> */}
 
       <div id="books" className="flex flex-col gap-10 items-center md:px-20 px-4 py-8">
         <div className="flex w-full justify-between items-center mt-8">
@@ -96,11 +103,27 @@ const Home = () => {
             <div className="loader">Loading...</div> {/* Add loader styling as needed */}
           </div>
         ) : (
-          <div className="flex gap-8 flex-wrap md:gap-12 justify-start w-full items-start">
-            {books.slice(0, 4).map((book) => (
-              <BookCard key={book.id} book={book} onReadMore={() => handleOpen(book)} />
-            ))}
-          </div>
+          <>
+            {/* Show CustomCard only on desktop and tablet when there's only one book */}
+            {books.length === 1 ? (
+              <>
+                <div className="hidden md:flex md:mt-20">
+                  <CustomCard book={books[0]} />
+                </div>
+                {/* Show BookCard on mobile when there's only one book */}
+                <div className="block md:hidden">
+                  <BookCard book={books[0]} onReadMore={() => handleOpen(books[0])} />
+                </div>
+              </>
+            ) : (
+              // Show multiple books using BookCard
+              <div className="flex gap-8 flex-wrap md:gap-12 justify-start w-full items-start">
+                {books.slice(0, 4).map((book) => (
+                  <BookCard key={book.id} book={book} onReadMore={() => handleOpen(book)} />
+                ))}
+              </div>
+            )}
+          </>
         )}
 
       </div>
@@ -112,7 +135,7 @@ const Home = () => {
         <BookModal open={open} onClose={() => setOpen(false)} book={selectedBook} />
       )}
 
-      <BttButton/>
+      <BttButton />
     </section>
   );
 };
