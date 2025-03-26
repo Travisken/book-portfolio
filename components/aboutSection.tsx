@@ -15,7 +15,8 @@ export default function AboutSection() {
             <section id="about" className="flex items-start justify-start md:mt-10 px-3 md:px-[5.2rem]">
                 <section className=" flex-1 flex justify-start items-left flex-col mx-auto gap-8 text-left">
                 <h2 className="text-4xl text-left font-bold">
-                    Hi, I&apos;m Dr. Akinsiku Folarin
+                    Hi, I&apos;m Dr. Akinsiku Folarin Oluwanimbe
+                    
                 </h2>
 
                 <div className="bg-[#00000015] md:p-4 p-2 md:rounded-xl text-left md:max-w-[88vw]">

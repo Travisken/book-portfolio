@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import Image from "next/image";
 
 export default function ExperienceSection() {
@@ -9,13 +10,18 @@ export default function ExperienceSection() {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.5 }}
         >
-            <section className="flex flex-col w-full gap-10 md:p-10 mt-10 items-center justify-center">
-                <div className="flex flex-col items-center p-6 justify-center">
-                    <h3 className="text-3xl capitalize font-semibold">My work experience</h3>
-                    <p>Showcasing skills, achievements, and career growth through professional experiences.</p>
+            <section className="flex flex-col w-full gap-10 md:p-20 p-4 mt-10 items-center justify-center">
+                <div className="flex w-full text-left md:flex-row flex-col justify-between gap-10 items-start md:items-center">
+                    <div>
+                        <h3 className="text-3xl capitalize font-semibold">My work experience</h3>
+                        <p>Showcasing skills, achievements, and career growth through professional experiences.</p>
+                    </div>
+                    <button className="bg-[#00000020] hover:text-[#00000090] transition-all border-2 border-[#000000020] hover:border-[#00000050] hover:bg-white rounded-full p-4 hidden md:flex gap-4">
+                        Read more <ChevronRight />
+                    </button>
                 </div>
 
-                <section className="flex items-start flex-wrap p-6  min-h-[65vh]  gap-10 justify-center">
+                <section className="flex items-start flex-wrap md:px-20 px-4 gap-10 justify-center">
                     {/** Card Component */}
                     {[
                         {
@@ -33,7 +39,7 @@ export default function ExperienceSection() {
                                 "Orange Dental Specialists is a dental clinic located in Alagbaka, Akure, Ondo State with the vision to provide quality and accessible oral health care.",
                         },
                         {
-                            image: "/nmhpd_logo.jpeg",
+                            image: "/nmhpd_logo.PNG",
                             company: "Community of Nigerian Health Personnel in Diaspora",
                             role: "Member",
                             description:
@@ -42,7 +48,7 @@ export default function ExperienceSection() {
                     ].map((item, index) => (
                         <div
                             key={index}
-                            className="group w-full md:w-[20rem] flex flex-col shadow rounded-xl p-2 transition-all duration-300 hover:shadow-lg"
+                            className=" max-md:w-full flex-none md:flex-1 flex flex-col shadow rounded-xl p-2 transition-all duration-300 hover:shadow-lg"
                         >
                             <div className="relative h-52 w-full rounded-xl overflow-hidden">
                                 <Image
@@ -50,6 +56,7 @@ export default function ExperienceSection() {
                                     alt={item.company}
                                     layout="fill"
                                     objectFit="cover"
+                                    objectPosition="center"
                                     className="rounded-xl"
                                 />
                             </div>
@@ -64,6 +71,10 @@ export default function ExperienceSection() {
                             </div>
                         </div>
                     ))}
+
+                    <button className="bg-[#00000020] hover:text-[#00000090] transition-all border-2 border-[#000000020] hover:border-[#00000050] hover:bg-white w-full items-center justify-center rounded-full p-4 flex md:hidden gap-4">
+                        Read more <ChevronRight />
+                    </button>
                 </section>
             </section>
         </motion.div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Star, X } from 'lucide-react';
+import { ChevronRight, Star, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get, set } from 'firebase/database';
@@ -66,21 +66,21 @@ const CustomCard = ({ book }: { book: Book }) => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-
+    
         if (!validateEmail(formData.email)) {
             setError("Please enter a valid email address.");
             return;
         }
-
+    
         if (!book) {
             setError("Book details are missing.");
             return;
         }
-
+    
         setLoading(true);
         setError(null);
         setSuccess(null);
-
+    
         // Ensure the templateParams includes the correct recipient email
         const templateParams = {
             to_email: formData.email, // Ensure this matches your EmailJS template
@@ -89,7 +89,7 @@ const CustomCard = ({ book }: { book: Book }) => {
             from_name: "Dr. Folarin",
             reply_to: formData.email,
         };
-
+    
         try {
             await emailjs.send(
                 "service_pcg8s7k",
@@ -97,21 +97,21 @@ const CustomCard = ({ book }: { book: Book }) => {
                 templateParams,
                 "zZljp-c12W6mwkno9"
             );
-
+    
             const peopleReadEntry = {
                 email: formData.email,
                 date: new Date().toISOString(),
             };
-
+    
             const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
             const snapshot = await get(bookRef);
             const peopleReadList = snapshot.exists() ? snapshot.val() : [];
-
+    
             await set(bookRef, [...peopleReadList, peopleReadEntry]);
-
-            // Navigate to the pdf-viewer page with the book document
-            router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
-
+    
+            // Open the pdf-viewer page in a new tab
+            window.open(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`, "_blank");
+    
             setFormData({ email: "" });
             setSuccess("Email sent successfully!");
         } catch (error) {
@@ -121,6 +121,7 @@ const CustomCard = ({ book }: { book: Book }) => {
             setLoading(false);
         }
     };
+    
 
 
     if (!book) {
@@ -129,12 +130,12 @@ const CustomCard = ({ book }: { book: Book }) => {
 
 
     return (
-        <div className="w-[80vw]  relative max-w-4xl mx-auto bg-white shadow-md rounded-2xl p-6 hidden md:flex flex-row items-center space-x-6">
+        <div className="w-[80vw] h-[55vh] relative max-w-4xl mx-auto bg-white shadow-md rounded-2xl p-6 hidden md:flex flex-row items-center space-x-6">
             {/* Image */}
-            <Image src={book.bookLink} alt={book.title} width={400} height={200} className="!h-[20rem] rounded-lg" />
+            <Image src={book.bookLink} alt={book.title} width={400} height={200} className="!h-full rounded-lg" />
 
             {/* Content Section */}
-            <div className="flex flex-col space-y-4 w-full">
+            <div className="flex flex-col items-start justify-start h-full gap-6 w-full">
                 {/* Title */}
                 <h2 className="text-4xl font-semibold">{book.title}</h2>
 
@@ -151,7 +152,7 @@ const CustomCard = ({ book }: { book: Book }) => {
                         ))}
                     </div>
                 </div>
-                <form className='flex gap-8 relative flex-col' onSubmit={handleSubmit} action="POST">
+                <form className='flex gap-8 flex-1 w-full relative flex-col' onSubmit={handleSubmit} action="POST">
                     <input
                         type="email"
                         name="email"
@@ -194,10 +195,17 @@ const CustomCard = ({ book }: { book: Book }) => {
                 <div className="fixed z-50 inset-0 -left-6  flex items-center justify-center bg-black bg-opacity-50">
                     <div className='bg-white  p-6 rounded-lg relative'>
                         <div className="bg-white  p-6 rounded-lg md:max-w-[60vw] h-[50vh] overflow-scroll w-full">
-                            <h2 className="text-3xl font-bold mb-4">
+                            <div className='flex items-center justify-between mb-4'>
+                                <h2 className="text-3xl font-bold">
                                 About the book
                             </h2>
+                            <div className='flex items-center justify-center text-gray-500 cursor-pointer hover:text-gray-700 transition-all'>
+                                Read news letter <ChevronRight/>
+                            </div>
+                            </div>
                             <h2 className="text-xl font-semibold mb-4">{book.title}</h2>
+
+                            
                             <div dangerouslySetInnerHTML={{ __html: book.aboutBook }}></div>
                             <button
                                 onClick={() => setModalOpen(false)}

@@ -98,21 +98,21 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-
+    
         if (!validateEmail(formData.email)) {
             setError("Please enter a valid email address.");
             return;
         }
-
+    
         if (!book) {
             setError("Book details are missing.");
             return;
         }
-
+    
         setLoading(true);
         setError(null);
         setSuccess(null);
-
+    
         // Ensure the templateParams includes the correct recipient email
         const templateParams = {
             to_email: formData.email, // Ensure this matches your EmailJS template
@@ -121,7 +121,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             from_name: "Dr. Folarin",
             reply_to: formData.email,
         };
-
+    
         try {
             await emailjs.send(
                 "service_pcg8s7k",
@@ -129,21 +129,21 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 templateParams,
                 "zZljp-c12W6mwkno9"
             );
-
+    
             const peopleReadEntry = {
                 email: formData.email,
                 date: new Date().toISOString(),
             };
-
+    
             const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
             const snapshot = await get(bookRef);
             const peopleReadList = snapshot.exists() ? snapshot.val() : [];
-
+    
             await set(bookRef, [...peopleReadList, peopleReadEntry]);
-
-            // Navigate to the pdf-viewer page with the book document
-            router.push(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`);
-
+    
+            // Open the pdf-viewer page in a new tab
+            window.open(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`, "_blank");
+    
             setFormData({ email: "" });
             setSuccess("Email sent successfully!");
         } catch (error) {
@@ -153,6 +153,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             setLoading(false);
         }
     };
+    
 
 
     if (!book) return null;
@@ -167,9 +168,9 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 slotProps={{ backdrop: { timeout: 500 } }}
             >
                 <Fade in={open}>
-                    <Box sx={modalStyle} className="relative">
+                    <Box sx={modalStyle} className="relative p-2 md:!p-8">
                         <button
-                            className="absolute top-4 right-4 bg-transparent border-none cursor-pointer"
+                            className="absolute md:top-4 md:right-4 top-0 right-0 bg-transparent border-none cursor-pointer"
                             onClick={onClose}
                             aria-label="Close"
                         >
@@ -210,6 +211,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                                     >
                                         {loading ? "Sending..." : "Read now"}
                                     </Button>
+
                                 </form>
 
                                 <div className="flex flex-col mt-2 items-start">
