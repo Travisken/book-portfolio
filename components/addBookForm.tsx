@@ -10,6 +10,7 @@ import { ref, set, get } from "firebase/database";
 import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CircleAlert } from "lucide-react";
 
 interface BookData {
   title: string;
@@ -35,40 +36,29 @@ const BookUploadForm = () => {
     bookDocument: null,
     published: false,
   });
-
   const [preview, setPreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
-
-  const isValidUrl = (url: string): boolean => {
-    try {
-      new URL(url, window.location.origin);
-      return true;
-    } catch {
-      return false;
-    }
-  };
+  const [editBook, setEditBook] = useState(false);
 
   useEffect(() => {
     const fetchBookData = async () => {
       if (id) {
-        const bookRef = ref(database, "data/booksSection/" + id);
+        const bookRef = ref(database, `data/booksSection/${id}`);
         const snapshot = await get(bookRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          setBookData(data);
-
-        console.log("Fetched Book Data:", data);
-
-          if (data.bookLink && isValidUrl(data.bookLink)) {
-            setPreview(data.bookLink);
-          } else {
-            setPreview(null);
-          }
+          setBookData((prev) => ({
+            ...data,
+            bookLink: null, // Reset bookLink to null for editing
+            bookDocument: null, // Reset bookDocument to null for editing
+          }));
+          setEditBook(true);
+          setPreview(null);
+          
         }
       }
     };
-
     fetchBookData();
   }, [id]);
 
@@ -80,7 +70,7 @@ const BookUploadForm = () => {
       setErrors((prev) => ({ ...prev, bookLink: "" }));
     }
   };
-  
+
   const onDropDocument = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
@@ -101,20 +91,6 @@ const BookUploadForm = () => {
     maxFiles: 1,
   });
 
-  const resetForm = () => {
-    setBookData({
-      title: "",
-      description: "",
-      aboutBook: "",
-      contributors: "",
-      bookLink: null,
-      bookDocument: null,
-      published: false,
-    });
-    setPreview(null);
-    setErrors({});
-  };
-
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     if (!bookData.title) newErrors.title = "Title is required";
@@ -122,88 +98,46 @@ const BookUploadForm = () => {
     if (!bookData.aboutBook) newErrors.aboutBook = "About the book is required";
     if (!bookData.bookLink) newErrors.bookLink = "Book cover is required";
     if (!bookData.bookDocument) newErrors.bookDocument = "Book document is required";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const logFormData = (formData: any[] | FormData) => {
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    if (!validateForm()) {
-      toast.error("Please fill out all required fields.");
-      return;
-    }
-  
+    if (!validateForm()) return toast.error("Please fill out all required fields.");
     setLoading(true);
-  
+
     const formData = new FormData();
-    const numericId = id || Date.now();
-    formData.append("bookId", String(numericId));
-  
-    // Handle bookLink. If it's a URL, convert it to a file-like object.
-    if (bookData.bookLink instanceof File) {
-      formData.append("bookLink", bookData.bookLink);
-    } else if (typeof bookData.bookLink === "string") {
-      // Convert URL to a Blob for upload
-      const response = await fetch(bookData.bookLink);
-      const blob = await response.blob();
-      const file = new File([blob], "uploaded-image.jpg", { type: blob.type });
-      formData.append("bookLink", file);
-    }
-  
-    // Handle bookDocument
-    if (bookData.bookDocument instanceof File) {
-      formData.append("bookDocument", bookData.bookDocument);
-    } else {
-      console.warn("No valid book document to upload.");
-    }
-  
-    // Add other book details
+    const bookId = id || Date.now().toString();
+    formData.append("bookId", bookId);
     formData.append("title", bookData.title);
     formData.append("description", bookData.description);
     formData.append("aboutBook", bookData.aboutBook);
     formData.append("contributors", bookData.contributors);
     formData.append("published", String(bookData.published));
-  
-    // Log FormData for debugging
-    logFormData(formData);
-  
+    if (bookData.bookLink instanceof File) formData.append("bookLink", bookData.bookLink);
+    if (bookData.bookDocument) formData.append("bookDocument", bookData.bookDocument);
+
     try {
-      const response = await axios.post("https://server-uc0a.onrender.com/upload", formData, {
+      await axios.post("http://localhost:5001/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
-      // Handle the response...
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        console.error("Server responded with an error:", error.response?.data);
-      } else {
-        console.error("Error submitting book data:", error);
-      }
+      toast.success("Book uploaded successfully!");
+    } catch (error) {
+      toast.error("Failed to upload book. Check console for details.");
+      console.error("Upload error:", error);
     } finally {
       setLoading(false);
     }
   };
-  
-
-
-
-  useEffect(() => {
-    return () => {
-      if (preview) URL.revokeObjectURL(preview);
-    };
-  }, [preview]);
 
   return (
     <>
       <ToastContainer />
+      <h2 className="font-semibold text-3xl pb-4">
+        {editBook ? "Edit Book" : "Add Book"}
+      </h2>
+      {editBook && <p className="text-gray-600 md:w-1/2 flex gap-2"> <CircleAlert/> Please when editing the book data always re-upload the book cover photo and the book document.</p>}
       <form onSubmit={handleSubmit} className="w-full md:flex-nowrap flex-wrap gap-6 flex p-6 bg-white rounded-lg">
         <section className="space-y-4 max-w-lg mx-auto">
 
