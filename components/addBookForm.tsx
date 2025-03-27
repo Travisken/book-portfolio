@@ -120,30 +120,39 @@ const BookUploadForm = () => {
     e.preventDefault();
     if (!validateForm()) return toast.error("Please fill out all required fields.");
     setLoading(true);
-
+  
     const formData = new FormData();
-    const bookId = id || Date.now().toString();
-    formData.append("bookId", bookId);
     formData.append("title", bookData.title);
     formData.append("description", bookData.description);
     formData.append("aboutBook", bookData.aboutBook);
     formData.append("contributors", bookData.contributors);
     formData.append("published", String(bookData.published));
+  
     if (bookData.bookLink instanceof File) formData.append("bookLink", bookData.bookLink);
     if (bookData.bookDocument) formData.append("bookDocument", bookData.bookDocument);
-
+  
     try {
-      await axios.post("https://server-uc0a.onrender.com/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      toast.success("Book uploaded successfully!");
+      if (id) {
+        // If `id` exists, update the existing book using PATCH
+        await axios.patch(`https://server-uc0a.onrender.com/upload/${id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Book updated successfully!");
+      } else {
+        // If no `id`, create a new book using POST
+        await axios.post("https://server-uc0a.onrender.com/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Book uploaded successfully!");
+      }
     } catch (error) {
-      toast.error("Failed to upload book. Check console for details.");
+      toast.error("Failed to upload/update book. Check console for details.");
       console.error("Upload error:", error);
     } finally {
       setLoading(false);
     }
   };
+  
 
 
   return (
