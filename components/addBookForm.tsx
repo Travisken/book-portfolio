@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import RichTextEditor from "./textEditor";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { database } from "@/app/firebase";
 import { ref, get } from "firebase/database";
 import { useSearchParams } from "next/navigation";
@@ -115,44 +115,58 @@ const BookUploadForm = () => {
 
 
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return toast.error("Please fill out all required fields.");
+  
     setLoading(true);
   
-    const formData = new FormData();
-    formData.append("title", bookData.title);
-    formData.append("description", bookData.description);
-    formData.append("aboutBook", bookData.aboutBook);
-    formData.append("contributors", bookData.contributors);
-    formData.append("published", String(bookData.published));
-  
-    if (bookData.bookLink instanceof File) formData.append("bookLink", bookData.bookLink);
-    if (bookData.bookDocument) formData.append("bookDocument", bookData.bookDocument);
-  
     try {
-      if (id) {
-        // If `id` exists, update the existing book using PATCH
-        console.log("Updating book with ID:", id);
-        await axios.patch(`https://server-uc0a.onrender.com/upload/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        toast.success("Book updated successfully!");
-      } else {
-        // If no `id`, create a new book using POST
-        await axios.post("https://server-uc0a.onrender.com/upload", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        toast.success("Book uploaded successfully!");
+      const formData = new FormData();
+      formData.append("title", bookData.title || "");
+      formData.append("description", bookData.description || "");
+      formData.append("aboutBook", bookData.aboutBook || "");
+      formData.append("contributors", bookData.contributors || "");
+      formData.append("published", String(bookData.published || false));
+  
+      if (bookData.bookLink instanceof File) {
+        formData.append("bookLink", bookData.bookLink);
       }
-    } catch (error) {
-      toast.error("Failed to upload/update book. Check console for details.");
-      console.error("Upload error:", error);
+  
+      if (bookData.bookDocument instanceof File) {
+        formData.append("bookDocument", bookData.bookDocument);
+      }
+  
+      const url = id
+        ? `https://server-uc0a.onrender.com/upload/${id}` // PATCH if updating
+        : `https://server-uc0a.onrender.com/upload`; // POST if new upload
+  
+      const method = id ? "patch" : "post";
+  
+      const response = await axios({
+        method,
+        url,
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+  
+      toast.success(id ? "Book updated successfully!" : "Book uploaded successfully!");
+      console.log("Success:", response.data);
+    } catch (err) {
+      const error = err as AxiosError<{ message?: string }>; // Ensure TypeScript knows `message` might exist
+  
+      const errorMessage =
+        error.response?.data?.message || error.message || "An unexpected error occurred";
+  
+      console.error("Upload error:", errorMessage);
+  
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
+  
+
   
 
 
