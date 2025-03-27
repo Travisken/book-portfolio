@@ -132,7 +132,7 @@ const BookUploadForm = () => {
     if (bookData.bookDocument) formData.append("bookDocument", bookData.bookDocument);
 
     try {
-      await axios.post("https://server-uc0a.onrender.comse/upload", formData, {
+      await axios.post("https://server-uc0a.onrender.com/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.success("Book uploaded successfully!");
