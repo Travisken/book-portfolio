@@ -113,12 +113,22 @@ const BookUploadForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateBookId = async (id: string) => {
+    try {
+      const response = await axios.get(`https://server-uc0a.onrender.com/upload/${id}`);
+      console.log("book exhists", response);
+      return response.status === 200; // Book exists
+    } catch (error) {
+      return false; // Book does not exist
+    }
+  };
+  
 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return toast.error("Please fill out all required fields.");
-  
+    
     setLoading(true);
   
     try {
@@ -137,34 +147,35 @@ const BookUploadForm = () => {
         formData.append("bookDocument", bookData.bookDocument);
       }
   
-      const url = id
-        ? `https://server-uc0a.onrender.com/upload/${id}` // PATCH if updating
-        : `https://server-uc0a.onrender.com/upload`; // POST if new upload
+      if (id) {
+        const exists = await validateBookId(id);
+        if (!exists) {
+          toast.error("Book not found. Please check the ID.");
+          setLoading(false);
+          return;
+        }
   
-      const method = id ? "patch" : "post";
-  
-      const response = await axios({
-        method,
-        url,
-        data: formData,
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-  
-      toast.success(id ? "Book updated successfully!" : "Book uploaded successfully!");
-      console.log("Success:", response.data);
+        console.log("Updating book with ID:", id);
+        await axios.patch(`https://server-uc0a.onrender.com/upload/${id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Book updated successfully!");
+      } else {
+        await axios.post("https://server-uc0a.onrender.com/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Book uploaded successfully!");
+      }
     } catch (err) {
-      const error = err as AxiosError<{ message?: string }>; // Ensure TypeScript knows `message` might exist
-  
-      const errorMessage =
-        error.response?.data?.message || error.message || "An unexpected error occurred";
-  
+      const error = err as AxiosError<{ message?: string }>;
+      const errorMessage = error.response?.data?.message || error.message || "An error occurred.";
       console.error("Upload error:", errorMessage);
-  
       toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
+  
   
 
   
