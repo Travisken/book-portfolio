@@ -50,9 +50,10 @@ const BookUploadForm = () => {
           const data = snapshot.val();
           setBookData(() => ({
             ...data,
-            bookLink: null, // Reset bookLink to null for editing
-            bookDocument: null, // Reset bookDocument to null for editing
+            bookLink: data.bookLink || null, // Keep existing book link if available
+            bookDocument: data.bookDocument || null, // Keep existing document if available
           }));
+
           setEditBook(true);
           setPreview(null);
 
@@ -128,14 +129,25 @@ const BookUploadForm = () => {
     formData.append("aboutBook", bookData.aboutBook);
     formData.append("contributors", bookData.contributors);
     formData.append("published", String(bookData.published));
+
     if (bookData.bookLink instanceof File) formData.append("bookLink", bookData.bookLink);
-    if (bookData.bookDocument) formData.append("bookDocument", bookData.bookDocument);
+    if (bookData.bookDocument instanceof File) formData.append("bookDocument", bookData.bookDocument);
 
     try {
-      await axios.post("https://server-uc0a.onrender.com/upload", formData, {
+      const endpoint = id
+        ? `https://server-uc0a.onrender.com/upload/${id}` // Assuming PATCH for updates
+        : "https://server-uc0a.onrender.com/upload";
+
+      const method = id ? "PATCH" : "POST"; // Use PATCH for updates
+
+      await axios({
+        method,
+        url: endpoint,
+        data: formData,
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("Book uploaded successfully!");
+
+      toast.success(id ? "Book updated successfully!" : "Book uploaded successfully!");
     } catch (error) {
       toast.error("Failed to upload book. Check console for details.");
       console.error("Upload error:", error);
@@ -143,6 +155,7 @@ const BookUploadForm = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <>
@@ -215,13 +228,15 @@ const BookUploadForm = () => {
                 setBookData((prev) => ({
                   ...prev,
                   published: e.target.checked,
-                  bookDocument: e.target.checked ? prev.bookDocument : null, // Clear document if unpublished
+                  bookDocument: e.target.checked ? prev.bookDocument : null, // Keep document when publishing
                 }));
+
                 if (!e.target.checked) {
                   toast.warn("Book document upload is disabled when the book is not published.");
                 }
               }}
             />
+
 
             <label className="text-sm font-medium text-gray-700">Is this book published?</label>
           </div>

@@ -108,6 +108,8 @@ const CustomCard = ({ book }: { book: Book }) => {
             const peopleReadList = snapshot.exists() ? snapshot.val() : [];
 
             await set(bookRef, [...peopleReadList, peopleReadEntry]);
+            console.log(bookRef)
+            console.log(snapshot)
 
             // Open the pdf-viewer page in a new tab
             window.open(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`, "_blank");
@@ -167,12 +169,12 @@ const CustomCard = ({ book }: { book: Book }) => {
 
                     {/* Buttons */}
                     <div className="flex space-x-4">
-                       
+
 
                         {book.published ? (
                             <button disabled={loading} type='submit' className="px-8 py-3 bg-[#3ca0ca] text-white rounded-lg hover:bg-[#2c7898] transition">
-                            {loading ? "Sending..." : "Read now"}
-                        </button>
+                                {loading ? "Sending..." : "Read now"}
+                            </button>
                         ) : (
                             <button
                                 disabled
