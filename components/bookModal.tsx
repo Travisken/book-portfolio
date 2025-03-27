@@ -4,7 +4,7 @@ import emailjs from "@emailjs/browser";
 import { Star, X } from "lucide-react";
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get, set } from 'firebase/database';
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 // import Image from 'next/image';
 
 interface Testimonial {
@@ -51,7 +51,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState<string | null>(null);
     const [averageRating, setAverageRating] = useState<number>(0);
-    const router = useRouter();
+    // const router = useRouter();
 
     useEffect(() => {
         const fetchTestimonials = async () => {

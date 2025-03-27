@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ChevronRight, Star, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get, set } from 'firebase/database';
 import emailjs from "@emailjs/browser";
@@ -30,7 +30,7 @@ const CustomCard = ({ book }: { book: Book }) => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState<string | null>(null);
-    const router = useRouter();
+    // const router = useRouter();
     const [averageRating, setAverageRating] = useState<number>(0);
 
     useEffect(() => {

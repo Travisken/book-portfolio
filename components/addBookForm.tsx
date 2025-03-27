@@ -6,7 +6,7 @@ import Image from "next/image";
 import RichTextEditor from "./textEditor";
 import axios from "axios";
 import { database } from "@/app/firebase";
-import { ref, set, get } from "firebase/database";
+import { ref, get } from "firebase/database";
 import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -48,7 +48,7 @@ const BookUploadForm = () => {
         const snapshot = await get(bookRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          setBookData((prev) => ({
+          setBookData(() => ({
             ...data,
             bookLink: null, // Reset bookLink to null for editing
             bookDocument: null, // Reset bookDocument to null for editing
