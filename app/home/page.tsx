@@ -13,6 +13,7 @@ import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get } from 'firebase/database';
 import BttButton from "@/components/bttButton";
 import CustomCard from "@/components/customCard";
+import NewsSection from "@/components/newsSection";
 
 interface Book {
   id: number;
@@ -80,6 +81,7 @@ const Home = () => {
       <HeroSection />
       <AboutSection />
       <ExperienceSection />
+      <NewsSection/>
 
       {/* <CustomCard book={books[0]}></CustomCard> */}
 

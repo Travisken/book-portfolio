@@ -33,15 +33,15 @@ const BookCard: React.FC<BookProps> = ({ book, onReadMore }) => {
       <div className="flex flex-col gap-2">
         <h3 className="font-semibold text-xl">{book.title}</h3>
         <p className="text-zinc-600 line-clamp-3">{book.description}</p>
-        
-        {/* Conditional Button */}
-        {book.published ? (
           <button 
             onClick={() => onReadMore(book)} 
             className="p-2 rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex-1 flex md:w-1/2 items-center justify-center"
           >
             Read more
           </button>
+        {/* Conditional Button
+        {book.published ? (
+        
         ) : (
           <button 
             disabled 
@@ -49,7 +49,7 @@ const BookCard: React.FC<BookProps> = ({ book, onReadMore }) => {
           >
             Coming Soon
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );

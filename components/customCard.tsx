@@ -66,21 +66,21 @@ const CustomCard = ({ book }: { book: Book }) => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-    
+
         if (!validateEmail(formData.email)) {
             setError("Please enter a valid email address.");
             return;
         }
-    
+
         if (!book) {
             setError("Book details are missing.");
             return;
         }
-    
+
         setLoading(true);
         setError(null);
         setSuccess(null);
-    
+
         // Ensure the templateParams includes the correct recipient email
         const templateParams = {
             to_email: formData.email, // Ensure this matches your EmailJS template
@@ -89,7 +89,7 @@ const CustomCard = ({ book }: { book: Book }) => {
             from_name: "Dr. Folarin",
             reply_to: formData.email,
         };
-    
+
         try {
             await emailjs.send(
                 "service_pcg8s7k",
@@ -97,21 +97,21 @@ const CustomCard = ({ book }: { book: Book }) => {
                 templateParams,
                 "zZljp-c12W6mwkno9"
             );
-    
+
             const peopleReadEntry = {
                 email: formData.email,
                 date: new Date().toISOString(),
             };
-    
+
             const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
             const snapshot = await get(bookRef);
             const peopleReadList = snapshot.exists() ? snapshot.val() : [];
-    
+
             await set(bookRef, [...peopleReadList, peopleReadEntry]);
-    
+
             // Open the pdf-viewer page in a new tab
             window.open(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`, "_blank");
-    
+
             setFormData({ email: "" });
             setSuccess("Email sent successfully!");
         } catch (error) {
@@ -121,7 +121,7 @@ const CustomCard = ({ book }: { book: Book }) => {
             setLoading(false);
         }
     };
-    
+
 
 
     if (!book) {
@@ -167,9 +167,20 @@ const CustomCard = ({ book }: { book: Book }) => {
 
                     {/* Buttons */}
                     <div className="flex space-x-4">
-                        <button disabled={loading} type='submit' className="px-8 py-3 bg-[#3ca0ca] text-white rounded-lg hover:bg-[#2c7898] transition">
+                       
+
+                        {book.published ? (
+                            <button disabled={loading} type='submit' className="px-8 py-3 bg-[#3ca0ca] text-white rounded-lg hover:bg-[#2c7898] transition">
                             {loading ? "Sending..." : "Read now"}
                         </button>
+                        ) : (
+                            <button
+                                disabled
+                                className="p-3 rounded-xl font-semibold bg-gray-300 text-gray-600 cursor-not-allowed flex-1 flex items-center justify-center"
+                            >
+                                Coming Soon
+                            </button>
+                        )}
                         <button
                             onClick={() => setModalOpen(true)}
                             className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition">
@@ -197,15 +208,15 @@ const CustomCard = ({ book }: { book: Book }) => {
                         <div className="bg-white  p-6 rounded-lg md:max-w-[60vw] h-[50vh] overflow-scroll w-full">
                             <div className='flex items-center justify-between mb-4'>
                                 <h2 className="text-3xl font-bold">
-                                About the book
-                            </h2>
-                            <div className='flex items-center justify-center text-gray-500 cursor-pointer hover:text-gray-700 transition-all'>
-                                Read news letter <ChevronRight/>
-                            </div>
+                                    About the book
+                                </h2>
+                                <div className='flex items-center justify-center text-gray-500 cursor-pointer hover:text-gray-700 transition-all'>
+                                    Read news letter <ChevronRight />
+                                </div>
                             </div>
                             <h2 className="text-xl font-semibold mb-4">{book.title}</h2>
 
-                            
+
                             <div dangerouslySetInnerHTML={{ __html: book.aboutBook }}></div>
                             <button
                                 onClick={() => setModalOpen(false)}

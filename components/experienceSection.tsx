@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ExperienceSection() {
     return (
@@ -16,9 +17,9 @@ export default function ExperienceSection() {
                         <h3 className="text-3xl capitalize font-semibold">My work experience</h3>
                         <p>Showcasing skills, achievements, and career growth through professional experiences.</p>
                     </div>
-                    <button className="bg-[#00000020] hover:text-[#00000090] transition-all border-2 border-[#000000020] hover:border-[#00000050] hover:bg-white rounded-full p-4 hidden md:flex gap-4">
+                    <Link href={"/work-experience"} className="bg-[#00000020] hover:text-[#00000090] transition-all border-2 border-[#000000020] hover:border-[#00000050] hover:bg-white rounded-full p-4 hidden md:flex gap-4">
                         Read more <ChevronRight />
-                    </button>
+                    </Link>
                 </div>
 
                 <section className="flex items-start flex-wrap md:px-20 px-4 gap-10 justify-center">
@@ -48,7 +49,7 @@ export default function ExperienceSection() {
                     ].map((item, index) => (
                         <div
                             key={index}
-                            className=" max-md:w-full flex-none md:flex-1 flex flex-col shadow rounded-xl p-2 transition-all duration-300 hover:shadow-lg"
+                            className="group max-md:w-full overflow-hidden cursor-pointer flex-none md:flex-1 flex flex-col shadow rounded-xl p-2 transition-all duration-300 hover:shadow-lg"
                         >
                             <div className="relative h-52 w-full rounded-xl overflow-hidden">
                                 <Image
@@ -57,7 +58,7 @@ export default function ExperienceSection() {
                                     layout="fill"
                                     objectFit="cover"
                                     objectPosition="center"
-                                    className="rounded-xl"
+                                    className="rounded-xl group-hover:scale-[1.1] transition-all"
                                 />
                             </div>
 
@@ -65,7 +66,7 @@ export default function ExperienceSection() {
                             <div className="flex flex-col gap-2">
                                 <h3 className="font-semibold text-xl mt-6 line-clamp-1">{item.company}</h3>
                                 <p className="text-[#00000090] text-sm">{item.role}</p>
-                                <p className="text-zinc-600 line-clamp-2 group-hover:line-clamp-none max-h-16 group-hover:max-h-full overflow-hidden transition-all duration-300 ease-in-out">
+                                <p className="text-zinc-600 line-clamp-2 max-h-16 group-hover:max-h-full overflow-hidden transition-all duration-300 ease-in-out">
                                     {item.description}
                                 </p>
                             </div>

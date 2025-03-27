@@ -9,16 +9,16 @@ const HeroSection: React.FC = () => {
             <section className="flex  mt-[8rem] relative flex-wrap text-center md:text-left md:justify-between md:p-0 p-4 md:h-[90vh] md:px-20 items-start">
                 <div className="flex flex-col md:w-[50%] gap-4 items-center md:items-start">
                     <h3 className=" m-0 p-0 md:text-5xl text-3xl md:w-[80%] font-extrabold">
-                        Dr. Akinsiku Folarin
+                        Dr. Akinsiku Folarin Oluwanimbe
                     </h3>
-                    <p>
-                        CEO of Pentspace, integrates e-commerce, healthcare innovation, and global collaboration to enhance business connections, bridge local and global healthcare standards, and drive sustainable, technology-driven solutions for Nigeria’s healthcare sector.
+                    <p className="md:w-[90%] text-xl text-gray-600">
+                        Is a seasoned dentist with over 12 years of hands-on clinical experience and more than 5 years of leadership in organizational management within the healthcare sector.
                     </p>
                     <Link href="#books" className=" rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white  flex w-[8rem] md:w-[14rem] py-3 mt-2 items-center justify-center">
                         Books
                     </Link>
 
-                    <HealthQuotesCarousel/>
+                    <HealthQuotesCarousel />
                 </div>
                 <div style={{
                     backgroundImage: "url('/author.jpeg')",

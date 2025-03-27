@@ -22,7 +22,7 @@ export default function BttButton() {
     return (
         <>
             {isVisible && (
-                <div className="fixed md:block hidden bottom-10 right-10">
+                <div className="fixed transition-all md:block hidden bottom-10 right-10">
                     <Link className="button_btt" href={"#heroSection"}>
                         <svg className="svgIcon" viewBox="0 0 384 512">
                             <path

@@ -53,10 +53,12 @@ export default function Navbar() {
     return (
         <nav className="flex w-full justify-between md:p-0 px-4 items-center relative">
             <div className="flex justify-between items-center w-full md:px-20">
-                <div className="bg-[#3ca0ca] logo justify-center font-bold h-24 flex w-32 flex-col px-4 text-white">
-                    <span className="text-xl">Dr.</span>
-                    <span className="text-2xl">Folarin.</span>
-                </div>
+                <Link href="/" to={"/"}>
+                    <div className="bg-[#3ca0ca] logo justify-center font-bold h-24 flex w-32 flex-col px-4 text-white">
+                        <span className="text-xl">Dr.</span>
+                        <span className="text-2xl">Folarin.</span>
+                    </div>
+                </Link>
                 <ul className="hidden md:flex gap-12 items-center text-xl">
                     {navLinks.map(({ name, href }) => (
                         <li key={href}>
@@ -70,7 +72,7 @@ export default function Navbar() {
                     ))}
                 </ul>
                 <Link
-                    className="py-3 hidden md:flex rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white w-[12rem] h-fit items-center justify-center"
+                    className="py-3 hidden cursor-pointer md:flex rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white w-[12rem] h-fit items-center justify-center"
                     to={"testimonialForm"}
                 >
                     Feedback

@@ -20,6 +20,7 @@ interface Book {
     bookDocument: string;
     aboutBook: string;
     bookLink: string;
+    published: boolean;
     peopleRead?: { email: string; date: string }[]; // Optional array for storing emails and dates
 }
 
@@ -98,21 +99,21 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-    
+
         if (!validateEmail(formData.email)) {
             setError("Please enter a valid email address.");
             return;
         }
-    
+
         if (!book) {
             setError("Book details are missing.");
             return;
         }
-    
+
         setLoading(true);
         setError(null);
         setSuccess(null);
-    
+
         // Ensure the templateParams includes the correct recipient email
         const templateParams = {
             to_email: formData.email, // Ensure this matches your EmailJS template
@@ -121,7 +122,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             from_name: "Dr. Folarin",
             reply_to: formData.email,
         };
-    
+
         try {
             await emailjs.send(
                 "service_pcg8s7k",
@@ -129,21 +130,21 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 templateParams,
                 "zZljp-c12W6mwkno9"
             );
-    
+
             const peopleReadEntry = {
                 email: formData.email,
                 date: new Date().toISOString(),
             };
-    
+
             const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
             const snapshot = await get(bookRef);
             const peopleReadList = snapshot.exists() ? snapshot.val() : [];
-    
+
             await set(bookRef, [...peopleReadList, peopleReadEntry]);
-    
+
             // Open the pdf-viewer page in a new tab
             window.open(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`, "_blank");
-    
+
             setFormData({ email: "" });
             setSuccess("Email sent successfully!");
         } catch (error) {
@@ -153,7 +154,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
             setLoading(false);
         }
     };
-    
+
 
 
     if (!book) return null;
@@ -168,14 +169,15 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 slotProps={{ backdrop: { timeout: 500 } }}
             >
                 <Fade in={open}>
-                    <Box sx={modalStyle} className="relative p-2 md:!p-8">
-                        <button
-                            className="absolute md:top-4 md:right-4 top-0 right-0 bg-transparent border-none cursor-pointer"
+                    <Box className="relative">
+                         <button
+                            className="absolute md:top-4 md:right-4 -top-4 bg-white right-0 bg-transparent border-none cursor-pointer"
                             onClick={onClose}
                             aria-label="Close"
                         >
                             <X className="w-6 h-6 text-gray-600" />
                         </button>
+                    <Box sx={modalStyle} className="relative p-2 md:!top-[50%] !overflow-scroll !top-[50%] md:!max-h-[90vh] !max-h-[80vh] md:!p-8">
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div
@@ -203,14 +205,25 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                                     />
                                     {error && <p className="text-red-500 bottom-0 absolute text-sm">{error}</p>}
                                     {success && <p className="text-green-500 top-[3rem] absolute text-sm">{success}</p>}
-                                    <Button
-                                        variant="contained"
-                                        className="mt-4 !py-3 !rounded-xl !bg-[#3ca0ce] hover:!bg-[#135690]"
-                                        type="submit"
-                                        disabled={loading}
-                                    >
-                                        {loading ? "Sending..." : "Read now"}
-                                    </Button>
+                                
+
+                                    {book.published ? (
+                                        <Button
+                                            variant="contained"
+                                            className="mt-4 !py-3 !rounded-xl !bg-[#3ca0ce] !shadow-none hover:!bg-[#135690]"
+                                            type="submit"
+                                            disabled={loading}
+                                        >
+                                            {loading ? "Sending..." : "Read now"}
+                                        </Button>
+                                    ) : (
+                                        <button
+                                            disabled
+                                            className="p-3 rounded-xl font-semibold bg-gray-300 text-gray-600 cursor-not-allowed flex-1 flex items-center justify-center"
+                                        >
+                                            Coming Soon
+                                        </button>
+                                    )}
 
                                 </form>
 
@@ -233,6 +246,8 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                             <p className="text-gray-700 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: book.aboutBook }} />
                         </section>
                     </Box>
+                    </Box>
+                       
                 </Fade>
             </Modal>
         </>
