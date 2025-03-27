@@ -129,25 +129,14 @@ const BookUploadForm = () => {
     formData.append("aboutBook", bookData.aboutBook);
     formData.append("contributors", bookData.contributors);
     formData.append("published", String(bookData.published));
-
     if (bookData.bookLink instanceof File) formData.append("bookLink", bookData.bookLink);
-    if (bookData.bookDocument instanceof File) formData.append("bookDocument", bookData.bookDocument);
+    if (bookData.bookDocument) formData.append("bookDocument", bookData.bookDocument);
 
     try {
-      const endpoint = id
-        ? `https://server-uc0a.onrender.com/upload/${id}` // Assuming PATCH for updates
-        : "https://server-uc0a.onrender.com/upload";
-
-      const method = id ? "PATCH" : "POST"; // Use PATCH for updates
-
-      await axios({
-        method,
-        url: endpoint,
-        data: formData,
+      await axios.post("https://server-uc0a.onrender.com/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      toast.success(id ? "Book updated successfully!" : "Book uploaded successfully!");
+      toast.success("Book uploaded successfully!");
     } catch (error) {
       toast.error("Failed to upload book. Check console for details.");
       console.error("Upload error:", error);
