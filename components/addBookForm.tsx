@@ -134,6 +134,7 @@ const BookUploadForm = () => {
     try {
       if (id) {
         // If `id` exists, update the existing book using PATCH
+        console.log("Updating book with ID:", id);
         await axios.patch(`https://server-uc0a.onrender.com/upload/${id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
