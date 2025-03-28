@@ -76,9 +76,7 @@ export default function WorkExperience() {
               <span>
                 Bridging the Gap in Oral Health: A Story of Change, Hope, and Impact
 
-                Thirteen years ago, a young dentist stepped into a community where dental care was a distant thought, barely within reach. Families suffered in silence, enduring pain that could have been prevented with basic treatment. Toothaches were not just discomforts; they were barriers—to learning, to work, to confidence. It wasn&apos;t just about teeth; it was about quality of life.
-
-                That dentist was me.
+                Thirteen years ago, a young dentist stepped into a community where dental care was a distant thought, barely within reach. Families suffered in silence, enduring pain that could have been prevented with basic treatment. Toothaches were not just discomforts; they were barriers—to learning, to work, to confidence. It wasn&apos;t just about teeth; it was about quality of life. That dentist was me.
               </span>
 
               <span>
