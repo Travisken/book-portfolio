@@ -22,7 +22,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({
   return (
     <div
       className={`bg-white flex flex-col gap-4 text-center mx-auto border md:shadow-lg rounded-2xl p-2 md:p-6  transition-all duration-500 ease-in-out 
-        ${isExpanded ? "w-[100%] md:w-[50vw] z-10 scale-100" : "w-[100%] md:w-[25%] scale-100 opacity-70"}
+        ${isExpanded ? "w-[100%] md:w-[50vw] z-10 scale-100" : "w-[100%] md:w-[32%] scale-100 opacity-70"}
         ${isExpanded ? "" : "h-auto md:h-[18rem] overflow-hidden"} `}
       onClick={onToggle}
     >
