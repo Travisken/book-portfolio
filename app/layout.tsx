@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "Dr. Akinsiku Folarin Oluwanimbe",
     images: [
       {
-        url: "https://www.drnimbs.com/public/author.jpeg", // Replace with actual image URL
+        url: "/author.jpeg", // Replace with actual image URL
         width: 1200,
         height: 630,
         alt: "Dr. Akinsiku Folarin Oluwanimbe",
