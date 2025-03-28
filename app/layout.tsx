@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     ],
     type: "website",
   },
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "Dr. Akinsiku Folarin Oluwanimbe",
-  //   description: "A seasoned dentist with over 12 years of hands-on clinical experience and more than 5 years of leadership in organizational management within the healthcare sector.",
-  //   images: "https://www.drnimbs.com/author.jpeg", // Replace with actual image URL
-  // },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dr. Akinsiku Folarin Oluwanimbe",
+    description: "A seasoned dentist with over 12 years of hands-on clinical experience and more than 5 years of leadership in organizational management within the healthcare sector.",
+    images: "https://www.drnimbs.com/author.jpeg", // Replace with actual image URL
+  },
 };
 
 export default function RootLayout({
