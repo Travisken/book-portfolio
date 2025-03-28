@@ -27,7 +27,7 @@ export default function ExperienceSection() {
                     {[
                         {
                             image: "/penthouse_logo.jpeg",
-                            company: "Penthouse",
+                            company: "Pentspace",
                             role: "Chief Executive Officer",
                             description:
                                 "Pentspace is an online marketplace app with the largest collection of businesses and services easily accessible to users.",
