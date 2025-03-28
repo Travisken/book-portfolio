@@ -21,14 +21,14 @@ export default function Sidebar({ closeSidebar }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-full md:w-64 h-screen py-6 bg-white shadow-md p-4 flex flex-col justify-between">
+    <div className="w-full md:w-64 h-screen py-6 bg-white shadow-md p-4 flex flex-col justify-between">
       <nav>
         <ul className="space-y-4 pt-16">
           {menuItems.map(({ name, href, icon: Icon }) => (
             <li key={href}>
               <Link
                 href={href}
-                onClick={closeSidebar} 
+                onClick={closeSidebar}
                 className={clsx(
                   "flex items-center p-3 rounded-lg transition-all duration-300",
                   pathname == href
@@ -41,7 +41,7 @@ export default function Sidebar({ closeSidebar }: SidebarProps) {
               </Link>
             </li>
           ))}
-{/* 
+          {/* 
           <button className="flex gap-2 items-center p-3 w-full rounded-lg transition-all duration-300 hover:shadow-md text-gray-700 hover:bg-gray-200">
             <FiPlus className="text-xl"/>
             
@@ -55,6 +55,6 @@ export default function Sidebar({ closeSidebar }: SidebarProps) {
         <FiLogOut className="text-xl md:mr-2" />
         <span className="">Logout</span>
       </button>
-    </aside>
+    </div>
   );
 }

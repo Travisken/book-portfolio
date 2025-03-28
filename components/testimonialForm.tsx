@@ -84,14 +84,14 @@ export default function TestimonialForm() {
 
       const templateParams = {
         from_name: formData.fullName,
-        to_name: 'Angolo Isaac',
+        to_email: formData.email,
         message: `New feedback received from ${formData.fullName} (${formData.email}):\n\n` +
           `Book Name: ${formData.title}\n` +
           `Review: ${formData.review}\n` +
           `Rating: ${formData.rating}`
       };
 
-      await emailjs.send('service_56znazp', 'template_22kln5n', templateParams, 'whMJPH_AhXYVn1L1U');
+      await emailjs.send('service_5946ay9', 'template_2pphbzh', templateParams, 'zZljp-c12W6mwkno9');
 
       toast.success('Thank you for your feedback! Your testimonial is pending approval.');
 
