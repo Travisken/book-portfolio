@@ -17,7 +17,7 @@ export default function ExperienceSection() {
                         <h3 className="text-3xl capitalize font-semibold">My work experience</h3>
                         <p>Showcasing skills, achievements, and career growth through professional experiences.</p>
                     </div>
-                    <Link href={"/work-experience"} className="bg-[#00000020] hover:text-[#00000090] transition-all border-2 border-[#000000020] hover:border-[#00000050] hover:bg-white rounded-full p-4 hidden md:flex gap-4">
+                    <Link href={"/work-experience"} className="bg-[#00000020] hover:text-[#00000090] transition-all border-2 text-xl border-[#000000020] hover:border-[#00000050] hover:bg-white rounded-full px-6 py-3 hidden md:flex gap-2 ">
                         Read more <ChevronRight />
                     </Link>
                 </div>
