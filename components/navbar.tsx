@@ -51,7 +51,7 @@ export default function Navbar() {
     }, []);
 
     return (
-        <nav className="flex w-full justify-between md:p-0 px-4 items-center relative">
+        <nav id="nav" className="flex w-full justify-between md:p-0 px-4 items-center relative">
             <div className="flex justify-between items-center w-full md:px-20">
                 <Link href="/" to={"/"}>
                     <div className="bg-[#3ca0ca] logo justify-center font-bold h-24 flex w-32 flex-col px-4 text-white">

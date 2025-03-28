@@ -22,6 +22,19 @@ section{
 
 .logo{
   position: relative;
+  
+}
+.logo:hover{
+  background-color: #2782aa;
+  transition: all 200ms ease-in-out;
+}
+
+.logo:hover::after{
+  border-top-color: #2782aa;
+}
+
+.logo:hover::before{
+  border-top-color: #2782aa;
 }
 
 .logo::after {
@@ -29,6 +42,7 @@ section{
   content: "";
   width: 0;
   height: 0;
+  transition: all 200ms ease-in-out;
   border-right: 6rem solid transparent; /* Adjust for triangle width */
   border-top: 4rem solid #3ca0ce; /* Triangle height and color */
   top: 5rem; /* Position from the top */
@@ -41,6 +55,7 @@ section{
   width: 0;
   height: 0;
   border-left: 6rem solid transparent; /* Adjust for triangle width */
+  transition: all 200ms ease-in-out;
   border-top: 4rem solid #3ca0ce; /* Triangle height and color */
   top: 5rem; /* Position from the top */
   right: 0; /* Align to the right */
@@ -268,11 +283,22 @@ section{
 }
 
 .swiper-initialized{
-  height: 40vh;
+  padding-bottom: 3rem !important;
   /* background-color: red; */
 }
 
 .swiper-pagination-bullet-active{
   width: 2rem !important;
   border-radius: 4px !important;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
 }

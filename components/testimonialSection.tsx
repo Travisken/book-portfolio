@@ -15,6 +15,7 @@ interface Testimonial {
   fullName: string;
   rating: number;
   review: string;
+  email: string;
   approved: boolean; // Ensure this field exists in your database
   bookName: string; // Add bookName to the interface
 }
@@ -23,10 +24,15 @@ const TestimonialSection: React.FC = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state
+  const [activeCard, setActiveCard] = useState<number | null>(null);
+
+  const handleToggle = (index: number) => {
+    setActiveCard(activeCard === index ? null : index);
+  };
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 1000);
     };
 
     handleResize(); // Check on initial render
@@ -69,7 +75,7 @@ const TestimonialSection: React.FC = () => {
       exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 0.5 }}
     >
-      <div id="testimonials" className="h-[70vh] md:px-20 flex items-center bg-g">
+      <div id="testimonials" className="min-h-[70vh] md:px-20 flex items-center bg-g">
         <div className="container px-4">
           <h2 className="text-3xl font-bold text-left mb-6">Testimonials</h2>
           {loading ? ( // Show loader while fetching
@@ -81,24 +87,36 @@ const TestimonialSection: React.FC = () => {
               slidesPerView={1}
               spaceBetween={10}
               pagination={{ clickable: true }}
-              autoplay={{ delay: 30000, disableOnInteraction: false }}
+              autoplay={activeCard === null ? { delay: 30000, disableOnInteraction: false } : false}
+              onSlideChange={() => setActiveCard(null)} // Reset activeCard when the slide changes
               modules={[Pagination, Autoplay]}
               className="w-full"
             >
+
               {testimonials
                 .filter((t) => t.approved) // Only show approved testimonials
-                .map((testimonial) => (
+                .map((testimonial, index) => (
                   <SwiperSlide key={testimonial.id}>
-                    <TestimonialCard {...testimonial} /> {/* Ensure bookName is included */}
+                    <TestimonialCard
+                      key={index}
+                      {...testimonial}
+                      isExpanded={activeCard === index}
+                      onToggle={() => handleToggle(index)}
+                    />{/* Ensure bookName is included */}
                   </SwiperSlide>
                 ))}
             </Swiper>
           ) : (
-            <div className="flex gap-10">
+            <div className="flex gap-4">
               {testimonials
                 .filter((t) => t.approved) // Only show approved testimonials
-                .map((testimonial) => (
-                  <TestimonialCard key={testimonial.id} {...testimonial} /> 
+                .map((testimonial, index) => (
+                  <TestimonialCard
+                    key={index}
+                    {...testimonial}
+                    isExpanded={activeCard === index}
+                    onToggle={() => handleToggle(index)}
+                  />
                 ))}
             </div>
           )}

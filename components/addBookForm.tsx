@@ -119,6 +119,7 @@ const BookUploadForm = () => {
       console.log("book exhists", response);
       return response.status === 200; // Book exists
     } catch (error) {
+      console.log(error)
       return false; // Book does not exist
     }
   };

@@ -132,9 +132,9 @@ const CustomCard = ({ book }: { book: Book }) => {
 
 
     return (
-        <div className="w-[80vw] h-[55vh] relative max-w-4xl mx-auto bg-white shadow-md rounded-2xl p-6 hidden md:flex flex-row items-center space-x-6">
+        <div className="md:w-[90vw] lg:w-[60vw] md:h-fit min-h-[55vh]: relative mx-auto bg-white shadow-md rounded-2xl p-6 hidden md:flex flex-row items-start space-x-6">
             {/* Image */}
-            <Image src={book.bookLink} alt={book.title} width={400} height={200} className="!h-full rounded-lg" />
+            <Image src={book.bookLink} alt={book.title} width={400} height={200} className="!h-full !w-[50%] rounded-lg" />
 
             {/* Content Section */}
             <div className="flex flex-col items-start justify-start h-full gap-6 w-full">
