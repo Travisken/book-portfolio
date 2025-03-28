@@ -10,7 +10,7 @@ export default function DashboardNavbar() {
   return (
     <>
       {/* Navbar */}
-      <nav className="bg-white fixed w-full z-20 p-4 ">
+      <nav className="bg-white fixed w-full z-50 p-4 top-0 ">
         <div className="container mx-auto flex justify-between items-center">
           {/* Hamburger Button */}
           <button
