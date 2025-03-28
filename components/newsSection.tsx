@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Image from "next/image";
 
 const videos = [
     {
@@ -81,9 +82,11 @@ export default function NewsSection() {
                             onClick={() => handleVideoSelect(video)}
                         >
                             {/* Display YouTube thumbnail */}
-                            <img
+                            <Image
                                 src={`https://img.youtube.com/vi/${getVideoId(video.url)}/hqdefault.jpg`}
                                 alt={video.title}
+                                height={96}
+                                width={96}
                                 className="w-full h-24 rounded-md object-cover"
                             />
                             <div className="flex flex-col gap-2 justify-between">

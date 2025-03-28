@@ -91,7 +91,7 @@ export default function WorkExperience() {
               <span>
                 A Vision, A Challenge, and A Leap of Faith
 
-                With nothing but a vision and determination, I set out to change the narrative. I knew that awareness was as critical as treatment. So, I started small—speaking in schools, banks, and engaging market women. The conversations were simple but powerful: &quot;This is how you brush properly,&quot; &quot;This is why sugar matters,&quot; &quot;This is how you prevent a lifetime of dental pain."
+                With nothing but a vision and determination, I set out to change the narrative. I knew that awareness was as critical as treatment. So, I started small—speaking in schools, banks, and engaging market women. The conversations were simple but powerful: &quot;This is how you brush properly,&quot; &quot;This is why sugar matters,&quot; &quot;This is how you prevent a lifetime of dental pain.&quote;
 
                 The dream of a fully functional dental center seemed distant. Financial barriers loomed large, but passion doesn&apos;t wait for perfect conditions. A government loan, personal savings and donations from family members provided the breakthrough, and with that, we laid the foundation for what would become a beacon of hope.
 
