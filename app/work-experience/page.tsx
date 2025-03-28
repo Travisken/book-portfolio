@@ -1,5 +1,4 @@
 import BttButton from "@/components/bttButton";
-import { motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -11,10 +10,10 @@ export default function WorkExperience() {
 
       <section className="md:px-20 px-4">
 
-        <div className=" w-full flex justify-between items-center">
+        <div className="w-full flex justify-between items-center">
 
           
-          <Link href={"/"} className=" group flex gap-4 items-center justify-center">
+          <Link href={"/"} className="group flex gap-4 items-center justify-center">
           <span className="bg-[#00000020]  group-hover:text-[#00000090] transition-all border-2 border-[#000000020] group-hover:border-[#00000050] group-hover:bg-white rounded-full w-10 aspect-square flex items-center justify-center gap-4">
             <ChevronLeft /> 
           </span>
@@ -29,7 +28,7 @@ export default function WorkExperience() {
           </Link>
         </div>
 
-        <div className=" py-16 md:py-14 text-lg md:text-xl flex gap-8 flex-col">
+        <div className="py-16 md:py-14 text-lg md:text-xl flex gap-8 flex-col">
           <h2 className="text-4xl mt-10 font-bold capitalize">
             My work experience
           </h2>
@@ -92,7 +91,7 @@ export default function WorkExperience() {
               <span>
                 A Vision, A Challenge, and A Leap of Faith
 
-                With nothing but a vision and determination, I set out to change the narrative. I knew that awareness was as critical as treatment. So, I started small—speaking in schools, banks, and engaging market women. The conversations were simple but powerful: "This is how you brush properly," "This is why sugar matters," "This is how you prevent a lifetime of dental pain."
+                With nothing but a vision and determination, I set out to change the narrative. I knew that awareness was as critical as treatment. So, I started small—speaking in schools, banks, and engaging market women. The conversations were simple but powerful: &quot;This is how you brush properly,&quot; &quot;This is why sugar matters,&quot; &quot;This is how you prevent a lifetime of dental pain."
 
                 The dream of a fully functional dental center seemed distant. Financial barriers loomed large, but passion doesn&apos;t wait for perfect conditions. A government loan, personal savings and donations from family members provided the breakthrough, and with that, we laid the foundation for what would become a beacon of hope.
 

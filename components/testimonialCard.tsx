@@ -15,7 +15,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({
   review,
   rating,
   bookName,
-  email,
+  // email,
   isExpanded,
   onToggle,
 }) => {
@@ -45,7 +45,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({
 
       <div>
         <h3 className="text-lg font-semibold whitespace-normal break-words">{fullName}</h3>
-        <p className="text-sm text-gray-500">{email}</p>
+        <p className="text-sm text-gray-500">{bookName}</p>
       </div>
     </div>
   );
