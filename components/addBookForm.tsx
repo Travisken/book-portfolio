@@ -44,7 +44,7 @@ const BookUploadForm = () => {
   useEffect(() => {
     const fetchBookData = async () => {
       if (id) {
-        const bookRef = ref(database, `data/booksSection/${id}`);
+        const bookRef = ref(database, `data/${id}`);
         const snapshot = await get(bookRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
