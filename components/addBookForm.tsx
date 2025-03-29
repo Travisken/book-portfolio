@@ -44,7 +44,7 @@ const BookUploadForm = () => {
   useEffect(() => {
     const fetchBookData = async () => {
       if (id) {
-        const bookRef = ref(database, `data/${id}`);
+        const bookRef = ref(database, `data/booksSection/${id}`);
         const snapshot = await get(bookRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
@@ -118,7 +118,7 @@ const BookUploadForm = () => {
 
   const validateBookId = async (id: string) => {
     try {
-      const booksRef = ref(database, "data/booksSection"); // Reference to all books
+      const booksRef = ref(database, "data"); // Reference to all books
       const snapshot = await get(booksRef);
   
       if (!snapshot.exists()) {
