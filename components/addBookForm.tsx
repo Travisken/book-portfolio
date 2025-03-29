@@ -113,6 +113,7 @@ const BookUploadForm = () => {
     if (bookData.published && !bookData.bookDocument) {
       newErrors.bookDocument = "Book document is required when publishing";
     }
+    
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -132,7 +133,10 @@ const BookUploadForm = () => {
     if (bookData.bookLink instanceof File) {
       formData.append("bookLink", bookData.bookLink);
     }
-    formData.append("bookDocument", bookData.bookDocument as Blob);
+    if (bookData.bookDocument) {
+      formData.append("bookDocument", bookData.bookDocument as Blob);
+    }    
+    // formData.append("bookDocument", bookData.bookDocument as Blob);
     formData.append("title", bookData.title);
     formData.append("description", bookData.description);
     formData.append("aboutBook", bookData.aboutBook);
