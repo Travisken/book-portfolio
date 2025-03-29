@@ -252,7 +252,7 @@ const BookUploadForm = () => {
 
             {/* Contributors */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Contributors (Optional)</label>
+              <label className="block text-sm font-medium text-gray-700">News letter link (Optional)</label>
               <input
                 type="text"
                 name="contributors"
