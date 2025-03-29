@@ -6,7 +6,7 @@ import Image from "next/image";
 import RichTextEditor from "./textEditor";
 import axios, { AxiosError } from "axios";
 import { database } from "@/app/firebase";
-import { ref, get, update, set } from "firebase/database";
+import { ref, get, update } from "firebase/database";
 import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -171,7 +171,6 @@ const BookUploadForm = () => {
           setLoading(false);
           return;
         }
-        await update(bookRef, bookDataToUpdate);
   
         console.log("Updating book with ID:", id);
         await axios.patch(`https://server-uc0a.onrender.com/upload/${id}`, formData, {
@@ -182,7 +181,6 @@ const BookUploadForm = () => {
         await axios.post("https://server-uc0a.onrender.com/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        await set(bookRef, bookDataToUpdate);
         toast.success("Book uploaded successfully!");
       }
     } catch (err) {
