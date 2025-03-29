@@ -139,7 +139,7 @@ const CustomCard = ({ book }: { book: Book }) => {
             {/* Content Section */}
             <div className="flex flex-col items-start justify-start h-full gap-6 w-full">
                 {/* Title */}
-                <h2 className="text-4xl font-semibold">{book.title}</h2>
+                <h2 className="text-4xl capitalize font-semibold">{book.title}</h2>
 
                 {/* Description */}
                 <p className="text-gray-600">{book.description}</p>
