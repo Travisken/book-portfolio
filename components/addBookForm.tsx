@@ -6,7 +6,7 @@ import Image from "next/image";
 import RichTextEditor from "./textEditor";
 import axios, { AxiosError } from "axios";
 import { database } from "@/app/firebase";
-import { ref, get } from "firebase/database";
+import { ref, get, set } from "firebase/database";
 import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -113,13 +113,16 @@ const BookUploadForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+
+  
+
   const validateBookId = async (id: string) => {
     try {
       const response = await axios.get(`https://server-uc0a.onrender.com/upload/${id}`);
-      console.log("book exhists", response);
+      console.log("Book exists:", response.data); // Check API response
       return response.status === 200; // Book exists
     } catch (error) {
-      console.log(error)
+      console.error("Error fetching book:", error);
       return false; // Book does not exist
     }
   };
@@ -129,6 +132,19 @@ const BookUploadForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return toast.error("Please fill out all required fields.");
+
+    // try {
+    //   const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
+    //   await set(bookRef, {
+    //     title: bookData.title,
+    //     description: bookData.description,
+    //     aboutBook: bookData.aboutBook,
+    //     contributors: bookData.contributors,
+    //     bookLink: bookData.bookLink, // Ensure file handling
+    //     bookDocument: bookData.bookDocument,
+    //     published: bookData.published,
+    //   })
+    // }
     
     setLoading(true);
   
@@ -139,6 +155,17 @@ const BookUploadForm = () => {
       formData.append("aboutBook", bookData.aboutBook || "");
       formData.append("contributors", bookData.contributors || "");
       formData.append("published", String(bookData.published || false));
+
+      const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
+      await set(bookRef, {
+        title: bookData.title,
+        description: bookData.description,
+        aboutBook: bookData.aboutBook,
+        contributors: bookData.contributors,
+        bookLink: bookData.bookLink, // Ensure file handling
+        bookDocument: bookData.bookDocument,
+        published: bookData.published,
+      })
   
       if (bookData.bookLink instanceof File) {
         formData.append("bookLink", bookData.bookLink);
