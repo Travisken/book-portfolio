@@ -27,6 +27,7 @@ interface Book {
   bookLink: string;
   published: boolean;
   rating: number;
+  contributors: string;
 }
 
 const Home = () => {

@@ -19,6 +19,7 @@ interface Book {
     bookDocument: string;
     bookLink: string;
     published: boolean;
+    contributors: string;
     rating: number;
 }
 
@@ -212,9 +213,9 @@ const CustomCard = ({ book }: { book: Book }) => {
                                 <h2 className="text-3xl font-bold">
                                     About the book
                                 </h2>
-                                <div className='flex items-center justify-center text-gray-500 cursor-pointer hover:text-gray-700 transition-all'>
+                                <a href={book.contributors} className='flex items-center justify-center text-gray-500 cursor-pointer hover:text-gray-700 transition-all'>
                                     Read news letter <ChevronRight />
-                                </div>
+                                </a>
                             </div>
                             <h2 className="text-xl font-semibold mb-4">{book.title}</h2>
 
