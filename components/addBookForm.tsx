@@ -118,36 +118,38 @@ const BookUploadForm = () => {
 
   const validateBookId = async (id: string) => {
     try {
-      const response = await axios.get(`https://server-uc0a.onrender.com/upload/${id}`);
-      console.log("Book exists:", response.data); // Check API response
-      return response.status === 200; // Book exists
+      const booksRef = ref(database, "data/booksSection"); // Reference to all books
+      const snapshot = await get(booksRef);
+  
+      if (!snapshot.exists()) {
+        toast.error("No books found in the database.");
+        return false;
+      }
+  
+      const books = snapshot.val();
+      const bookExists = Object.keys(books).includes(id);
+  
+      if (!bookExists) {
+        toast.error("Book not found. Please check the ID.");
+        return false;
+      }
+  
+      return true;
     } catch (error) {
-      console.error("Error fetching book:", error);
-      return false; // Book does not exist
+      console.error("Error validating book ID:", error);
+      toast.error("An error occurred while checking the book ID.");
+      return false;
     }
   };
+  
   
 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return toast.error("Please fill out all required fields.");
-
-    // try {
-    //   const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
-    //   await set(bookRef, {
-    //     title: bookData.title,
-    //     description: bookData.description,
-    //     aboutBook: bookData.aboutBook,
-    //     contributors: bookData.contributors,
-    //     bookLink: bookData.bookLink, // Ensure file handling
-    //     bookDocument: bookData.bookDocument,
-    //     published: bookData.published,
-    //   })
-    // }
-    
-    setLoading(true);
   
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("title", bookData.title || "");
@@ -155,22 +157,10 @@ const BookUploadForm = () => {
       formData.append("aboutBook", bookData.aboutBook || "");
       formData.append("contributors", bookData.contributors || "");
       formData.append("published", String(bookData.published || false));
-
-      const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
-      await set(bookRef, {
-        title: bookData.title,
-        description: bookData.description,
-        aboutBook: bookData.aboutBook,
-        contributors: bookData.contributors,
-        bookLink: bookData.bookLink, // Ensure file handling
-        bookDocument: bookData.bookDocument,
-        published: bookData.published,
-      })
   
       if (bookData.bookLink instanceof File) {
         formData.append("bookLink", bookData.bookLink);
       }
-  
       if (bookData.bookDocument instanceof File) {
         formData.append("bookDocument", bookData.bookDocument);
       }
@@ -178,12 +168,10 @@ const BookUploadForm = () => {
       if (id) {
         const exists = await validateBookId(id);
         if (!exists) {
-          toast.error("Book not found. Please check the ID.");
           setLoading(false);
           return;
         }
   
-        console.log("Updating book with ID:", id);
         await axios.patch(`https://server-uc0a.onrender.com/upload/${id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
@@ -194,6 +182,19 @@ const BookUploadForm = () => {
         });
         toast.success("Book uploaded successfully!");
       }
+  
+      // ✅ Ensure Firebase is updated
+      const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
+      await set(bookRef, {
+        title: bookData.title,
+        description: bookData.description,
+        aboutBook: bookData.aboutBook,
+        contributors: bookData.contributors,
+        bookLink: bookData.bookLink,
+        bookDocument: bookData.bookDocument,
+        published: bookData.published,
+      });
+  
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
       const errorMessage = error.response?.data?.message || error.message || "An error occurred.";
