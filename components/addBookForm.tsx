@@ -6,7 +6,7 @@ import Image from "next/image";
 import RichTextEditor from "./textEditor";
 import axios, { AxiosError } from "axios";
 import { database } from "@/app/firebase";
-import { ref, get, update } from "firebase/database";
+import { ref, get } from "firebase/database";
 import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
