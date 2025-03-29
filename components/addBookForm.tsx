@@ -11,7 +11,6 @@ import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CircleAlert } from "lucide-react";
-// import { headers } from "next/headers";
 
 interface BookData {
   title: string;
@@ -133,8 +132,22 @@ const BookUploadForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return toast.error("Please fill out all required fields.");
+
+    // try {
+    //   const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
+    //   await set(bookRef, {
+    //     title: bookData.title,
+    //     description: bookData.description,
+    //     aboutBook: bookData.aboutBook,
+    //     contributors: bookData.contributors,
+    //     bookLink: bookData.bookLink, // Ensure file handling
+    //     bookDocument: bookData.bookDocument,
+    //     published: bookData.published,
+    //   })
+    // }
     
     setLoading(true);
+  
     try {
       const formData = new FormData();
       formData.append("title", bookData.title || "");
@@ -142,11 +155,22 @@ const BookUploadForm = () => {
       formData.append("aboutBook", bookData.aboutBook || "");
       formData.append("contributors", bookData.contributors || "");
       formData.append("published", String(bookData.published || false));
+
+      const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
+      await set(bookRef, {
+        title: bookData.title,
+        description: bookData.description,
+        aboutBook: bookData.aboutBook,
+        contributors: bookData.contributors,
+        bookLink: bookData.bookLink, // Ensure file handling
+        bookDocument: bookData.bookDocument,
+        published: bookData.published,
+      })
   
-      // Append files properly
       if (bookData.bookLink instanceof File) {
         formData.append("bookLink", bookData.bookLink);
       }
+  
       if (bookData.bookDocument instanceof File) {
         formData.append("bookDocument", bookData.bookDocument);
       }
@@ -165,24 +189,11 @@ const BookUploadForm = () => {
         });
         toast.success("Book updated successfully!");
       } else {
-        await axios.post("https://server-uc0a.onrender.com/upload`, formData", {
+        await axios.post("https://server-uc0a.onrender.com/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("Book uploaded successfully!");
       }
-  
-      // ✅ Ensure Firebase is updated
-      const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
-      await set(bookRef, {
-        title: bookData.title,
-        description: bookData.description,
-        aboutBook: bookData.aboutBook,
-        contributors: bookData.contributors,
-        bookLink: bookData.bookLink,
-        bookDocument: bookData.bookDocument,
-        published: bookData.published,
-      });
-  
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
       const errorMessage = error.response?.data?.message || error.message || "An error occurred.";
@@ -193,6 +204,10 @@ const BookUploadForm = () => {
     }
   };
   
+  
+
+  
+
 
   return (
     <>
