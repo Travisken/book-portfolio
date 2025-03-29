@@ -6,7 +6,7 @@ import Image from "next/image";
 import RichTextEditor from "./textEditor";
 import axios, { AxiosError } from "axios";
 import { database } from "@/app/firebase";
-import { ref, get } from "firebase/database";
+import { ref, get, set } from "firebase/database";
 import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -133,7 +133,18 @@ const BookUploadForm = () => {
     e.preventDefault();
     if (!validateForm()) return toast.error("Please fill out all required fields.");
 
-
+    // try {
+    //   const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
+    //   await set(bookRef, {
+    //     title: bookData.title,
+    //     description: bookData.description,
+    //     aboutBook: bookData.aboutBook,
+    //     contributors: bookData.contributors,
+    //     bookLink: bookData.bookLink, // Ensure file handling
+    //     bookDocument: bookData.bookDocument,
+    //     published: bookData.published,
+    //   })
+    // }
     
     setLoading(true);
   
@@ -146,15 +157,15 @@ const BookUploadForm = () => {
       formData.append("published", String(bookData.published || false));
 
       const bookRef = ref(database, `data/booksSection/${id || Date.now()}`);
-      const bookDataToUpdate = {
+      await set(bookRef, {
         title: bookData.title,
         description: bookData.description,
         aboutBook: bookData.aboutBook,
         contributors: bookData.contributors,
-        bookLink: bookData.bookLink instanceof File ? null : bookData.bookLink, // Preserve URL if not changed
-        bookDocument: bookData.bookDocument instanceof File ? null : bookData.bookDocument,
+        bookLink: bookData.bookLink, // Ensure file handling
+        bookDocument: bookData.bookDocument,
         published: bookData.published,
-      };
+      })
   
       if (bookData.bookLink instanceof File) {
         formData.append("bookLink", bookData.bookLink);
