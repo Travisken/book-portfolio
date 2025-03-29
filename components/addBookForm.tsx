@@ -10,6 +10,7 @@ import { ref, set, get } from "firebase/database";
 import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CircleAlert } from "lucide-react";
 
 interface BookData {
   title: string;
@@ -36,6 +37,7 @@ const BookUploadForm = () => {
   });
   const [preview, setPreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [editBook, setEditBook] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const isValidUrl = (url: string): boolean => {
@@ -55,8 +57,9 @@ const BookUploadForm = () => {
         if (snapshot.exists()) {
           const data = snapshot.val();
           setBookData(data);
-
+          
           if (data.bookLink && isValidUrl(data.bookLink)) {
+            setEditBook(true);
             setPreview(data.bookLink);
           } else {
             console.error("Invalid URL for book cover:", data.bookLink);
@@ -105,7 +108,11 @@ const BookUploadForm = () => {
     if (!bookData.description) newErrors.description = "Description is required";
     if (!bookData.aboutBook) newErrors.aboutBook = "About the book is required";
     if (!bookData.bookLink) newErrors.bookLink = "Book cover is required";
-    if (!bookData.bookDocument) newErrors.bookDocument = "Book document is required";
+    // if (!bookData.bookDocument) newErrors.bookDocument = "Book document is required";
+
+    if (bookData.published && !bookData.bookDocument) {
+      newErrors.bookDocument = "Book document is required when publishing";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -182,130 +189,146 @@ const BookUploadForm = () => {
 
   return (
     <>
-      <ToastContainer />
-      <form onSubmit={handleSubmit} className="w-full md:flex-nowrap flex-wrap gap-6 flex p-6 bg-white rounded-lg">
-        <section className="space-y-4 max-w-lg mx-auto">
-          {/* Book Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Book Name</label>
-            <input
-              type="text"
-              name="title"
-              placeholder="Add book name"
-              value={bookData.title}
-              onChange={(e) => setBookData({ ...bookData, title: e.target.value })}
-              className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl"
-            />
-            {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
-          </div>
+      <section className=" w-full ">
 
-          {/* Book Description */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Book Description</label>
-            <input
-              name="description"
-              placeholder="Add a brief description"
-              value={bookData.description}
-              onChange={(e) => setBookData({ ...bookData, description: e.target.value })}
-              className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl"
-            />
-            {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
-          </div>
-
-          {/* About the Book */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">About the Book</label>
-            <input
-              type="text"
-              value={bookData.aboutBook || ""} // Ensure the value is never undefined
-              readOnly
-              placeholder="Click to write about the book"
-              onClick={() => setIsModalOpen(true)}
-              className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl cursor-pointer"
-            />
-            {errors.aboutBook && <p className="text-red-500 text-sm">{errors.aboutBook}</p>}
-          </div>
-
-          {/* Contributors */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Contributors (Optional)</label>
-            <input
-              type="text"
-              name="contributors"
-              value={bookData.contributors}
-              onChange={(e) => setBookData({ ...bookData, contributors: e.target.value })}
-              className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl"
-            />
-          </div>
-
-          {/* Published Checkbox */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={bookData.published}
-              onChange={(e) => setBookData({ ...bookData, published: e.target.checked })}
-            />
-            <label className="text-sm font-medium text-gray-700">Is this book published?</label>
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-[#3ca0ca] text-white p-3 rounded-xl hover:bg-[#3ca0ca] disabled:bg-gray-400"
-            disabled={loading}
-          >
-            {loading ? "Uploading..." : id ? "Update Book" : "Upload Book"}
-          </button>
-        </section>
-
-        {/* Cover and Document Upload Sections */}
-        <section className="flex flex-col gap-10">
-          {/* Cover Photo Dropzone */}
-          <div className="flex-1 h-[65%] border-4 border-dashed border-gray-400 p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#3ca0ca] transition">
-            <label className="block text-xl font-medium text-gray-500">Book Cover Photo</label>
-            <div {...getRootPropsCover()} className="mt-2 p-6 rounded-xl flex flex-col items-center justify-center cursor-pointer">
-              <input {...getInputPropsCover()} />
-              {preview ? (
-                <Image
-                  height={300}
-                  width={300}
-                  src={preview || ""}
-                  alt="Preview"
-                  className="w-[20rem] h-[20rem] object-cover rounded-lg"
-                />
-              ) : (
-                <p className="text-gray-500 hover:text-[#3ca0ca]">Drag & Drop or Click to Upload</p>
-              )}
+        <ToastContainer />
+        <h2 className="font-semibold text-3xl pb-4">
+          {editBook ? "Edit Book" : "Add Book"}
+        </h2>
+        {editBook && <p className="text-gray-600 md:w-1/2 flex gap-2"> <CircleAlert /> Please when editing the book data always re-upload the book cover photo and the book document.</p>}
+        <form onSubmit={handleSubmit} className="w-full md:flex-nowrap flex-wrap gap-6 flex p-6 bg-white rounded-lg">
+          <section className="space-y-4 max-w-lg mx-auto">
+            {/* Book Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Book Name</label>
+              <input
+                type="text"
+                name="title"
+                placeholder="Add book name"
+                value={bookData.title}
+                onChange={(e) => setBookData({ ...bookData, title: e.target.value })}
+                className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl"
+              />
+              {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
             </div>
-            {errors.bookLink && <p className="text-red-500 text-sm">{errors.bookLink}</p>}
-          </div>
 
-          {/* Document Dropzone */}
-          <div{...getRootPropsDocument()} className="border-4 border-dashed border-gray-400 p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#3ca0ca] transition">
-            <label className="block text-xl font-medium text-gray-500">Book Document</label>
-            <div  className="p-2 rounded-xl flex flex-col items-center justify-center cursor-pointer">
-              <input {...getInputPropsDocument()} />
-              {bookData.bookDocument ? (
-                <p>Document uploaded</p>
-              ) : (
-                <p className="text-gray-500 hover:text-[#3ca0ca]">Drag & Drop or Click to Upload</p>
-              )}
+            {/* Book Description */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Book Description</label>
+              <input
+                name="description"
+                placeholder="Add a brief description"
+                value={bookData.description}
+                onChange={(e) => setBookData({ ...bookData, description: e.target.value })}
+                className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl"
+              />
+              {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
             </div>
-            {errors.bookDocument && <p className="text-red-500 text-sm">{errors.bookDocument}</p>}
-          </div>
-        </section>
 
-        {/* Rich Text Editor Modal */}
-        <RichTextEditor
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSave={(text) => {
-            setBookData((prev) => ({ ...prev, aboutBook: text }));
-            setIsModalOpen(false);
-          }}
-          value={bookData.aboutBook}
-        />
-      </form>
+            {/* About the Book */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">About the Book</label>
+              <input
+                type="text"
+                value={bookData.aboutBook || ""} // Ensure the value is never undefined
+                readOnly
+                placeholder="Click to write about the book"
+                onClick={() => setIsModalOpen(true)}
+                className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl cursor-pointer"
+              />
+              {errors.aboutBook && <p className="text-red-500 text-sm">{errors.aboutBook}</p>}
+            </div>
+
+            {/* Contributors */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Contributors (Optional)</label>
+              <input
+                type="text"
+                name="contributors"
+                value={bookData.contributors}
+                onChange={(e) => setBookData({ ...bookData, contributors: e.target.value })}
+                className="w-full mt-1 p-3 border focus:outline-[#3ca0ca] rounded-xl"
+              />
+            </div>
+
+            {/* Published Checkbox */}
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={bookData.published}
+                onChange={(e) => setBookData({ ...bookData, published: e.target.checked })}
+              />
+              <label className="text-sm font-medium text-gray-700">Is this book published?</label>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-[#3ca0ca] text-white p-3 rounded-xl hover:bg-[#3ca0ca] disabled:bg-gray-400"
+              disabled={loading}
+            >
+              {loading ? "Uploading..." : id ? "Update Book" : "Upload Book"}
+            </button>
+          </section>
+
+          {/* Cover and Document Upload Sections */}
+          <section className="flex flex-col gap-10">
+            {/* Cover Photo Dropzone */}
+            <div className="flex-1 h-[65%] border-4 border-dashed border-gray-400 p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#3ca0ca] transition">
+              <label className="block text-xl font-medium text-gray-500">Book Cover Photo</label>
+              <div {...getRootPropsCover()} className="mt-2 p-6 rounded-xl flex flex-col items-center justify-center cursor-pointer">
+                <input {...getInputPropsCover()} />
+                {preview ? (
+                  <Image
+                    height={300}
+                    width={300}
+                    src={preview || ""}
+                    alt="Preview"
+                    className="w-[20rem] h-[20rem] object-cover rounded-lg"
+                  />
+                ) : (
+                  <p className="text-gray-500 hover:text-[#3ca0ca]">Drag & Drop or Click to Upload</p>
+                )}
+              </div>
+              {errors.bookLink && <p className="text-red-500 text-sm">{errors.bookLink}</p>}
+            </div>
+
+            {/* Document Dropzone */}
+            <div
+              {...getRootPropsDocument()}
+              className={`border-4 border-dashed ${bookData.published ? "border-gray-400 hover:border-[#3ca0ca]" : "border-gray-300 opacity-50"
+                } p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer transition`}
+              style={{ pointerEvents: bookData.published ? "auto" : "none" }} // Disable interaction
+            >
+              <label className="block text-xl font-medium text-gray-500">Book Document</label>
+              <div className="p-2 rounded-xl flex flex-col items-center justify-center">
+                <input {...getInputPropsDocument()} disabled={!bookData.published} />
+                {bookData.bookDocument ? (
+                  <p>Document uploaded</p>
+                ) : (
+                  <p className="text-gray-500">
+                    {bookData.published ? "Drag & Drop or Click to Upload" : "Disabled until book is published"}
+                  </p>
+                )}
+              </div>
+              {errors.bookDocument && <p className="text-red-500 text-sm">{errors.bookDocument}</p>}
+            </div>
+          </section>
+
+          {/* Rich Text Editor Modal */}
+          <RichTextEditor
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSave={(text) => {
+              setBookData((prev) => ({ ...prev, aboutBook: text }));
+              setIsModalOpen(false);
+            }}
+            value={bookData.aboutBook}
+          />
+        </form>
+
+      </section>
+
     </>
   );
 };
