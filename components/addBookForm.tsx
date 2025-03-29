@@ -108,11 +108,10 @@ const BookUploadForm = () => {
     if (!bookData.description) newErrors.description = "Description is required";
     if (!bookData.aboutBook) newErrors.aboutBook = "About the book is required";
     if (!bookData.bookLink) newErrors.bookLink = "Book cover is required";
-    // if (!bookData.bookDocument) newErrors.bookDocument = "Book document is required";
-
     if (bookData.published && !bookData.bookDocument) {
       newErrors.bookDocument = "Book document is required when publishing";
     }
+    
     
 
     setErrors(newErrors);
@@ -121,35 +120,42 @@ const BookUploadForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!validateForm()) {
       toast.error("Please fill out all required fields.");
       return;
     }
-
+  
+    console.log("Submitting Form Data:", bookData);
+  
     setLoading(true);
-
+  
     const formData = new FormData();
     if (bookData.bookLink instanceof File) {
       formData.append("bookLink", bookData.bookLink);
     }
     if (bookData.bookDocument) {
       formData.append("bookDocument", bookData.bookDocument as Blob);
-    }    
-    // formData.append("bookDocument", bookData.bookDocument as Blob);
+    }
+  
     formData.append("title", bookData.title);
     formData.append("description", bookData.description);
     formData.append("aboutBook", bookData.aboutBook);
     formData.append("contributors", bookData.contributors);
     formData.append("published", String(bookData.published));
-
+  
     try {
-      const response = await axios.post("https://server-uc0a.onrender.com/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
+      const response = await axios.post(
+        "https://server-uc0a.onrender.com/upload",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+  
+      console.log("Server Response:", response.data);
+  
       const { bookLink, bookDocument } = response.data;
-
       const numericId = id || Date.now();
       const bookRef = ref(database, "data/booksSection/" + numericId);
       await set(bookRef, {
@@ -158,7 +164,7 @@ const BookUploadForm = () => {
         bookLink,
         bookDocument,
       });
-
+  
       toast.success("Book data submitted successfully!");
       resetForm();
     } catch (error) {
@@ -168,6 +174,7 @@ const BookUploadForm = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     return () => {
