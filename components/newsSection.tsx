@@ -19,6 +19,12 @@ const videos = [
         title: "How BoI Made Me An Accomplished Dentist-- MD; Orange Dental Clinic Pt.2 |BoI Weekly|",
         date: "Oct 19, 2017",
         url: "https://www.youtube.com/embed/NL11nIpg1bk?si=3_Sq79t5qDB-giqW"
+    },
+    {
+        id: "4",
+        title: "How BoI Made Me An Accomplished Dentist-- MD; Orange Dental Clinic Pt.3 |BoI Weekly|",
+        date: "Oct 19, 2017",
+        url: "https://www.youtube.com/embed/9rnLJYVAqyc?si=9ImifZ4jZiAEsnSh"
     }
 ];
 

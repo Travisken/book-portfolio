@@ -214,7 +214,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                                             type="submit"
                                             disabled={loading}
                                         >
-                                            {loading ? "Sending..." : "Read now"}
+                                            {loading ? "Sending..." : "Download now"}
                                         </Button>
                                     ) : (
                                         <button

@@ -173,8 +173,8 @@ const CustomCard = ({ book }: { book: Book }) => {
 
 
                         {book.published ? (
-                            <button disabled={loading} type='submit' className="px-8 py-3 bg-[#3ca0ca] text-white rounded-lg hover:bg-[#2c7898] transition">
-                                {loading ? "Sending..." : "Read now"}
+                            <button disabled={loading} type='submit' className="px-8 py-3 bg-[#3ca0ca] text-white flex-1 rounded-lg hover:bg-[#2c7898] transition">
+                                {loading ? "Sending..." : "Download now"}
                             </button>
                         ) : (
                             <button
@@ -213,7 +213,8 @@ const CustomCard = ({ book }: { book: Book }) => {
                                 <h2 className="text-3xl font-bold">
                                     About the book
                                 </h2>
-                                <a href={book.contributors} className='flex items-center justify-center text-gray-500 cursor-pointer hover:text-gray-700 transition-all'>
+                                {/* <a href="http://" target="_blank" rel="noopener noreferrer"></a> */}
+                                <a target="_blank" href={book.contributors} className='flex items-center justify-center text-gray-500 cursor-pointer hover:text-gray-700 transition-all'>
                                     Read news letter <ChevronRight />
                                 </a>
                             </div>
