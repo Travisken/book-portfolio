@@ -84,11 +84,11 @@ export default function NewsSection() {
                 </div>
 
                 {/* Video thumbnails */}
-                <div className="flex flex-row gap-2 w-full flex-wrap">
+                <div className="flex md:flex-row flex-col gap-2 w-full flex-wrap">
                     {videos.map((video) => (
                         <div
                             key={video.id}
-                            className={`flex gap-2 rounded-lg w-[32%] p-2 cursor-pointer transition-all ${selectedVideo.id === video.id ? "ring-2 ring-[#3ca0ca] shadow-sm" : "bg-gray-200"}`}
+                            className={`flex gap-2 rounded-lg w-full md:w-[32%] p-2 cursor-pointer transition-all ${selectedVideo.id === video.id ? "ring-2 ring-[#3ca0ca] shadow-sm" : "bg-gray-200"}`}
                             onClick={() => handleVideoSelect(video)}
                         >
                             <Image
