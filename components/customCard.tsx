@@ -174,7 +174,7 @@ const CustomCard = ({ book }: { book: Book }) => {
 
                         {book.published ? (
                             <button disabled={loading} type='submit' className="px-8 py-3 bg-[#3ca0ca] text-white flex-1 rounded-lg hover:bg-[#2c7898] transition">
-                                {loading ? "Sending..." : "Download now"}
+                                {loading ? "Sending..." : "Download for free"}
                             </button>
                         ) : (
                             <button
