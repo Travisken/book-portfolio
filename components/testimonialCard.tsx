@@ -15,40 +15,36 @@ const TestimonialCard: React.FC<TestimonialProps> = ({
   fullName,
   review,
   rating,
-  // bookName,
-  email,
   isExpanded,
   onToggle,
 }) => {
-
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
+  const [userProfile, setUserProfile] = useState<string | null>(null);
 
   useEffect(() => {
     if (fullName.includes("Will Katz")) {
       const parts = fullName.split(", ");
       setName(parts[0]); // First part as name
       setTitle(parts.slice(1).join(", ")); // Remaining parts as title
+      setUserProfile("https://www.drnimbs.com/willkatz.JPG"); // Replace with actual image URL
     } else {
       setName(fullName);
       setTitle("");
+      setUserProfile(null);
     }
   }, [fullName]);
 
   return (
     <div
-      className={`bg-white flex flex-col gap-4 text-center mx-auto border md:shadow-lg rounded-2xl p-2 md:p-6  transition-all duration-500 ease-in-out 
+      className={`bg-white flex flex-col gap-4 text-center mx-auto border md:shadow-lg rounded-2xl p-2 md:p-6 transition-all duration-500 ease-in-out 
         ${isExpanded ? "w-[100%] md:w-[50vw] z-10 scale-100" : "w-[100%] md:w-[32%] scale-100 opacity-70"}
-        ${isExpanded ? "" : "h-auto md:h-[19rem] overflow-hidden"} `}
+        ${isExpanded ? "" : "h-auto md:h-[22rem] overflow-hidden"}`}
       onClick={onToggle}
     >
       <p className={`text-gray-700 mt-4 italic ${isExpanded ? "" : "line-clamp-3"}`}>
         &quot;{review}&quot;
       </p>
-
-      {/* <button onClick={onToggle} className="text-blue-500 hover:underline">
-        {isExpanded ? "See Less" : "See More"}
-      </button> */}
 
       <div className="flex items-center justify-center mt-4">
         {[...Array(5)].map((_, index) => (
@@ -59,10 +55,18 @@ const TestimonialCard: React.FC<TestimonialProps> = ({
         ))}
       </div>
 
-      <div>
+      <div className="flex flex-col items-center justify-center">
         <h3 className="text-xl font-semibold whitespace-normal break-words">{name}</h3>
         {title && <p className="text-base font-medium text-gray-600">{title}</p>}
-        <p className="text-sm text-gray-500">{email}</p>
+
+        {/* User Profile Image or First Letter */}
+        <div className="border-2 mt-4 text-center shadow-inner flex items-center justify-center border-gray-300 text-gray-300 text-2xl font-semibold w-14 h-14 flex-shrink-0 rounded-full overflow-hidden">
+          {userProfile ? (
+            <img src={userProfile} alt={name} className="w-full h-full object-cover rounded-full" />
+          ) : (
+            <p className="text-gray-500 font-light text-3xl">{fullName.charAt(0).toUpperCase()}</p>
+          )}
+        </div>
       </div>
     </div>
   );
