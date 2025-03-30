@@ -11,6 +11,13 @@ const navLinks = [
     { name: "Books", href: "books" },
 ];
 
+const mobileNavLinks = [
+    { name: "Home", href: "home" },
+    { name: "About", href: "about" },
+    { name: "Books", href: "books" },
+    { name: "Contact", href: "mailto:contact@drnimbs.com" },
+];
+
 export default function Navbar() {
     const pathname = usePathname();
     const [activeSection, setActiveSection] = useState("");
@@ -117,7 +124,7 @@ export default function Navbar() {
                                 className="absolute top-12 -right-2 rounded-md bg-white z-20 shadow-md p-4 w-[94vw]"
                             >
                                 <ul className="flex flex-col gap-4">
-                                    {navLinks.map(({ name, href }) => (
+                                    {mobileNavLinks.map(({ name, href }) => (
                                         <li key={href}>
                                             <Link
                                                 className="block text-black hover:text-[#3ca0ce] font-semibold cursor-pointer"

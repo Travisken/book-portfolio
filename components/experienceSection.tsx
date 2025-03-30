@@ -17,9 +17,9 @@ export default function ExperienceSection() {
                         <h3 className="text-3xl capitalize font-semibold">My work experience</h3>
                         <p>Showcasing skills, achievements, and career growth through professional experiences.</p>
                     </div>
-                    <Link href={"/work-experience"} className="bg-[#00000020] hover:text-[#00000090] transition-all border-2 text-xl border-[#000000020] hover:border-[#00000050] hover:bg-white rounded-full px-6 py-3 hidden md:flex gap-2 ">
+                    {/* <Link href={"/work-experience"} className="bg-[#00000020] hover:text-[#00000090] transition-all border-2 text-xl border-[#000000020] hover:border-[#00000050] hover:bg-white rounded-full px-6 py-3 hidden md:flex gap-2 ">
                         Read more <ChevronRight />
-                    </Link>
+                    </Link> */}
                 </div>
 
                 <section className="flex items-start flex-wrap md:px-20 px-4 gap-10 justify-center">
@@ -29,6 +29,7 @@ export default function ExperienceSection() {
                             image: "/penthouse_logo.jpeg",
                             company: "Pentspace",
                             role: "Chief Executive Officer",
+                            id: "pentspace",
                             description:
                                 "Pentspace is an online marketplace app with the largest collection of businesses and services easily accessible to users.",
                         },
@@ -36,6 +37,8 @@ export default function ExperienceSection() {
                             image: "/orange_dentist_logo.jpeg",
                             company: "Orange Dental Specialists",
                             role: "Clinical Service Director",
+                            id: "orange-dental-specialists",
+
                             description:
                                 "Orange Dental Specialists is a dental clinic located in Alagbaka, Akure, Ondo State with the vision to provide quality and accessible oral health care.",
                         },
@@ -43,6 +46,7 @@ export default function ExperienceSection() {
                             image: "/nmhpd_logo.PNG",
                             company: "Community of Nigerian Health Personnel in Diaspora",
                             role: "Member",
+                            id: "cnhpd",
                             description:
                                 "The Community of Nigerian Health Personnel in Diaspora (CNHPD) comprises a dedicated group of professionals who plan to return to Nigeria in the near future to enhance the country’s health sector.",
                         },
@@ -69,13 +73,15 @@ export default function ExperienceSection() {
                                 <p className="text-zinc-600 line-clamp-2 max-h-16 group-hover:max-h-full overflow-hidden transition-all duration-300 ease-in-out">
                                     {item.description}
                                 </p>
+
+                                <Link href={`/work-experience/#${item.id}`} className="bg-[#00000020] items-center justify-center hover:text-[#00000999] transition-all border-2 text-lg border-[#000000020] hover:border-[#00000050] hover:bg-white rounded-full px-6 py-3 flex flex-1 gap-2 ">
+                                    Read more <ChevronRight />
+                                </Link>
                             </div>
                         </div>
                     ))}
 
-                    <button className="bg-[#00000020] hover:text-[#00000090] transition-all border-2 border-[#000000020] hover:border-[#00000050] hover:bg-white w-full items-center justify-center rounded-full p-4 flex md:hidden gap-4">
-                        Read more <ChevronRight />
-                    </button>
+
                 </section>
             </section>
         </motion.div>

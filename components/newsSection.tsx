@@ -25,10 +25,15 @@ const videos = [
         title: "How BoI Made Me An Accomplished Dentist-- MD; Orange Dental Clinic Pt.3 |BoI Weekly|",
         date: "Oct 19, 2017",
         url: "https://www.youtube.com/embed/9rnLJYVAqyc?si=9ImifZ4jZiAEsnSh"
+    },
+    {
+        id: "5",
+        title: "Harnessing the expertise of Nigerian Healthcare professionals in the Diaspora ...",
+        date: "Jan 15, 2021",
+        url: "https://www.youtube.com/embed/loEH8pg8Yjs?si=TWvdbgz2ucn9GPds"
     }
 ];
 
-// Function to extract video ID from YouTube URL
 const getVideoId = (url: string) => {
     const match = url.match(/embed\/([^?]+)/);
     return match ? match[1] : "";
@@ -40,30 +45,29 @@ export default function NewsSection() {
     const videoRef = useRef<HTMLDivElement>(null);
 
     const handleVideoSelect = (video: typeof videos[number]) => {
-        if (selectedVideo.id === video.id) return; // Avoid reloading the same video
+        if (selectedVideo.id === video.id) return;
         
-        setLoading(true); // Show loader
-        
+        setLoading(true);
         setTimeout(() => {
             setSelectedVideo(video);
-            setLoading(false); // Hide loader
+            setLoading(false);
             videoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 1000); // Simulated loading delay
+        }, 1000);
     };
 
     return (
         <div className="md:px-20 p-4 w-full">
             <h2 className="text-3xl font-semibold capitalize mb-4">outreach / news</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Main video player with loader */}
-                <div ref={videoRef} className="md:col-span-2 bg-black rounded-lg overflow-hidden relative">
+            <div className="flex flex-col md:flex-col md:h-[90vh] gap-4">
+                {/* Main video player */}
+                <div ref={videoRef} className="flex-1 bg-black rounded-lg overflow-hidden relative">
                     {loading ? (
                         <div className="flex justify-center items-center h-64 md:h-96 bg-gray-800">
                             <div className="w-10 h-10 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
                         </div>
                     ) : (
                         <iframe
-                            key={selectedVideo.id} // Ensures reloading of iframe
+                            key={selectedVideo.id}
                             src={selectedVideo.url}
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             className="w-full h-64 md:h-[85%]"
@@ -80,24 +84,23 @@ export default function NewsSection() {
                 </div>
 
                 {/* Video thumbnails */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-row gap-2 w-full flex-wrap">
                     {videos.map((video) => (
                         <div
                             key={video.id}
-                            className={`bg-gray-200 flex md:flex-col gap-2 rounded-lg p-2 cursor-pointer transition-all ${selectedVideo.id === video.id ? "ring-2 ring-[#3ca0ca] shadow-sm" : ""}`}
+                            className={`flex gap-2 rounded-lg w-[32%] p-2 cursor-pointer transition-all ${selectedVideo.id === video.id ? "ring-2 ring-[#3ca0ca] shadow-sm" : "bg-gray-200"}`}
                             onClick={() => handleVideoSelect(video)}
                         >
-                            {/* Display YouTube thumbnail */}
                             <Image
                                 src={`https://img.youtube.com/vi/${getVideoId(video.url)}/hqdefault.jpg`}
                                 alt={video.title}
-                                height={96}
+                                height={72}
                                 width={96}
-                                className="w-full h-24 rounded-md object-cover"
+                                className="rounded-md object-cover"
                             />
-                            <div className="flex flex-col gap-2 justify-between">
+                            <div className="flex flex-col justify-between">
                                 <p className="text-xs opacity-75 mt-1">{video.date}</p>
-                                <h4 className="md:text-sm text-xs font-semibold">{video.title}</h4>
+                                <h4 className="text-sm font-semibold">{video.title}</h4>
                             </div>
                         </div>
                     ))}

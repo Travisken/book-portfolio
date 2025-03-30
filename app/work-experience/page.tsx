@@ -33,7 +33,7 @@ export default function WorkExperience() {
             My work experience
           </h2>
 
-          <div>
+          <div id="pentspace">
             <h3 className="text-3xl font-semibold mb-4">
               Pentspace
             </h3>
@@ -66,7 +66,7 @@ export default function WorkExperience() {
 
           </div>
 
-          <div>
+          <div id="orange-dental-specialists">
             <h3 className="text-3xl font-semibold mb-4">
               Orange Dental Specialists
             </h3>
@@ -130,7 +130,7 @@ export default function WorkExperience() {
           </div>
 
 
-          <div>
+          <div id="cnhpd">
             <h3 className="text-3xl font-semibold mb-4">
               Community of Nigerian Healthcare Professionals in diaspora(CNHPD)
             </h3>
