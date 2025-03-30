@@ -31,7 +31,7 @@ interface BookModalProps {
 }
 
 const modalStyle = {
-    position: "absolute",
+    position: "fixed",  // Ensure it stays centered even if the page scrolls
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
@@ -45,6 +45,7 @@ const modalStyle = {
     maxHeight: "90vh",
     overflowY: "auto",
 };
+
 
 const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     const [formData, setFormData] = useState({ email: "" });
@@ -171,13 +172,13 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
                 <Fade in={open}>
                     <Box className="relative">
                          <button
-                            className="absolute md:top-4 md:right-4 -top-4 bg-white right-0 bg-transparent border-none cursor-pointer"
+                            className="absolute md:top-4 md:right-4 -top-0 bg-white right-0 bg-transparent border-none p-2 rounded-full cursor-pointer"
                             onClick={onClose}
                             aria-label="Close"
                         >
                             <X className="w-6 h-6 text-gray-600" />
                         </button>
-                    <Box sx={modalStyle} className="relative p-2 md:!top-[50%] !overflow-scroll !top-[50%] md:!max-h-[90vh] !max-h-[80vh] md:!p-8">
+                        <Box sx={modalStyle} className="relative p-4 md:p-6">
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div

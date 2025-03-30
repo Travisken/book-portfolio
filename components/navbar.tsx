@@ -126,13 +126,24 @@ export default function Navbar() {
                                 <ul className="flex flex-col gap-4">
                                     {mobileNavLinks.map(({ name, href }) => (
                                         <li key={href}>
-                                            <Link
-                                                className="block text-black hover:text-[#3ca0ce] font-semibold cursor-pointer"
-                                                smooth={true} duration={500} to={href}
-                                                onClick={() => setIsMenuOpen(false)}
-                                            >
-                                                {name}
-                                            </Link>
+                                            {href.startsWith("mailto:") ? (
+                                                <a
+                                                    className="block text-black hover:text-[#3ca0ce] font-semibold cursor-pointer"
+                                                    href={href}
+                                                    onClick={() => setIsMenuOpen(false)}
+                                                >
+                                                    {name}
+                                                </a>
+                                            ) : (
+                                                <Link
+                                                    className="block text-black hover:text-[#3ca0ce] font-semibold cursor-pointer"
+                                                    smooth={true} duration={500} to={href}
+                                                    onClick={() => setIsMenuOpen(false)}
+                                                >
+                                                    {name}
+                                                </Link>
+                                            )}
+
                                         </li>
                                     ))}
                                 </ul>
