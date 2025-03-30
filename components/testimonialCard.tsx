@@ -38,8 +38,8 @@ const TestimonialCard: React.FC<TestimonialProps> = ({
   return (
     <div
       className={`bg-white flex flex-col gap-4 text-center mx-auto border md:shadow-lg rounded-2xl p-2 md:p-6 transition-all duration-500 ease-in-out 
-        ${isExpanded ? "w-[100%] md:w-[50vw] z-10 scale-100" : "w-[100%] md:w-[32%] scale-100 opacity-70"}
-        ${isExpanded ? "" : "h-auto md:h-[22rem] overflow-hidden"}`}
+        ${isExpanded ? "w-[100%] md:w-[50vw] z-10 scale-100" : "w-[100%] md:w-[32%] scale-100"}
+        ${isExpanded ? "" : "h-auto md:h-[24rem] overflow-hidden"}`}
       onClick={onToggle}
     >
       <p className={`text-gray-700 mt-4 italic ${isExpanded ? "" : "line-clamp-3"}`}>
@@ -60,13 +60,16 @@ const TestimonialCard: React.FC<TestimonialProps> = ({
         {title && <p className="text-base font-medium text-gray-600">{title}</p>}
 
         {/* User Profile Image or First Letter */}
-        <div className="border-2 mt-4 text-center shadow-inner flex items-center justify-center border-gray-300 text-gray-300 text-2xl font-semibold w-14 h-14 flex-shrink-0 rounded-full overflow-hidden">
-          {userProfile ? (
+        {userProfile ? (
+          <div className="border-2 mt-4 text-center flex items-center justify-center border-gray-300 font-semibold w-24 h-24 flex-shrink-0 rounded-full overflow-hidden">
             <img src={userProfile} alt={name} className="w-full h-full object-cover rounded-full" />
-          ) : (
+          </div>
+        ) : (
+
+          <div className="border-2 mt-4 text-center shadow-inner flex items-center justify-center border-gray-300 text-gray-300 text-2xl font-semibold w-16 h-16 flex-shrink-0 rounded-full overflow-hidden">
             <p className="text-gray-500 font-light text-3xl">{fullName.charAt(0).toUpperCase()}</p>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
