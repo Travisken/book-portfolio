@@ -1,19 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import BookCard from "@/components/bookCard";
+// import BookCard from "@/components/bookCard";
 import BookModal from "@/components/bookModal";
 import HeroSection from "@/components/heroSection";
 import TestimonialForm from "@/components/testimonialForm";
 import AboutSection from "@/components/aboutSection";
 import TestimonialSection from "@/components/testimonialSection";
-import Link from "next/link";
+// import Link from "next/link";
 import ExperienceSection from "@/components/experienceSection";
 import { database } from '@/app/firebase'; // Adjust path as necessary
 import { ref, get } from 'firebase/database';
 import BttButton from "@/components/bttButton";
-import CustomCard from "@/components/customCard";
+// import CustomCard from "@/components/customCard";
 import NewsSection from "@/components/newsSection";
+import BooksSection from "@/components/bookSection";
 
 interface Book {
   id: number;
@@ -82,60 +83,13 @@ const Home = () => {
       <HeroSection />
       <AboutSection />
       <ExperienceSection />
-      <NewsSection/>
-
-      {/* <CustomCard book={books[0]}></CustomCard> */}
-
-      <div id="books" className="flex flex-col gap-10 items-center md:px-20 px-4 py-8">
-        <div className="flex w-full justify-between items-center mt-8">
-          <h2 className="text-3xl font-bold">Books</h2>
-          {books.length > 4 && (
-            <Link
-              href="/books"
-              className="p-2 rounded-xl font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex w-[8rem] items-center justify-center"
-            >
-              See more
-            </Link>
-          )}
-        </div>
-
-        {loading ? (
-          <div className="flex justify-center items-center h-full">
-            <div className="loader">Loading...</div> {/* Add loader styling as needed */}
-          </div>
-        ) : (
-          <>
-            {/* Show CustomCard only on desktop and tablet when there's only one book */}
-            {books.length === 1 ? (
-              <>
-                <div className="hidden md:flex md:mt-20">
-                  <CustomCard book={books[0]} />
-                </div>
-                {/* Show BookCard on mobile when there's only one book */}
-                <div className="block md:hidden">
-                  <BookCard book={books[0]} onReadMore={() => handleOpen(books[0])} />
-                </div>
-              </>
-            ) : (
-              // Show multiple books using BookCard
-              <div className="flex gap-8 flex-wrap md:gap-12 justify-start w-full items-start">
-                {books.slice(0, 4).map((book) => (
-                  <BookCard key={book.id} book={book} onReadMore={() => handleOpen(book)} />
-                ))}
-              </div>
-            )}
-          </>
-        )}
-
-      </div>
-
+      <NewsSection />
+      <BooksSection books={books} loading={loading} handleOpen={handleOpen} />
       <TestimonialSection />
       <TestimonialForm />
-
       {open && selectedBook && (
         <BookModal open={open} onClose={() => setOpen(false)} book={selectedBook} />
       )}
-
       <BttButton />
     </section>
   );

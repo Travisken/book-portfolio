@@ -1,4 +1,7 @@
+"use client";
+
 import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 
 const videos = [
@@ -6,32 +9,32 @@ const videos = [
         id: "1",
         title: "100 People Benefit from Rotary Free Dental Outreach",
         date: "Mar 29, 2022",
-        url: "https://www.youtube.com/embed/BzczFjsm0WE?si=uOMgXL5cSTBQnPTY"
+        url: "https://www.youtube.com/embed/BzczFjsm0WE?si=uOMgXL5cSTBQnPTY",
     },
     {
         id: "2",
         title: "How BoI Made Me An Accomplished Dentist-- MD; Orange Dental Clinic Pt.1 |BoI Weekly|",
         date: "Oct 19, 2017",
-        url: "https://www.youtube.com/embed/Lm2mc1W_Pts?si=41D7GXZFGa68lNNV"
+        url: "https://www.youtube.com/embed/Lm2mc1W_Pts?si=41D7GXZFGa68lNNV",
     },
     {
         id: "3",
         title: "How BoI Made Me An Accomplished Dentist-- MD; Orange Dental Clinic Pt.2 |BoI Weekly|",
         date: "Oct 19, 2017",
-        url: "https://www.youtube.com/embed/NL11nIpg1bk?si=3_Sq79t5qDB-giqW"
+        url: "https://www.youtube.com/embed/NL11nIpg1bk?si=3_Sq79t5qDB-giqW",
     },
     {
         id: "4",
         title: "How BoI Made Me An Accomplished Dentist-- MD; Orange Dental Clinic Pt.3 |BoI Weekly|",
         date: "Oct 19, 2017",
-        url: "https://www.youtube.com/embed/9rnLJYVAqyc?si=9ImifZ4jZiAEsnSh"
+        url: "https://www.youtube.com/embed/9rnLJYVAqyc?si=9ImifZ4jZiAEsnSh",
     },
     {
         id: "5",
         title: "Harnessing the expertise of Nigerian Healthcare professionals in the Diaspora ...",
         date: "Jan 15, 2021",
-        url: "https://www.youtube.com/embed/loEH8pg8Yjs?si=TWvdbgz2ucn9GPds"
-    }
+        url: "https://www.youtube.com/embed/loEH8pg8Yjs?si=TWvdbgz2ucn9GPds",
+    },
 ];
 
 const getVideoId = (url: string) => {
@@ -42,11 +45,12 @@ const getVideoId = (url: string) => {
 export default function NewsSection() {
     const [selectedVideo, setSelectedVideo] = useState(videos[0]);
     const [loading, setLoading] = useState(false);
+    const sectionRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(sectionRef, { once: true, margin: "-50px" });
 
     const handleVideoSelect = (video: typeof videos[number]) => {
         if (selectedVideo.id === video.id) return;
-        
         setLoading(true);
         setTimeout(() => {
             setSelectedVideo(video);
@@ -56,11 +60,24 @@ export default function NewsSection() {
     };
 
     return (
-        <div className="md:px-20 p-4 w-full">
-            <h2 className="text-3xl font-semibold capitalize mb-4">outreach / news</h2>
+        <motion.div
+            ref={sectionRef}
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="md:px-20 p-4 w-full"
+        >
+            <h2 className="text-3xl font-semibold capitalize mb-4">Outreach / News</h2>
+
             <div className="flex flex-col md:flex-col md:h-[90vh] gap-4">
                 {/* Main video player */}
-                <div ref={videoRef} className="flex-1 bg-black rounded-lg overflow-hidden relative">
+                <motion.div
+                    ref={videoRef}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="flex-1 bg-black rounded-lg overflow-hidden relative"
+                >
                     {loading ? (
                         <div className="flex justify-center items-center h-64 md:h-96 bg-gray-800">
                             <div className="w-10 h-10 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
@@ -81,14 +98,20 @@ export default function NewsSection() {
                         <p className="text-sm opacity-75">{selectedVideo.date}</p>
                         <h3 className="text-lg font-semibold">{selectedVideo.title}</h3>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Video thumbnails */}
                 <div className="flex md:flex-row flex-col gap-2 w-full flex-wrap">
-                    {videos.map((video) => (
-                        <div
+                    {videos.map((video, index) => (
+                        <motion.div
                             key={video.id}
-                            className={`flex gap-2 rounded-lg w-full md:w-[32%] p-2 cursor-pointer transition-all ${selectedVideo.id === video.id ? "ring-2 ring-[#3ca0ca] shadow-sm" : "bg-gray-200"}`}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                            transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
+                            className={`flex gap-2 rounded-lg w-full md:w-[32%] p-2 cursor-pointer transition-all ${selectedVideo.id === video.id
+                                ? "ring-2 ring-[#3ca0ca] shadow-sm"
+                                : "bg-gray-200"
+                                }`}
                             onClick={() => handleVideoSelect(video)}
                         >
                             <Image
@@ -102,10 +125,10 @@ export default function NewsSection() {
                                 <p className="text-xs opacity-75 mt-1">{video.date}</p>
                                 <h4 className="text-sm font-semibold">{video.title}</h4>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
