@@ -84,12 +84,13 @@ const CustomCard = ({ book }: { book: Book }) => {
 
         // Ensure the templateParams includes the correct recipient email
         const templateParams = {
-            to_email: formData.email, // Ensure this matches your EmailJS template
+            to_email: formData.email,
             book_title: book.title,
             book_link: `https://www.drnimbs.com/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`,
             from_name: "Dr. Folarin",
-            reply_to: formData.email,
+            message: `Read ${book.title} online.`,
         };
+
 
         try {
             await emailjs.send(
@@ -174,7 +175,7 @@ const CustomCard = ({ book }: { book: Book }) => {
 
                         {book.published ? (
                             <button disabled={loading} type='submit' className="px-8 py-3 bg-[#3ca0ca] text-white flex-1 rounded-lg hover:bg-[#2c7898] transition">
-                                {loading ? "Sending..." : "Download for free"}
+                                {loading ? "Sending..." : "Read for free"}
                             </button>
                         ) : (
                             <button
