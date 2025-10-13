@@ -114,7 +114,7 @@ const CustomCard = ({ book }: { book: Book }) => {
             console.log(snapshot)
 
             // Open the pdf-viewer page in a new tab
-            window.open(`/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`, "_blank");
+            window.open(decodeURIComponent(book.bookDocument), "_blank");
 
             setFormData({ email: "" });
             setSuccess("Email sent successfully!");
