@@ -86,7 +86,7 @@ const CustomCard = ({ book }: { book: Book }) => {
         const templateParams = {
             to_email: formData.email,
             book_title: book.title,
-            book_link: `https://www.drnimbs.com/pdf-viewer?bookDocument=${encodeURIComponent(book.bookDocument)}`,
+            book_link: `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(book.bookDocument)}`,
             from_name: "Dr. Folarin",
             message: `Read ${book.title} online.`,
         };
