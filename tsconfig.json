@@ -25,6 +25,6 @@
     "noUnusedParameters": false, // Disable error for unused function parameters
     // "noUnusedLabels": false // Ensures no unnecessary warnings
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "get.js"],
   "exclude": ["node_modules"]
 }
