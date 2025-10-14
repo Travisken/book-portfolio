@@ -35,6 +35,36 @@ const videos = [
         date: "Jan 15, 2021",
         url: "https://www.youtube.com/embed/loEH8pg8Yjs?si=TWvdbgz2ucn9GPds",
     },
+    {
+        id: "6",
+        title: "Leadership, Trust & The Healthcare Divide: Why Government Officials Seek Treatment Abroad.",
+        date: "Jul 28, 2025",
+        url: "https://www.youtube.com/embed/DC7ay8H09fg?si=JbgSRvNbyn6Hvbqb",
+    },
+    {
+        id: "7",
+        title: "IRDOC NIGERIA: Blazing the trail in Interventional Radiology.",
+        date: "Jul 12, 2025",
+        url: "https://www.youtube.com/embed/oWNCdlI3i7g?si=9FM8EfuvJ7BZd2i_",
+    },
+    {
+        id: "8",
+        title: "This Lagos Hospital is Changing Healthcare Forever",
+        date: "Aug 16, 2025",
+        url: "https://www.youtube.com/embed/rNrwRPo6S8c?si=JKr12Fwx5OYsc20w",
+    },
+    {
+        id: "9",
+        title: "Inside U-VOL: The Diaspora-Led Mission Transforming Healthcare in Nigeria.",
+        date: "Jul 19, 2025",
+        url: "https://www.youtube.com/embed/ikxeH5J-9G8?si=MsqvQGzDYH3Ov-HT",
+    },
+    {
+        id: "10",
+        title: "DUCHESS INTERNATIONAL HOSPITAL, LAGOS, NIGERIA",
+        date: "Jun 19, 2025",
+        url: "https://www.youtube.com/embed/ryi2bqLhMjo?si=tvuveIu8zbO70IgA",
+    },
 ];
 
 const getVideoId = (url: string) => {
@@ -69,7 +99,7 @@ export default function NewsSection() {
         >
             <h2 className="text-3xl font-semibold capitalize mb-4">Outreach / News</h2>
 
-            <div className="flex flex-col md:flex-col md:h-[90vh] gap-4">
+            <div className="flex flex-col md:flex-col md:h-[140vh] gap-4">
                 {/* Main video player */}
                 <motion.div
                     ref={videoRef}
@@ -108,7 +138,7 @@ export default function NewsSection() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                             transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
-                            className={`flex gap-2 rounded-lg w-full md:w-[32%] p-2 cursor-pointer transition-all ${selectedVideo.id === video.id
+                            className={`flex gap-2 rounded-lg w-full md:w-[32%] h-fit p-2 cursor-pointer transition-all ${selectedVideo.id === video.id
                                 ? "ring-2 ring-[#3ca0ca] shadow-sm"
                                 : "bg-gray-200"
                                 }`}
@@ -116,11 +146,17 @@ export default function NewsSection() {
                         >
                             <Image
                                 src={`https://img.youtube.com/vi/${getVideoId(video.url)}/hqdefault.jpg`}
-                                alt={video.title}
+                                alt={video.id}
                                 height={72}
                                 width={96}
                                 className="rounded-md object-cover"
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.onerror = null; // Prevent infinite loop if fallback fails
+                                    target.src = "/fallback_image.jpeg"; // Path to your fallback image in /public folder
+                                }}
                             />
+
                             <div className="flex flex-col justify-between">
                                 <p className="text-xs opacity-75 mt-1">{video.date}</p>
                                 <h4 className="text-sm font-semibold">{video.title}</h4>
