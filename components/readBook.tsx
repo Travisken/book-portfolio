@@ -14,23 +14,30 @@ export default function ReadBook() {
     try {
       console.log("Raw bookDocument param:", bookDocument);
 
-      // Handle both encoded and unencoded URLs
+      // Decode URL safely
       const decoded = bookDocument.includes("%")
         ? decodeURIComponent(bookDocument)
         : bookDocument;
 
-      // Handle relative paths (e.g. "/books/book.pdf" or "book.pdf")
-      const finalUrl =
-        decoded.startsWith("http") || decoded.startsWith("https")
-          ? decoded
-          : `https://www.drnimbs.com/${decoded.replace(/^\/+/, "")}`;
+      // Handle Dropbox URLs to open inline instead of downloading
+      let finalUrl = decoded;
+      if (decoded.includes("dropbox.com")) {
+        // Convert any ?dl=0 or ?dl=1 to ?raw=1 for inline view
+        finalUrl = decoded
+          .replace(/\?dl=\d/, "?raw=1")
+          .replace(/\?dl$/, "?raw=1")
+          .replace(/(\?raw=\d)?$/, "?raw=1");
+      } else if (!decoded.startsWith("http")) {
+        // Fallback: handle relative paths (for local hosting)
+        finalUrl = `https://www.drnimbs.com/${decoded.replace(/^\/+/, "")}`;
+      }
 
       console.log("Redirecting to:", finalUrl);
 
-      // Attempt redirect
+      // Redirect user to inline view
       window.location.href = finalUrl;
 
-      // Optional: set timeout to show error if redirect fails
+      // Timeout fallback if redirect fails
       const timeout = setTimeout(() => setError(true), 7000);
       return () => clearTimeout(timeout);
     } catch (err) {
@@ -58,7 +65,9 @@ export default function ReadBook() {
   return (
     <div className="flex flex-col items-center justify-center h-screen text-gray-600 text-lg">
       <p className="text-xl font-medium mb-2">Redirecting to your book...</p>
-      <p className="text-gray-500 text-sm">If nothing happens, please check your browser popup settings.</p>
+      <p className="text-gray-500 text-sm">
+        If nothing happens, please check your browser popup settings.
+      </p>
     </div>
   );
 }
