@@ -14,30 +14,27 @@ export default function ReadBook() {
     try {
       console.log("Raw bookDocument param:", bookDocument);
 
-      // Decode URL safely
       const decoded = bookDocument.includes("%")
         ? decodeURIComponent(bookDocument)
         : bookDocument;
 
-      // Handle Dropbox URLs to open inline instead of downloading
       let finalUrl = decoded;
+
+      // ✅ Convert Dropbox link to direct content link (always inline)
       if (decoded.includes("dropbox.com")) {
-        // Convert any ?dl=0 or ?dl=1 to ?raw=1 for inline view
         finalUrl = decoded
-          .replace(/\?dl=\d/, "?raw=1")
-          .replace(/\?dl$/, "?raw=1")
-          .replace(/(\?raw=\d)?$/, "?raw=1");
+          .replace("www.dropbox.com", "dl.dropboxusercontent.com")
+          .replace("?dl=0", "")
+          .replace("?dl=1", "")
+          .replace("?raw=1", "");
       } else if (!decoded.startsWith("http")) {
-        // Fallback: handle relative paths (for local hosting)
+        // fallback for relative paths
         finalUrl = `https://www.drnimbs.com/${decoded.replace(/^\/+/, "")}`;
       }
 
       console.log("Redirecting to:", finalUrl);
-
-      // Redirect user to inline view
       window.location.href = finalUrl;
 
-      // Timeout fallback if redirect fails
       const timeout = setTimeout(() => setError(true), 7000);
       return () => clearTimeout(timeout);
     } catch (err) {
