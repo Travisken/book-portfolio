@@ -63,7 +63,7 @@ export default function Dashboard() {
             Total: {emailCount}
           </span>
         </div>
-        <EmailTable onEmailCountChange={setEmailCount} />
+        <EmailTable onEmailCountChange={(count) => console.log("Email count:", count)} />
       </div>
 
       {/* ✅ Testimonials Section */}
