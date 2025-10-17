@@ -6,47 +6,37 @@ import { useSearchParams } from "next/navigation";
 export default function ReadBook() {
   const searchParams = useSearchParams();
   const bookDocument = searchParams.get("bookDocument");
+  const [viewerUrl, setViewerUrl] = useState<string | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!bookDocument) return;
 
     try {
-      console.log("Raw bookDocument param:", bookDocument);
-
-      // Decode URL safely
       const decoded = bookDocument.includes("%")
         ? decodeURIComponent(bookDocument)
         : bookDocument;
 
-      // Handle Dropbox URLs to open inline instead of downloading
-      let finalUrl = decoded;
+      // Convert Dropbox link to a raw URL
+      let fileUrl = decoded;
       if (decoded.includes("dropbox.com")) {
-        // Convert any ?dl=0 or ?dl=1 to ?raw=1 for inline view
-        finalUrl = decoded
-          .replace(/\?dl=\d/, "?raw=1")
-          .replace(/\?dl$/, "?raw=1")
-          .replace(/(\?raw=\d)?$/, "?raw=1");
-      } else if (!decoded.startsWith("http")) {
-        // Fallback: handle relative paths (for local hosting)
-        finalUrl = `https://www.drnimbs.com/${decoded.replace(/^\/+/, "")}`;
+        fileUrl = decoded
+          .replace("www.dropbox.com", "dl.dropboxusercontent.com")
+          .replace("?dl=0", "")
+          .replace("?dl=1", "")
+          .replace("?raw=1", "");
       }
 
-      console.log("Redirecting to:", finalUrl);
-
-      // Redirect user to inline view
-      window.location.href = finalUrl;
-
-      // Timeout fallback if redirect fails
-      const timeout = setTimeout(() => setError(true), 7000);
-      return () => clearTimeout(timeout);
+      // ✅ Wrap it with Google Docs Viewer (forces inline view)
+      const gdocsUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(fileUrl)}`;
+      setViewerUrl(gdocsUrl);
     } catch (err) {
       console.error("Invalid bookDocument link:", err);
       setError(true);
     }
   }, [bookDocument]);
 
-  if (error) {
+  if (error || !viewerUrl) {
     return (
       <div className="flex flex-col items-center justify-center h-screen text-gray-700 text-lg text-center px-6">
         <p className="mb-3 font-semibold text-2xl">⚠️ Unable to open your book</p>
@@ -63,11 +53,13 @@ export default function ReadBook() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen text-gray-600 text-lg">
-      <p className="text-xl font-medium mb-2">Redirecting to your book...</p>
-      <p className="text-gray-500 text-sm">
-        If nothing happens, please check your browser popup settings.
-      </p>
+    <div className="w-screen h-screen bg-gray-100">
+      <iframe
+        src={viewerUrl}
+        className="w-full h-full border-none"
+        allow="fullscreen"
+        title="Book Viewer"
+      />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ChevronRight, Star, X } from 'lucide-react';
 import { database } from '@/app/firebase'; // Adjust path as necessary
-import { ref, get, set } from 'firebase/database';
+import { ref, push } from 'firebase/database';
 import emailjs from "@emailjs/browser";
 
 interface Book {
@@ -67,14 +67,13 @@ const CustomCard = ({ book }: { book: Book }) => {
         const templateParams = {
             to_email: formData.email,
             book_title: book.title,
-            // ✅ Use redirect page instead of direct PDF URL
             book_link: `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(book.bookDocument)}`,
             from_name: "Dr. Folarin",
             message: `Read ${book.title} online.`,
         };
 
         try {
-            // Send email
+            // ✅ Send email with EmailJS
             await emailjs.send(
                 "service_pcg8s7k",
                 "template_2pphbzh",
@@ -82,19 +81,16 @@ const CustomCard = ({ book }: { book: Book }) => {
                 "zZljp-c12W6mwkno9"
             );
 
-            // Save reader entry in Firebase
+            // ✅ Save submitted email to Firebase (each submission stored uniquely)
             const peopleReadEntry = {
                 email: formData.email,
                 date: new Date().toISOString(),
             };
 
-            const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
-            const snapshot = await get(bookRef);
-            const peopleReadList = snapshot.exists() ? snapshot.val() : [];
+            const peopleReadRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
+            await push(peopleReadRef, peopleReadEntry);
 
-            await set(bookRef, [...peopleReadList, peopleReadEntry]);
-
-            // ✅ Redirect through /read-book for safe opening
+            // ✅ Redirect to the book reading page
             const redirectUrl = `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(book.bookDocument)}`;
             window.open(redirectUrl, "_blank");
 
@@ -114,7 +110,7 @@ const CustomCard = ({ book }: { book: Book }) => {
 
     return (
         <div className="md:w-[90vw] lg:w-[60vw] md:h-fit min-h-[55vh] relative mx-auto bg-white shadow-md rounded-2xl p-6 hidden md:flex flex-row items-start space-x-6">
-            {/* Image */}
+            {/* Book Image */}
             <Image
                 src={book.bookLink}
                 alt={book.title}
@@ -123,10 +119,9 @@ const CustomCard = ({ book }: { book: Book }) => {
                 className="!h-full !w-[50%] rounded-lg"
             />
 
-            {/* Content Section */}
+            {/* Book Details */}
             <div className="flex flex-col items-start justify-start h-full gap-6 w-full">
                 <h2 className="text-4xl capitalize font-semibold">{book.title}</h2>
-
                 <p className="text-gray-600">{book.description}</p>
 
                 {/* Ratings */}
@@ -153,10 +148,10 @@ const CustomCard = ({ book }: { book: Book }) => {
                         className="w-full p-3 border rounded-lg focus:outline-[#3ca0ce]"
                         required
                     />
+
                     {error && <p className="text-red-500 bottom-0 absolute text-sm">{error}</p>}
                     {success && <p className="text-green-500 top-[3rem] absolute text-sm">{success}</p>}
 
-                    {/* Buttons */}
                     <div className="flex space-x-4">
                         {book.published ? (
                             <button
@@ -185,7 +180,7 @@ const CustomCard = ({ book }: { book: Book }) => {
                     </div>
                 </form>
 
-                {/* Background decorative dots */}
+                {/* Decorative background dots */}
                 <div className="absolute -z-[1] -top-24 -left-24 md:grid hidden grid-cols-8 gap-4">
                     {[...Array(55)].map((_, i) => (
                         <span key={i} className="w-4 h-4 bg-gray-300 rounded-full"></span>
@@ -193,7 +188,7 @@ const CustomCard = ({ book }: { book: Book }) => {
                 </div>
             </div>
 
-            {/* Modal */}
+            {/* About Modal */}
             {modalOpen && (
                 <div className="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg relative">
