@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Star, X } from "lucide-react";
 import { database } from "@/app/firebase";
-import { ref, get, set } from "firebase/database";
+import { ref, get, push } from "firebase/database"; // ✅ use push instead of set
 
 interface Testimonial {
   bookName: string;
@@ -100,10 +100,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
     try {
       const decoded = rawUrl.includes("%") ? decodeURIComponent(rawUrl) : rawUrl;
-
       const viewerUrl = `/read-book?bookDocument=${encodeURIComponent(decoded)}`;
-
-      // Open in a new tab (no Dropbox download)
       window.open(viewerUrl, "_blank");
     } catch (err) {
       console.error("Failed to open book document:", err);
@@ -139,6 +136,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     };
 
     try {
+      // ✅ Send email with EmailJS
       await emailjs.send(
         "service_pcg8s7k",
         "template_2pphbzh",
@@ -146,15 +144,12 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
         "zZljp-c12W6mwkno9"
       );
 
+      // ✅ Save email submission in Firebase (each entry stored with a unique ID)
       const entry = { email: formData.email, date: new Date().toISOString() };
+      const peopleReadRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
+      await push(peopleReadRef, entry);
 
-      const bookRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
-      const snapshot = await get(bookRef);
-      const list = snapshot.exists() ? snapshot.val() : [];
-
-      await set(bookRef, [...list, entry]);
-
-      // ✅ Use /read-book viewer (no Dropbox download)
+      // ✅ Redirect safely through the /read-book viewer
       openBookDocument(book.bookDocument);
 
       setFormData({ email: "" });
