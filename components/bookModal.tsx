@@ -100,10 +100,10 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     try {
       // ✅ Send email with EmailJS
       await emailjs.send(
-        "service_pcg8s7k",
-        "template_2pphbzh",
+        "service_3pbn9c7", 
+        "template_f4aecqk",
         templateParams,
-        "zZljp-c12W6mwkno9"
+        "ctYtI2h1sBjCxXBpC"
       );
 
       // ✅ Post the email data to your local API route
