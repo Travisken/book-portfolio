@@ -77,7 +77,7 @@ const CustomCard = ({ book }: { book: Book }) => {
         "service_3pbn9c7", 
         "template_f4aecqk",
         templateParams,
-        "ctYtI2h1sBjCxXBpC"
+        "ctYtI2h1sBjCxXBpC" //public key
       );
 
    
