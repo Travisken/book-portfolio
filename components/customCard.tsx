@@ -74,12 +74,13 @@ const CustomCard = ({ book }: { book: Book }) => {
     try {
       // ✅ Send book email using EmailJS
       await emailjs.send(
-        "service_pcg8s7k",
-        "template_2pphbzh",
+        "service_3pbn9c7",
+        "template_f4aecqk",
         templateParams,
-        "zZljp-c12W6mwkno9"
+        "FQyXXhmGEWXQXdm3CWpQ0"
       );
 
+   
       // ✅ Save email to local data.json via API
       const entry = {
         email: formData.email,
