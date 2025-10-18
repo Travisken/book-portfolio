@@ -74,7 +74,7 @@ const CustomCard = ({ book }: { book: Book }) => {
     try {
       // ✅ Send book email using EmailJS
       await emailjs.send(
-        "service_3pbn9c7",
+        "service_3pbn9c7", 
         "template_f4aecqk",
         templateParams,
         "FQyXXhmGEWXQXdm3CWpQ0"
