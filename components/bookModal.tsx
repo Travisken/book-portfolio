@@ -4,8 +4,6 @@ import { Modal, Backdrop, Fade, Box, Typography, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Star, X } from "lucide-react";
-import { database } from "@/app/firebase";
-import { ref, get, push } from "firebase/database"; // ✅ use push instead of set
 
 interface Testimonial {
   bookName: string;
@@ -21,7 +19,6 @@ interface Book {
   aboutBook: string;
   bookLink: string;
   published: boolean;
-  peopleRead?: { email: string; date: string }[];
 }
 
 interface BookModalProps {
@@ -53,36 +50,6 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
   const [success, setSuccess] = useState<string | null>(null);
   const [averageRating, setAverageRating] = useState<number>(0);
 
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      if (!book) return;
-
-      try {
-        const testimonialsRef = ref(database, "data/testimonials");
-        const snapshot = await get(testimonialsRef);
-
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const testimonials: Testimonial[] = Object.values(data);
-          const filtered = testimonials.filter((t) => t.bookName === book.title);
-
-          if (filtered.length > 0) {
-            const totalRating = filtered.reduce((acc, t) => acc + t.rating, 0);
-            setAverageRating(totalRating / filtered.length);
-          } else {
-            setAverageRating(0);
-          }
-        } else {
-          setAverageRating(0);
-        }
-      } catch (error) {
-        console.error("Error fetching testimonials:", error);
-      }
-    };
-
-    fetchTestimonials();
-  }, [book]);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ email: event.target.value });
     setError(null);
@@ -91,13 +58,11 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  /** ✅ Redirect through the `/read-book` viewer instead of Dropbox directly */
   const openBookDocument = (rawUrl: string) => {
     if (!rawUrl) {
       setError("Book link is missing or invalid.");
       return;
     }
-
     try {
       const decoded = rawUrl.includes("%") ? decodeURIComponent(rawUrl) : rawUrl;
       const viewerUrl = `/read-book?bookDocument=${encodeURIComponent(decoded)}`;
@@ -144,19 +109,24 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
         "zZljp-c12W6mwkno9"
       );
 
-      // ✅ Save email submission in Firebase (each entry stored with a unique ID)
-      const entry = { email: formData.email, date: new Date().toISOString() };
-      const peopleReadRef = ref(database, `data/booksSection/${book.id}/peopleRead`);
-      await push(peopleReadRef, entry);
+      // ✅ Post the email data to your local API route
+      await fetch("/api/emails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          bookId: book.id,
+        }),
+      });
 
-      // ✅ Redirect safely through the /read-book viewer
+      // ✅ Open the book after saving
       openBookDocument(book.bookDocument);
 
       setFormData({ email: "" });
-      setSuccess("Email sent successfully!");
+      setSuccess("Email sent and saved successfully!");
     } catch (error) {
-      console.error("Failed to send email:", error);
-      setError("Error sending email. Please try again.");
+      console.error("Error sending or saving email:", error);
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -58,7 +58,7 @@ export default function EmailTable({ onEmailCountChange }: EmailTableProps) {
       {emails.length > 3 && (
         <button
           onClick={() => setShowAll(!showAll)}
-          className="text-blue-600 mt-3 underline"
+          className="text-gray-600 font-semibold mt-3 underline"
         >
           {showAll ? "See Less" : "See More"}
         </button>
