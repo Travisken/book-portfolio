@@ -63,23 +63,24 @@ const CustomCard = ({ book }: { book: Book }) => {
     setError(null);
     setSuccess(null);
 
-    const templateParams = {
-      to_email: formData.email,
-      book_title: book.title,
-      book_link: `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(book.bookDocument)}`,
-      from_name: "Dr. Folarin",
-      message: `Read ${book.title} online.`,
-    };
-
-    try {
-      // ✅ Send book email using EmailJS
-      await emailjs.send(
-        "service_3pbn9c7", 
-        "template_f4aecqk",
-        templateParams,
-        "ctYtI2h1sBjCxXBpC" //public key
-      );
-
+   const templateParams = {
+         to_email: formData.email,
+         book_title: book.title,
+         book_link: `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(
+           book.bookDocument
+         )}`,
+         from_name: "Dr. Folarin",
+         reply_to: formData.email,
+       };
+   
+       try {
+         // ✅ Send email with EmailJS
+         await emailjs.send(
+           "service_3pbn9c7", 
+           "template_f4aecqk",
+           templateParams,
+           "ctYtI2h1sBjCxXBpC"
+         );
    
       // ✅ Save email to local data.json via API
       const entry = {
