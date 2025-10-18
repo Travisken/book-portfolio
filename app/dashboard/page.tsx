@@ -25,7 +25,7 @@ export default function Dashboard() {
         setLoading(false);
       }
     });
-
+    console.log(downloadCount)
     return () => unsubscribe();
   }, [router]);
 
@@ -63,7 +63,13 @@ export default function Dashboard() {
             Total: {emailCount}
           </span>
         </div>
-        <EmailTable onEmailCountChange={(count) => console.log("Email count:", count)} />
+        <EmailTable
+          onEmailCountChange={(count) => {
+            console.log("Email count:", count);
+            setEmailCount(count);
+          }}
+        />
+
       </div>
 
       {/* ✅ Testimonials Section */}

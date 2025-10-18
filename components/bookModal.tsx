@@ -1,14 +1,10 @@
 "use client";
 
 import { Modal, Backdrop, Fade, Box, Typography, Button } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Star, X } from "lucide-react";
 
-interface Testimonial {
-  bookName: string;
-  rating: number;
-}
 
 interface Book {
   id: number;
@@ -54,6 +50,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     setFormData({ email: event.target.value });
     setError(null);
     setSuccess(null);
+    setAverageRating(0);
   };
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
