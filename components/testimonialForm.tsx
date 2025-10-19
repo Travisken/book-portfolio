@@ -105,22 +105,22 @@ export default function TestimonialForm() {
         createdAt: new Date().toISOString(),
       });
 
-      const templateParams = {
-        from_name: formData.fullName,
-        to_email: formData.email,
-        message:
-          `New feedback received from ${formData.fullName} (${formData.email}):\n\n` +
-          `Book Name: ${formData.title}\n` +
-          `Review: ${formData.review}\n` +
-          `Rating: ${formData.rating}`,
-      };
+      //const templateParams = {
+        //from_name: formData.fullName,
+        //to_email: formData.email,
+        //message:
+          //`New feedback received from ${formData.fullName} (${formData.email}):\n\n` +
+        //  `Book Name: ${formData.title}\n` +
+        //  `Review: ${formData.review}\n` +
+          //`Rating: ${formData.rating}`,
+    //  };
 
-      await emailjs.send(
-        "service_3pbn9c7", 
-           "template_f4aecqk",
-           templateParams,
-           "ctYtI2h1sBjCxXBpC"
-      );
+      //await emailjs.send(
+      //  "service_3pbn9c7", 
+         //  "template_f4aecqk",
+           //templateParams,
+         //  "ctYtI2h1sBjCxXBpC"
+     // );
 
       toast.success("Thank you for your feedback! Your testimonial is pending approval.");
 
