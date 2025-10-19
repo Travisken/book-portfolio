@@ -116,10 +116,10 @@ export default function TestimonialForm() {
       };
 
       await emailjs.send(
-        "service_5946ay9",
-        "template_2pphbzh",
-        templateParams,
-        "zZljp-c12W6mwkno9"
+        "service_3pbn9c7", 
+           "template_f4aecqk",
+           templateParams,
+           "ctYtI2h1sBjCxXBpC"
       );
 
       toast.success("Thank you for your feedback! Your testimonial is pending approval.");
