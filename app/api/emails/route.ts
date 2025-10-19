@@ -1,27 +1,24 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 
-const dataDir = path.join(process.cwd(), "data");
-const filePath = path.join(dataDir, "email.json");
-
-// 🧩 Ensure data directory & file exist
-function ensureFileExists() {
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, JSON.stringify([]));
-  }
-}
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${process.env.JSONBIN_ID}`;
+const JSONBIN_KEY = process.env.JSONBIN_KEY as string;
 
 // 🧠 GET - Fetch all emails
 export async function GET() {
   try {
-    ensureFileExists();
+    // Fetch data from JSONBin
+    const res = await fetch(JSONBIN_URL, {
+      headers: { "X-Master-Key": JSONBIN_KEY },
+      cache: "no-store",
+    });
 
-    const data = fs.readFileSync(filePath, "utf8");
-    const emails = JSON.parse(data || "[]");
+    if (!res.ok) {
+      console.error("❌ Failed to fetch emails:", res.statusText);
+      return NextResponse.json({ error: "Failed to fetch emails" }, { status: 500 });
+    }
+
+    const json = await res.json();
+    const emails = json.record?.emails || [];
 
     return NextResponse.json({ emails });
   } catch (error) {
@@ -33,17 +30,25 @@ export async function GET() {
 // ✉️ POST - Add a new email
 export async function POST(req: Request) {
   try {
-    ensureFileExists();
-
-    const body = await req.json();
-    const { email } = body;
+    const { email } = await req.json();
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    const fileData = fs.readFileSync(filePath, "utf8");
-    const emails = fileData ? JSON.parse(fileData) : [];
+    // Get current emails
+    const getRes = await fetch(JSONBIN_URL, {
+      headers: { "X-Master-Key": JSONBIN_KEY },
+      cache: "no-store",
+    });
+
+    if (!getRes.ok) {
+      console.error("❌ Failed to load existing emails:", getRes.statusText);
+      return NextResponse.json({ error: "Failed to load existing emails" }, { status: 500 });
+    }
+
+    const data = await getRes.json();
+    const emails = data.record?.emails || [];
 
     const newEmail = {
       id: Date.now().toString(),
@@ -51,8 +56,22 @@ export async function POST(req: Request) {
       createdAt: new Date().toISOString(),
     };
 
-    emails.push(newEmail);
-    fs.writeFileSync(filePath, JSON.stringify(emails, null, 2));
+    // Append and update
+    const updated = { emails: [...emails, newEmail] };
+
+    const putRes = await fetch(JSONBIN_URL, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": JSONBIN_KEY,
+      },
+      body: JSON.stringify(updated),
+    });
+
+    if (!putRes.ok) {
+      console.error("❌ Failed to update JSONBin:", putRes.statusText);
+      return NextResponse.json({ error: "Failed to update email list" }, { status: 500 });
+    }
 
     return NextResponse.json({ success: true, email: newEmail });
   } catch (error) {
