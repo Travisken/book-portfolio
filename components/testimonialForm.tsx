@@ -4,7 +4,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useState, useRef } from "reac
 import { FaStar } from "react-icons/fa";
 import { database } from "@/app/firebase";
 import { ref, push, get } from "firebase/database";
-import emailjs from "emailjs-com";
+//import emailjs from "emailjs-com";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SelectInput from "./selectInput";
