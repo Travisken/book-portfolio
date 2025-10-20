@@ -4,7 +4,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useState, useRef } from "reac
 import { FaStar } from "react-icons/fa";
 import { database } from "@/app/firebase";
 import { ref, push, get } from "firebase/database";
-import emailjs from "emailjs-com";
+//import emailjs from "emailjs-com";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SelectInput from "./selectInput";
@@ -105,22 +105,22 @@ export default function TestimonialForm() {
         createdAt: new Date().toISOString(),
       });
 
-      const templateParams = {
-        from_name: formData.fullName,
-        to_email: formData.email,
-        message:
-          `New feedback received from ${formData.fullName} (${formData.email}):\n\n` +
-          `Book Name: ${formData.title}\n` +
-          `Review: ${formData.review}\n` +
-          `Rating: ${formData.rating}`,
-      };
+      //const templateParams = {
+        //from_name: formData.fullName,
+        //to_email: formData.email,
+        //message:
+          //`New feedback received from ${formData.fullName} (${formData.email}):\n\n` +
+        //  `Book Name: ${formData.title}\n` +
+        //  `Review: ${formData.review}\n` +
+          //`Rating: ${formData.rating}`,
+    //  };
 
-      await emailjs.send(
-        "service_5946ay9",
-        "template_2pphbzh",
-        templateParams,
-        "zZljp-c12W6mwkno9"
-      );
+      //await emailjs.send(
+      //  "service_3pbn9c7", 
+         //  "template_f4aecqk",
+           //templateParams,
+         //  "ctYtI2h1sBjCxXBpC"
+     // );
 
       toast.success("Thank you for your feedback! Your testimonial is pending approval.");
 
