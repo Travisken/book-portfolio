@@ -100,7 +100,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     try {
       // ✅ Send email with EmailJS
       await emailjs.send(
-        "service_3pbn9c7", 
+        "service_r0opsvd", 
         "template_f4aecqk",
         templateParams,
         "ctYtI2h1sBjCxXBpC"
