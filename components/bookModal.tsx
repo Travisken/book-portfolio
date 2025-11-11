@@ -2,7 +2,7 @@
 
 import { Modal, Backdrop, Fade, Box, Typography, Button } from "@mui/material";
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
+// import emailjs from "@emailjs/browser";
 import { Star, X } from "lucide-react";
 
 
@@ -71,63 +71,60 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    if (!validateEmail(formData.email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
+  if (!validateEmail(formData.email)) {
+    setError("Please enter a valid email address.");
+    return;
+  }
 
-    if (!book) {
-      setError("Book details are missing.");
-      return;
-    }
+  if (!book) {
+    setError("Book details are missing.");
+    return;
+  }
 
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
+  setLoading(true);
+  setError(null);
+  setSuccess(null);
 
-    const templateParams = {
-      to_email: formData.email,
-      book_title: book.title,
-      book_link: `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(
-        book.bookDocument
-      )}`,
-      from_name: "Dr. Folarin",
-      reply_to: formData.email,
-    };
+  try {
+    // ✅ Send email via your new Mailgun API route
+    const res = await fetch("/api/send-mail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: formData.email,
+        bookTitle: book.title,
+        bookDocument: book.bookDocument,
+      }),
+    });
 
-    try {
-      // ✅ Send email with EmailJS
-      await emailjs.send(
-        "service_r0opsvd", 
-        "template_f4aecqk",
-        templateParams,
-        "ctYtI2h1sBjCxXBpC"
-      );
+    const data = await res.json();
 
-      // ✅ Post the email data to your local API route
-      await fetch("/api/emails", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          bookId: book.id,
-        }),
-      });
+    if (!res.ok) throw new Error(data.error || "Failed to send email");
 
-      // ✅ Open the book after saving
-      openBookDocument(book.bookDocument);
+    // ✅ Save to your database
+    await fetch("/api/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: formData.email,
+        bookId: book.id,
+      }),
+    });
 
-      setFormData({ email: "" });
-      setSuccess("Email sent and saved successfully!");
-    } catch (error) {
-      console.error("Error sending or saving email:", error);
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    // ✅ Open book
+    openBookDocument(book.bookDocument);
+    setFormData({ email: "" });
+    setSuccess("Email sent and saved successfully!");
+  } catch (error) {
+    console.error("Error sending or saving email:", error);
+    setError("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   if (!book) return null;
 
