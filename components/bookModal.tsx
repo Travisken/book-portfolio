@@ -101,7 +101,7 @@ const handleSubmit = async (event: React.FormEvent) => {
     if (!res.ok) throw new Error("Failed to send email");
 
     // Save email in your DB
-    await fetch("/api/emails", {
+    await fetch("/api/save-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: formData.email, bookId: book.id }),
