@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ChevronRight, Star, X } from 'lucide-react';
-import emailjs from "@emailjs/browser";
 import axios from "axios";
 
 interface Book {
@@ -47,65 +46,60 @@ const CustomCard = ({ book }: { book: Book }) => {
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    if (!validateEmail(formData.email)) {
-      setError("Please enter a valid email address.");
-      return;
+  if (!validateEmail(formData.email)) {
+    setError("Please enter a valid email address.");
+    return;
+  }
+
+  if (!book) {
+    setError("Book details are missing.");
+    return;
+  }
+
+  setLoading(true);
+  setError(null);
+  setSuccess(null);
+
+  try {
+    // ✅ Send email via your backend API (Mailjet SMTP)
+    const emailResponse = await axios.post("/api/send-mail", {
+      email: formData.email,
+      bookTitle: book.title,
+      bookDocument: book.bookDocument,
+    });
+
+    if (!emailResponse.data.success) {
+      throw new Error("Failed to send email");
     }
 
-    if (!book) {
-      setError("Book details are missing.");
-      return;
-    }
+    // ✅ Save email to local API
+    const entry = {
+      email: formData.email,
+      date: new Date().toISOString(),
+      bookId: book.id,
+      bookTitle: book.title,
+    };
 
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
+    await axios.post("/api/save-email", entry);
 
-   const templateParams = {
-         to_email: formData.email,
-         book_title: book.title,
-         book_link: `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(
-           book.bookDocument
-         )}`,
-         from_name: "Dr. Folarin",
-         reply_to: formData.email,
-       };
-   
-       try {
-         // ✅ Send email with EmailJS
-         await emailjs.send(
-           "service_r0opsvd", 
-           "template_f4aecqk",
-           templateParams,
-           "ctYtI2h1sBjCxXBpC"
-         );
-   
-      // ✅ Save email to local data.json via API
-      const entry = {
-        email: formData.email,
-        date: new Date().toISOString(),
-        bookId: book.id,
-        bookTitle: book.title,
-      };
+    // ✅ Open book in new tab
+    const redirectUrl = `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(
+      book.bookDocument
+    )}`;
+    window.open(redirectUrl, "_blank");
 
-      const response = await axios.post("/api/save-email", entry);
-      console.log("Email saved:", response.data);
+    setFormData({ email: "" });
+    setSuccess("Email sent successfully!");
+  } catch (err) {
+    console.error("Error sending email or saving data:", err);
+    setError("Error sending email. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
-      // ✅ Redirect user to the reader page
-      const redirectUrl = `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(book.bookDocument)}`;
-      window.open(redirectUrl, "_blank");
-
-      setFormData({ email: "" });
-      setSuccess("Email sent successfully!");
-    } catch (error) {
-      console.error("Failed to send email or save data:", error);
-      setError("Error sending email. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (!book) {
     return <div className="text-red-500">Error: Book data is missing.</div>;
