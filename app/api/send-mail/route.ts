@@ -1,42 +1,49 @@
+import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
-import Mailgun from "mailgun.js";
-import formData from "form-data";
-
-const mailgun = new Mailgun(formData);
-const mg = mailgun.client({
-  username: "api",
-  key: process.env.MAILGUN_API_KEY as string, // store securely
-});
 
 export async function POST(req: Request) {
   try {
     const { email, bookTitle, bookDocument } = await req.json();
 
     if (!email || !bookTitle || !bookDocument) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Compose dynamic book link
+    // Create book link
     const bookLink = `https://www.drnimbs.com/read-book?bookDocument=${encodeURIComponent(
       bookDocument
     )}`;
 
-    // Send using your Mailgun template
-    const response = await mg.messages.create(process.env.MAILGUN_DOMAIN as string, {
-      from: "Dr. Folarin <mail@yourdomain.com>",
-      to: [email],
-      subject: `Your free book: ${bookTitle}`,
-      template: "book_delivery", // ← your Mailgun template name
-      'h:X-Mailgun-Variables': JSON.stringify({
-        book_title: bookTitle,
-        book_link: bookLink,
-        recipient_email: email,
-      }),
+    // Create the transporter
+    const transporter = nodemailer.createTransport({
+      host: "in-v3.mailjet.com",
+      port: 587,
+      secure: false, // TLS
+      auth: {
+        user: process.env.MAILJET_API_KEY,
+        pass: process.env.MAILJET_SECRET_KEY,
+      },
     });
 
-    return NextResponse.json({ success: true, data: response });
+    // Compose message
+    const info = await transporter.sendMail({
+      from: `"${process.env.MAILJET_SENDER_NAME}" <${process.env.MAILJET_SENDER_EMAIL}>`,
+      to: email,
+      subject: `Your copy of ${bookTitle}`,
+      html: `
+        <div style="max-width:600px;margin:40px auto;border-radius:10px;padding:30px;font-family:'Helvetica Neue',Arial,sans-serif;color:#f1f1f1;"> <h1 style="font-size:22px;color:#000;margin-bottom:20px;display:flex;align-items:center;gap:8px;">📚 The Book Link</h1> <p style="font-size:15px;line-height:1.6;color:#000;">Hello,</p> <p style="font-size:15px;line-height:1.6;color:#000;"> You requested to read <strong style="color:#fff;">{{book_title}}</strong>. </p> <p style="font-size:15px;line-height:1.6;color:#000;">Click the link below to access the book:</p>
+
+<a href={${bookLink}} style="display:inline-block;background-color:#0078d4;color:#fff;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:6px;margin:20px 0;font-size:15px;">📖 Read Book</a>
+
+<p style="font-size:15px;line-height:1.6;color:#000;"> Please do well to drop a review on the website after reading. Thank you. </p> <p style="font-size:15px;line-height:1.6;color:#000;"> If you did not request this, please ignore this email. </p> <p style="font-size:15px;line-height:1.6;color:#000;"> Best regards,<br> <strong style="color:#000;">Dr. Folarin</strong> </p> </div>
+      `,
+    });
+
+    console.log("Mail sent:", info.messageId);
+
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Mailgun error:", error);
-    return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
+    console.error("Mailjet SMTP error:", error);
+    return NextResponse.json({ error: "Failed to send mail" }, { status: 500 });
   }
 }

@@ -70,7 +70,7 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+const handleSubmit = async (event: React.FormEvent) => {
   event.preventDefault();
 
   if (!validateEmail(formData.email)) {
@@ -88,7 +88,6 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
   setSuccess(null);
 
   try {
-    // ✅ Send email via your new Mailgun API route
     const res = await fetch("/api/send-mail", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -99,26 +98,20 @@ const BookModal: React.FC<BookModalProps> = ({ open, onClose, book }) => {
       }),
     });
 
-    const data = await res.json();
+    if (!res.ok) throw new Error("Failed to send email");
 
-    if (!res.ok) throw new Error(data.error || "Failed to send email");
-
-    // ✅ Save to your database
+    // Save email in your DB
     await fetch("/api/emails", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: formData.email,
-        bookId: book.id,
-      }),
+      body: JSON.stringify({ email: formData.email, bookId: book.id }),
     });
 
-    // ✅ Open book
     openBookDocument(book.bookDocument);
     setFormData({ email: "" });
     setSuccess("Email sent and saved successfully!");
   } catch (error) {
-    console.error("Error sending or saving email:", error);
+    console.error(error);
     setError("Something went wrong. Please try again.");
   } finally {
     setLoading(false);
