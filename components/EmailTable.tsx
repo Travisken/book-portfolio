@@ -16,7 +16,7 @@ interface EmailTableProps {
 export default function EmailTable({ onEmailCountChange }: EmailTableProps) {
   const [emails, setEmails] = useState<Email[]>([]);
   const [showAll, setShowAll] = useState(false);
-  const [copiedEmailId, setCopiedEmailId] = useState<string | null>(null);
+  // const [copiedEmailId, setCopiedEmailId] = useState<string | null>(null);
   const [copiedAll, setCopiedAll] = useState(false);
 
   useEffect(() => {
@@ -34,11 +34,11 @@ export default function EmailTable({ onEmailCountChange }: EmailTableProps) {
     fetchEmails();
   }, [onEmailCountChange]);
 
-  const handleCopySingle = async (email: string, id: string) => {
-    await navigator.clipboard.writeText(email);
-    setCopiedEmailId(id);
-    setTimeout(() => setCopiedEmailId(null), 1500);
-  };
+  // const handleCopySingle = async (email: string, id: string) => {
+  //   await navigator.clipboard.writeText(email);
+  //   setCopiedEmailId(id);
+  //   setTimeout(() => setCopiedEmailId(null), 1500);
+  // };
 
   const handleCopyAll = async () => {
     const allEmails = emails.map((e) => e.email).join("\n");
@@ -83,7 +83,7 @@ export default function EmailTable({ onEmailCountChange }: EmailTableProps) {
               <td className="py-2 px-4 flex items-center gap-2">
                 <span>{email.email}</span>
 
-                <button
+                {/* <button
                   onClick={() => handleCopySingle(email.email, email.id)}
                   className="text-gray-500 hover:text-black transition"
                   aria-label="Copy email"
@@ -93,7 +93,7 @@ export default function EmailTable({ onEmailCountChange }: EmailTableProps) {
 
                 {copiedEmailId === email.id && (
                   <span className="ml-2 text-xs text-green-600">Copied!</span>
-                )}
+                )} */}
               </td>
 
               <td className="py-2 px-4">
