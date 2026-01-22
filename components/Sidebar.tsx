@@ -1,13 +1,13 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { FiHome, FiLogOut, FiPlus } from "react-icons/fi";
+import { FiHome, FiLogOut, FiMail, FiPlus } from "react-icons/fi";
 import Link from "next/link";
 import clsx from "clsx";
 
 const menuItems = [
   { name: "Dashboard", href: "/dashboard", icon: FiHome },
-  // { name: "Emails", href: "#emails", icon: FiMail },
+  { name: "Form Data", href: "/dashboard/form", icon: FiMail },
   // { name: "Testimonials", href: "#testimonials", icon: FiStar },
   // { name: "Partners", href: "#partners", icon: FiUsers },
   { name: "Add Book", href: "/dashboard/add-book", icon: FiPlus },

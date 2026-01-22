@@ -63,7 +63,7 @@ export default function JoinCommunity() {
            </div>
           </div>
           <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSecSztiYr8J1BznYq4Gu59wupRky9nYZC2hzIpdYEpHkDWP6Q/viewform?usp=publish-editor"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSepWZsS9YIZSADmHwCq-qvcC82014K4yLdzp-iYyrZ0z-MrJQ/viewform?usp=publish-editor"
             target="_blank"
             className="py-3 max-md:w-full mt-8 h-fit rounded-xl  bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex px-12 items-center font-semibold justify-center"
           >
