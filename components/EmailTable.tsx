@@ -59,7 +59,7 @@ export default function EmailTable({ onEmailCountChange }: EmailTableProps) {
               Emails
               <button
                 onClick={handleCopyAll}
-                className="py-2 px-4 rounded-xl gap-2 ml-4 font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex-1 flex md:w-1/2 items-center justify-center"
+                className="md:py-2 py-1 px-1 md:px-4 rounded md:rounded-xl gap-2 md:ml-4  max-md:text-xs font-semibold bg-zinc-200 text-black hover:bg-[#3ca0ce] transition-all duration-500 hover:text-white flex-1 flex md:w-1/2 items-center justify-center"
                 aria-label="Copy all emails"
               >
                 Copy All
