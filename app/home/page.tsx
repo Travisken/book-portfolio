@@ -15,6 +15,7 @@ import BttButton from "@/components/bttButton";
 // import CustomCard from "@/components/customCard";
 import NewsSection from "@/components/newsSection";
 import BooksSection from "@/components/bookSection";
+import JoinCommunity from "@/components/joinCommunity";
 
 interface Book {
   id: number;
@@ -85,6 +86,7 @@ const Home = () => {
       <ExperienceSection />
       <NewsSection />
       <BooksSection books={books} loading={loading} handleOpen={handleOpen} />
+      <JoinCommunity />
       <TestimonialSection />
       <TestimonialForm />
       {open && selectedBook && (
