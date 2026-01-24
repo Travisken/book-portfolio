@@ -8,7 +8,7 @@ import clsx from "clsx";
 const menuItems = [
   { name: "Dashboard", href: "/dashboard", icon: FiHome },
   { name: "Form Data", href: "/dashboard/form", icon: FiMail },
-  // { name: "Testimonials", href: "#testimonials", icon: FiStar },
+  { name: "Submitted Mails", href: "/dashboard/submitted-emails", icon: FiMail },
   // { name: "Partners", href: "#partners", icon: FiUsers },
   { name: "Add Book", href: "/dashboard/add-book", icon: FiPlus },
 ];

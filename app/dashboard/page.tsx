@@ -5,14 +5,13 @@ import { auth } from "@/app/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import EmailTable from "@/components/EmailTable";
+// import EmailTable from "@/components/EmailTable";
 import TestimonialManager from "@/components/TestimonialManager";
 import BookTable from "@/components/BookTable";
 
 export default function Dashboard() {
   const [downloadCount, setDownloadCount] = useState(0);
   const [books, setBooks] = useState([]);
-  const [emailCount, setEmailCount] = useState(0); // ✅ track number of emails
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -55,22 +54,7 @@ export default function Dashboard() {
     <div className="md:p-6 p-2">
       <h1 className="text-2xl font-bold mb-8">Admin Dashboard</h1>
 
-      {/* ✅ Emails Section */}
-      <div className="bg-white md:p-6 p-2 rounded-lg shadow-md mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Submitted Emails</h2>
-          <span className="text-gray-600 text-sm">
-            Total: {emailCount}
-          </span>
-        </div>
-        <EmailTable
-          onEmailCountChange={(count) => {
-            console.log("Email count:", count);
-            setEmailCount(count);
-          }}
-        />
-
-      </div>
+    
 
       {/* ✅ Testimonials Section */}
       <div className="bg-white md:p-6 p-2 rounded-lg shadow-md mb-8">

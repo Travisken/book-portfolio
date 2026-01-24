@@ -16,29 +16,23 @@ export default function AdminFormsPage() {
   useEffect(() => {
     setLoading(true);
     fetch("/api/form-responses")
-      .then(res => res.json())
-      .then(res => setData(res))
+      .then((res) => res.json())
+      .then((res) => setData(res))
       .finally(() => setLoading(false));
   }, []);
 
   const filtered = useMemo(() => {
-    return data.filter(r =>
+    return data.filter((r) =>
       [r.name, r.email, r.country]
         .join(" ")
         .toLowerCase()
-        .includes(search.toLowerCase())
+        .includes(search.toLowerCase()),
     );
   }, [data, search]);
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filtered.length / PAGE_SIZE)
-  );
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
 
-  const paginated = filtered.slice(
-    (page - 1) * PAGE_SIZE,
-    page * PAGE_SIZE
-  );
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -46,21 +40,23 @@ export default function AdminFormsPage() {
     setTimeout(() => setToast(null), 2000);
   };
 
-  const allEmails = filtered.map(r => r.email).join(", ");
-  const allPhones = filtered.map(r => r.phone).join(", ");
+  const allEmails = filtered.map((r) => r.email).join(", ");
+  const allPhones = filtered.map((r) => r.phone).join(", ");
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-4">
-        Mentorship Registrations
-      </h1>
+      <h1 className="text-2xl font-semibold mb-1">Mentorship Registrations</h1>
+
+      <p className="text-sm text-gray-500 mb-4">
+        Showing {filtered.length} of {data.length} registrations
+      </p>
 
       {/* Search + Actions */}
       <div className="flex flex-col md:flex-row md:items-center gap-3 mb-4">
         <input
           placeholder="Search name, email, country..."
           value={search}
-          onChange={e => {
+          onChange={(e) => {
             setSearch(e.target.value);
             setPage(1);
           }}
@@ -96,9 +92,7 @@ export default function AdminFormsPage() {
       {/* Empty state */}
       {!loading && filtered.length === 0 && (
         <div className="py-20 text-center border rounded-xl text-gray-500">
-          <p className="text-lg font-medium">
-            No registrations found
-          </p>
+          <p className="text-lg font-medium">No registrations found</p>
           <p className="text-sm mt-1">
             Try adjusting your search or check back later.
           </p>
@@ -122,24 +116,15 @@ export default function AdminFormsPage() {
               </thead>
 
               <tbody>
-                {paginated.map(r => (
-                  <tr
-                    key={r.id}
-                    className="border-t hover:bg-gray-50"
-                  >
-                    <td className="p-3 font-medium">
-                      {r.name}
-                    </td>
+                {paginated.map((r) => (
+                  <tr key={r.id} className="border-t hover:bg-gray-50">
+                    <td className="p-3 font-medium">{r.name}</td>
                     <td className="p-3">{r.country}</td>
                     <td className="p-3">{r.email}</td>
                     <td className="p-3">{r.phone}</td>
-                    <td className="p-3">
-                      {r.specialties.join(", ")}
-                    </td>
+                    <td className="p-3">{r.specialties.join(", ")}</td>
                     <td className="p-3 text-gray-500">
-                      {new Date(
-                        r.timestamp
-                      ).toLocaleDateString()}
+                      {new Date(r.timestamp).toLocaleDateString()}
                     </td>
                   </tr>
                 ))}
@@ -156,14 +141,14 @@ export default function AdminFormsPage() {
             <div className="space-x-2">
               <button
                 disabled={page === 1}
-                onClick={() => setPage(p => p - 1)}
+                onClick={() => setPage((p) => p - 1)}
                 className="px-3 py-1 border rounded disabled:opacity-40"
               >
                 Prev
               </button>
               <button
                 disabled={page === totalPages}
-                onClick={() => setPage(p => p + 1)}
+                onClick={() => setPage((p) => p + 1)}
                 className="px-3 py-1 border rounded disabled:opacity-40"
               >
                 Next
