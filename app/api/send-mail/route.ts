@@ -90,7 +90,7 @@ export async function POST(req: Request) {
   </p>
 
   <a
-    href="https://docs.google.com/forms/d/e/1FAIpQLSepWZsS9YIZSADmHwCq-qvcC82014K4yLdzp-iYyrZ0z-MrJQ/viewform?usp=publish-editor"
+    href="https://forms.gle/CchNXsJeHLYMJGjJ9"
     target="_blank"
     style="
       display:inline-block;
