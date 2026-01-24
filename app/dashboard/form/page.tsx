@@ -111,7 +111,7 @@ export default function AdminFormsPage() {
                   <th className="p-3">Email</th>
                   <th className="p-3">Phone</th>
                   <th className="p-3">Specialty</th>
-                  <th className="p-3">Date</th>
+                  {/* <th className="p-3">Date</th> */}
                 </tr>
               </thead>
 
@@ -123,9 +123,9 @@ export default function AdminFormsPage() {
                     <td className="p-3">{r.email}</td>
                     <td className="p-3">{r.phone}</td>
                     <td className="p-3">{r.specialties.join(", ")}</td>
-                    <td className="p-3 text-gray-500">
+                    {/* <td className="p-3 text-gray-500">
                       {new Date(r.timestamp).toLocaleDateString()}
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
